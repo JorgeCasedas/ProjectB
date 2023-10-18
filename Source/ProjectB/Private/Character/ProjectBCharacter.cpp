@@ -13,44 +13,15 @@
 #include "Core/ProjectBPlayerState.h"
 #include "GAS/ProjectBAbilitySystemComponent.h"
 
+#include "Kismet/KismetMathLibrary.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Kismet/GameplayStatics.h"
+
 //////////////////////////////////////////////////////////////////////////
 // AProjectBCharacter
 
 AProjectBCharacter::AProjectBCharacter()
 {
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
-	// Don't rotate when the controller rotates. Let that just affect the camera.
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
-
-	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
-
-	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
-	// instead of recompiling to adjust them
-	GetCharacterMovement()->JumpZVelocity = 700.f;
-	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
-	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
-
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-
-	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
 void AProjectBCharacter::PossessedBy(AController* NewController)
@@ -69,6 +40,12 @@ void AProjectBCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+void AProjectBCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	LookTowardsMouse();
+}
+
 UAbilitySystemComponent* AProjectBCharacter::GetAbilitySystemComponent() const
 {
 	return ASC;
@@ -76,8 +53,10 @@ UAbilitySystemComponent* AProjectBCharacter::GetAbilitySystemComponent() const
 
 void AProjectBCharacter::BeginPlay()
 {
-	// Call the base class  
 	Super::BeginPlay();
+
+	if (!IsLocallyControlled())
+		return;
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -93,69 +72,54 @@ void AProjectBCharacter::InitAbilityActorInfo()
 {
 	AProjectBPlayerState* ProjectBPlayerState = GetPlayerState<AProjectBPlayerState>();
 	check(ProjectBPlayerState);
+
 	ProjectBPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(ProjectBPlayerState, this);
 	ASC = ProjectBPlayerState->GetAbilitySystemComponent();
 	AttributeSet = ProjectBPlayerState->GetAttributeSet();
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
 void AProjectBCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		//Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
-		//Moving
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) 
+	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AProjectBCharacter::Move);
-
-		//Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AProjectBCharacter::Look);
-
 	}
-
 }
 
 void AProjectBCharacter::Move(const FInputActionValue& Value)
 {
-	// input is a Vector2D
+	if (!Controller)
+		return;
+	if (!Controller->GetViewTarget())
+		return;
+
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	// Get camera rotation
+	const FRotator Rotation = Controller->GetViewTarget()->GetActorRotation();
+		
+	const FVector ForwardDirection = UKismetMathLibrary::GetForwardVector({ 0.f, 0.f, Rotation.Yaw });
+	const FVector RightDirection = UKismetMathLibrary::GetRightVector({ Rotation.Roll, 0.f, Rotation.Yaw });
 
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
-	}
+	AddMovementInput(ForwardDirection, -MovementVector.Y);
+	AddMovementInput(RightDirection, MovementVector.X);
 }
 
-void AProjectBCharacter::Look(const FInputActionValue& Value)
+void AProjectBCharacter::LookTowardsMouse()
 {
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	TObjectPtr<APlayerController> PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
-	if (Controller != nullptr)
-	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
+	if (!GetMesh())
+		return;
+	if (!PlayerController)
+		return;
+
+	const FVector2D MousePosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(GetWorld());
+
+	FHitResult HitResult;
+	PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+
+	float YawRotation = UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetComponentLocation(), HitResult.Location).Yaw;
+	
+	GetMesh()->SetRelativeRotation({ 0.f, 0.f, YawRotation-90.f });
 }
-
-
-
-
