@@ -1,15 +1,26 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Core/ProjectBGameMode.h"
-#include "Character/ProjectBCharacter.h"
+#include "Core/ProjectBPlayerController.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 AProjectBGameMode::AProjectBGameMode()
 {
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+}
+
+void AProjectBGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	OnPlayerLoggedIn.Broadcast(Cast<AProjectBPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0)));
+}
+
+void AProjectBGameMode::OnPostLogin(AController* NewPlayer)
+{
+	OnPlayerLoggedIn.Broadcast(Cast<AProjectBPlayerController>(NewPlayer));
+}
+
+void AProjectBGameMode::StartMatch()
+{
+	OnMatchStarted.Broadcast();
 }

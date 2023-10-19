@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class AProjectBCharacter;
+class AProjectBPlayerController;
 
 UCLASS()
 class PROJECTB_API AProjectBLevelCamera : public AActor
@@ -19,9 +20,9 @@ public:
 	AProjectBLevelCamera();
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USpringArmComponent> SpringArm;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCameraComponent> Camera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -37,8 +38,14 @@ protected:
 
 protected:
 	virtual void BeginPlay() override;
+
 	UFUNCTION()
 	void InitCameraStats();
+	UFUNCTION()
+	void OnMatchStarted();
+	UFUNCTION(NetMulticast, Reliable)
+	void Mulicast_OnMatchStarted();
+
 	UFUNCTION()
 	float GetMaxPlayersDistance();
 	UFUNCTION()

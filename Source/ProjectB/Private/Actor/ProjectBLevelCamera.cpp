@@ -7,16 +7,24 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Character/ProjectBCharacter.h"
+#include "Core/ProjectBPlayerController.h"
+#include "Core/ProjectBGameMode.h"
+#include "Core/ProjectBGameState.h"
+#include "GameFramework/GameState.h"
+#include "Core/ProjectBPlayerState.h"
 
 // Sets default values
 AProjectBLevelCamera::AProjectBLevelCamera()
 {
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SetRootComponent(SpringArm);
+	SpringArm->bDoCollisionTest = false;
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
 	PrimaryActorTick.bCanEverTick = true;
+	SetReplicates(true);
+	bNetLoadOnClient = true;
 }
 
 // Called when the game starts or when spawned
@@ -24,22 +32,42 @@ void AProjectBLevelCamera::BeginPlay()
 {
 	Super::BeginPlay();
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this,0);
-	if(PlayerController)
+	if(!PlayerController)
 	{
-		PlayerController->SetViewTargetWithBlend(this, 0.1f);
+		return;
+	}
+	PlayerController->SetViewTargetWithBlend(this, 0.1f);
+
+	AProjectBGameMode* PBGameMode = Cast<AProjectBGameMode>(UGameplayStatics::GetGameMode(this));
+	if (!PBGameMode)
+	{
+		return;
 	}
 
-	//TODO: Wait for all players to be connected
-	InitCameraStats();
+	PBGameMode->OnMatchStarted.AddDynamic(this, &AProjectBLevelCamera::OnMatchStarted);
 }
 
 void AProjectBLevelCamera::InitCameraStats()
 {
+	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
+	{
+		Characters.Add(Cast<AProjectBCharacter>(PlayerState->GetPawn()));
+	}
+
 	InitArmLength = SpringArm->TargetArmLength;
 	InitPlayersDistance = GetMaxPlayersDistance();
 }
 
-// Called every frame
+void AProjectBLevelCamera::OnMatchStarted()
+{
+	Mulicast_OnMatchStarted();
+}
+
+void AProjectBLevelCamera::Mulicast_OnMatchStarted_Implementation()
+{
+	InitCameraStats();
+}
+
 void AProjectBLevelCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -64,6 +92,7 @@ void AProjectBLevelCamera::ReZoomCamera()
 {
 	if (InitPlayersDistance == 0)
 	{
+		SpringArm->TargetArmLength = MaxArmLength;
 		return;
 	}
 	//Calculation based on an initial arm length adecuated to the characters spawn points;
@@ -74,18 +103,21 @@ void AProjectBLevelCamera::ReZoomCamera()
 float AProjectBLevelCamera::GetMaxPlayersDistance()
 {
 	float CurrentPlayersDistance = 0;
-	//TODO: Improve this nested for 
-	for (const AProjectBCharacter* CharacterA : Characters)
+
+	for (int i = 0; i < Characters.Num(); i++)
 	{
-		for (const AProjectBCharacter* CharacterB : Characters)
+		for (int j = i+1; j < Characters.Num(); j++)
 		{
-			const float Distance = FVector::Distance(CharacterA->GetActorLocation(), CharacterB->GetActorLocation());
+			if (j >= Characters.Num())
+				continue;
+
+			const float Distance = FVector::Distance(Characters[i]->GetActorLocation(), Characters[j]->GetActorLocation());
 			if (Distance > CurrentPlayersDistance)
 			{
 				CurrentPlayersDistance = Distance;
 			}
 		}
 	}
+
 	return CurrentPlayersDistance;
 }
-
