@@ -1,0 +1,52 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "ProjectBLevelCamera.generated.h"
+
+class USpringArmComponent;
+class UCameraComponent;
+class AProjectBCharacter;
+
+UCLASS()
+class PROJECTB_API AProjectBLevelCamera : public AActor
+{
+	GENERATED_BODY()
+	
+public:	
+	AProjectBLevelCamera();
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<USpringArmComponent> SpringArm;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<UCameraComponent> Camera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float InitArmLength;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxArmLength;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MinArmLength;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float InitPlayersDistance;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TArray<TObjectPtr<AProjectBCharacter>> Characters;
+
+protected:
+	virtual void BeginPlay() override;
+	UFUNCTION()
+	void InitCameraStats();
+	UFUNCTION()
+	float GetMaxPlayersDistance();
+	UFUNCTION()
+	void RepositionCamera();
+	UFUNCTION()
+	void ReZoomCamera();
+
+public:	
+	virtual void Tick(float DeltaTime) override;
+
+};
