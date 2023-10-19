@@ -22,6 +22,7 @@
 
 AProjectBCharacter::AProjectBCharacter()
 {
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AProjectBCharacter::PossessedBy(AController* NewController)
@@ -43,6 +44,8 @@ void AProjectBCharacter::OnRep_PlayerState()
 void AProjectBCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	if (!IsLocallyControlled())
+		return;
 	LookTowardsMouse();
 }
 
@@ -121,5 +124,5 @@ void AProjectBCharacter::LookTowardsMouse()
 
 	float YawRotation = UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetComponentLocation(), HitResult.Location).Yaw;
 	
-	GetMesh()->SetRelativeRotation({ 0.f, 0.f, YawRotation-90.f });
+	GetMesh()->SetRelativeRotation({ 0.f,  YawRotation-90.f, 0.f });
 }
