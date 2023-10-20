@@ -9,7 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class AProjectBCharacter;
-class AProjectBPlayerController;
+class APBPlayerController;
 
 UCLASS()
 class PROJECTB_API AProjectBLevelCamera : public AActor

@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Core/ProjectBPlayerController.h"
+#include "Core/PBPlayerController.h"
 #include "Character/ProjectBCharacter.h"
 
-AProjectBPlayerController::AProjectBPlayerController()
+APBPlayerController::APBPlayerController()
 {
 }
 
-AProjectBCharacter* AProjectBPlayerController::GetPBCharacter()
+AProjectBCharacter* APBPlayerController::GetPBCharacter()
 {
 	APawn* MyPawn = GetPawn();
 	if (!MyPawn)

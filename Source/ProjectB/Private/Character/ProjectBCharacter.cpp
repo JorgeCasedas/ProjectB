@@ -10,7 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
-#include "Core/ProjectBPlayerState.h"
+#include "Core/PBPlayerState.h"
 #include "GAS/ProjectBAbilitySystemComponent.h"
 
 #include "Kismet/KismetMathLibrary.h"
@@ -73,12 +73,12 @@ void AProjectBCharacter::BeginPlay()
 
 void AProjectBCharacter::InitAbilityActorInfo()
 {
-	AProjectBPlayerState* ProjectBPlayerState = GetPlayerState<AProjectBPlayerState>();
-	check(ProjectBPlayerState);
+	APBPlayerState* PBPlayerState = GetPlayerState<APBPlayerState>();
+	check(PBPlayerState);
 
-	ProjectBPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(ProjectBPlayerState, this);
-	ASC = ProjectBPlayerState->GetAbilitySystemComponent();
-	AttributeSet = ProjectBPlayerState->GetAttributeSet();
+	PBPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(PBPlayerState, this);
+	ASC = PBPlayerState->GetAbilitySystemComponent();
+	AttributeSet = PBPlayerState->GetAttributeSet();
 }
 
 void AProjectBCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

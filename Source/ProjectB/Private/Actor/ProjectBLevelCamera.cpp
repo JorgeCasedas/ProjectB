@@ -7,11 +7,11 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Character/ProjectBCharacter.h"
-#include "Core/ProjectBPlayerController.h"
+#include "Core/PBPlayerController.h"
 #include "Core/PBGameMode.h"
-#include "Core/ProjectBGameState.h"
+#include "Core/PBGameState.h"
 #include "GameFramework/GameState.h"
-#include "Core/ProjectBPlayerState.h"
+#include "Core/PBPlayerState.h"
 
 // Sets default values
 AProjectBLevelCamera::AProjectBLevelCamera()

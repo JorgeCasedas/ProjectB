@@ -4,20 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "ProjectBPlayerController.generated.h"
+#include "PBPlayerController.generated.h"
 
 class AProjectCharacter;
 /**
  * 
  */
 UCLASS()
-class PROJECTB_API AProjectBPlayerController : public APlayerController
+class PROJECTB_API APBPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
 public:
 
-	AProjectBPlayerController();
+	APBPlayerController();
 
 	UFUNCTION()
 	AProjectBCharacter* GetPBCharacter();

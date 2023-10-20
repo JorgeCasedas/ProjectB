@@ -7,7 +7,7 @@
 #include "AbilitySystemInterface.h"
 
 #include "GameFramework/PlayerState.h"
-#include "ProjectBPlayerState.generated.h"
+#include "PBPlayerState.generated.h"
 
 
 class UAbilitySystemComponent;
@@ -17,11 +17,11 @@ class UAttributeSet;
  * 
  */
 UCLASS()
-class PROJECTB_API AProjectBPlayerState : public APlayerState, public IAbilitySystemInterface
+class PROJECTB_API APBPlayerState : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 public:
-	AProjectBPlayerState();
+	APBPlayerState();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }

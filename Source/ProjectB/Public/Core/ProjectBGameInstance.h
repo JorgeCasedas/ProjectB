@@ -14,6 +14,9 @@ class FOnlineSessionSearch;
 /**
  * 
  */
+
+//TODO: Rename UProjectBGameInstance to UPBGameInstance
+
 UCLASS()
 class PROJECTB_API UProjectBGameInstance : public UGameInstance
 {
