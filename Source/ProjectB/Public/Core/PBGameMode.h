@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "ProjectBGameMode.generated.h"
+#include "GameFramework/GameMode.h"
+#include "PBGameMode.generated.h"
 
 class AProjectBPlayerController;
 
@@ -13,15 +13,15 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
 
 
 UCLASS(minimalapi)
-class AProjectBGameMode : public AGameModeBase
+class APBGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
 public:
-	AProjectBGameMode();
+	APBGameMode();
 
 	UFUNCTION(BlueprintCallable)
-	void StartMatch();
+	void StartPBMatch();
 
 public:
 	UPROPERTY(BlueprintAssignable)

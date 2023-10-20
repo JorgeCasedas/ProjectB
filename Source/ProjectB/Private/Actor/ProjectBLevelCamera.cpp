@@ -8,7 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Character/ProjectBCharacter.h"
 #include "Core/ProjectBPlayerController.h"
-#include "Core/ProjectBGameMode.h"
+#include "Core/PBGameMode.h"
 #include "Core/ProjectBGameState.h"
 #include "GameFramework/GameState.h"
 #include "Core/ProjectBPlayerState.h"
@@ -38,7 +38,7 @@ void AProjectBLevelCamera::BeginPlay()
 	}
 	PlayerController->SetViewTargetWithBlend(this, 0.1f);
 
-	AProjectBGameMode* PBGameMode = Cast<AProjectBGameMode>(UGameplayStatics::GetGameMode(this));
+	APBGameMode* PBGameMode = Cast<APBGameMode>(UGameplayStatics::GetGameMode(this));
 	if (!PBGameMode)
 	{
 		return;
