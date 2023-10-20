@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Actor/ProjectBLevelCamera.h"
+#include "Actor/PBLevelCamera.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "Camera/CameraComponent.h"
@@ -14,7 +14,7 @@
 #include "Core/PBPlayerState.h"
 
 // Sets default values
-AProjectBLevelCamera::AProjectBLevelCamera()
+APBLevelCamera::APBLevelCamera()
 {
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SetRootComponent(SpringArm);
@@ -28,7 +28,7 @@ AProjectBLevelCamera::AProjectBLevelCamera()
 }
 
 // Called when the game starts or when spawned
-void AProjectBLevelCamera::BeginPlay()
+void APBLevelCamera::BeginPlay()
 {
 	Super::BeginPlay();
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this,0);
@@ -44,10 +44,10 @@ void AProjectBLevelCamera::BeginPlay()
 		return;
 	}
 
-	PBGameMode->OnMatchStarted.AddDynamic(this, &AProjectBLevelCamera::OnMatchStarted);
+	PBGameMode->OnMatchStarted.AddDynamic(this, &APBLevelCamera::OnMatchStarted);
 }
 
-void AProjectBLevelCamera::InitCameraStats()
+void APBLevelCamera::InitCameraStats()
 {
 	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
 	{
@@ -58,24 +58,24 @@ void AProjectBLevelCamera::InitCameraStats()
 	InitPlayersDistance = GetMaxPlayersDistance();
 }
 
-void AProjectBLevelCamera::OnMatchStarted()
+void APBLevelCamera::OnMatchStarted()
 {
 	Mulicast_OnMatchStarted();
 }
 
-void AProjectBLevelCamera::Mulicast_OnMatchStarted_Implementation()
+void APBLevelCamera::Mulicast_OnMatchStarted_Implementation()
 {
 	InitCameraStats();
 }
 
-void AProjectBLevelCamera::Tick(float DeltaTime)
+void APBLevelCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	RepositionCamera();
 	ReZoomCamera();
 }
 
-void AProjectBLevelCamera::RepositionCamera()
+void APBLevelCamera::RepositionCamera()
 {
 	FVector PlayersVector = FVector::Zero();
 
@@ -88,7 +88,7 @@ void AProjectBLevelCamera::RepositionCamera()
 	SetActorLocation(MidPoint);
 }
 
-void AProjectBLevelCamera::ReZoomCamera()
+void APBLevelCamera::ReZoomCamera()
 {
 	if (InitPlayersDistance == 0)
 	{
@@ -100,7 +100,7 @@ void AProjectBLevelCamera::ReZoomCamera()
 	SpringArm->TargetArmLength = FMath::Clamp(UnClampedZoom, MinArmLength, MaxArmLength);
 }
 
-float AProjectBLevelCamera::GetMaxPlayersDistance()
+float APBLevelCamera::GetMaxPlayersDistance()
 {
 	float CurrentPlayersDistance = 0;
 

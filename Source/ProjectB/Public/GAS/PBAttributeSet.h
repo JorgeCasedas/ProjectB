@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "AbilitySystemComponent.h"
-#include "ProjectBAttributeSet.generated.h"
+#include "PBAttributeSet.generated.h"
 
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
  	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -17,20 +17,20 @@
  * 
  */
 UCLASS()
-class PROJECTB_API UProjectBAttributeSet : public UAttributeSet
+class PROJECTB_API UPBAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 public:
-	UProjectBAttributeSet();
+	UPBAttributeSet();
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category="Core Attributes")
 	FGameplayAttributeData Health;
-	ATTRIBUTE_ACCESSORS(UProjectBAttributeSet, Health);
+	ATTRIBUTE_ACCESSORS(UPBAttributeSet, Health);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Core Attributes")
 	FGameplayAttributeData MaxHealth;
-	ATTRIBUTE_ACCESSORS(UProjectBAttributeSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS(UPBAttributeSet, MaxHealth);
 
 
 	UFUNCTION()

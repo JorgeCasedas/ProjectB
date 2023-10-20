@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ProjectBLevelCamera.generated.h"
+#include "PBLevelCamera.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -12,12 +12,12 @@ class APBCharacter;
 class APBPlayerController;
 
 UCLASS()
-class PROJECTB_API AProjectBLevelCamera : public AActor
+class PROJECTB_API APBLevelCamera : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AProjectBLevelCamera();
+	APBLevelCamera();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

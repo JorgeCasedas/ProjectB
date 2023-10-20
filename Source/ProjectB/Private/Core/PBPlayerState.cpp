@@ -2,16 +2,16 @@
 
 
 #include "Core/PBPlayerState.h"
-#include "GAS/ProjectBAbilitySystemComponent.h"
-#include "GAS/ProjectBAttributeSet.h"
+#include "GAS/PBAbilitySystemComponent.h"
+#include "GAS/PBAttributeSet.h"
 
 APBPlayerState::APBPlayerState()
 {
-	ASC = CreateDefaultSubobject<UProjectBAbilitySystemComponent>("ASC");
+	ASC = CreateDefaultSubobject<UPBAbilitySystemComponent>("ASC");
 	ASC->SetIsReplicated(true);
 	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
-	AttributeSet = CreateDefaultSubobject<UProjectBAttributeSet>("AttributeSet");
+	AttributeSet = CreateDefaultSubobject<UPBAttributeSet>("AttributeSet");
 
 	NetUpdateFrequency = 100.f;
 }

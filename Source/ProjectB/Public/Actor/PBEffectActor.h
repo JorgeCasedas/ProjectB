@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ProjectBEffectActor.generated.h"
+#include "PBEffectActor.generated.h"
 
 class UCapsuleComponent;
 
 UCLASS()
-class PROJECTB_API AProjectBEffectActor : public AActor
+class PROJECTB_API APBEffectActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 
-	AProjectBEffectActor();
+	APBEffectActor();
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()

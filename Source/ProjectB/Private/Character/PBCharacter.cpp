@@ -11,7 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 
 #include "Core/PBPlayerState.h"
-#include "GAS/ProjectBAbilitySystemComponent.h"
+#include "GAS/PBAbilitySystemComponent.h"
 
 #include "Kismet/KismetMathLibrary.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
