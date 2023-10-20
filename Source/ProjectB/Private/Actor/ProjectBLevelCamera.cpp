@@ -6,7 +6,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Character/ProjectBCharacter.h"
+#include "Character/PBCharacter.h"
 #include "Core/PBPlayerController.h"
 #include "Core/PBGameMode.h"
 #include "Core/PBGameState.h"
@@ -51,7 +51,7 @@ void AProjectBLevelCamera::InitCameraStats()
 {
 	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
 	{
-		Characters.Add(Cast<AProjectBCharacter>(PlayerState->GetPawn()));
+		Characters.Add(Cast<APBCharacter>(PlayerState->GetPawn()));
 	}
 
 	InitArmLength = SpringArm->TargetArmLength;
@@ -79,7 +79,7 @@ void AProjectBLevelCamera::RepositionCamera()
 {
 	FVector PlayersVector = FVector::Zero();
 
-	for (AProjectBCharacter* Character : Characters)
+	for (APBCharacter* Character : Characters)
 	{
 		PlayersVector += Character->GetActorLocation();
 	}

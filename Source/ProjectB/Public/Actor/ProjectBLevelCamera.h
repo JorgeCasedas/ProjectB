@@ -8,7 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
-class AProjectBCharacter;
+class APBCharacter;
 class APBPlayerController;
 
 UCLASS()
@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float InitPlayersDistance;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<TObjectPtr<AProjectBCharacter>> Characters;
+	TArray<TObjectPtr<APBCharacter>> Characters;
 
 protected:
 	virtual void BeginPlay() override;

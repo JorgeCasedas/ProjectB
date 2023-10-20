@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "Character/ProjectBCharacter.h"
+#include "Character/PBCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -18,14 +18,14 @@
 #include "Kismet/GameplayStatics.h"
 
 //////////////////////////////////////////////////////////////////////////
-// AProjectBCharacter
+// APBCharacter
 
-AProjectBCharacter::AProjectBCharacter()
+APBCharacter::APBCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AProjectBCharacter::PossessedBy(AController* NewController)
+void APBCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
@@ -33,7 +33,7 @@ void AProjectBCharacter::PossessedBy(AController* NewController)
 	InitAbilityActorInfo();
 }
 
-void AProjectBCharacter::OnRep_PlayerState()
+void APBCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
@@ -41,7 +41,7 @@ void AProjectBCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
-void AProjectBCharacter::Tick(float DeltaSeconds)
+void APBCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	if (!IsLocallyControlled())
@@ -49,12 +49,12 @@ void AProjectBCharacter::Tick(float DeltaSeconds)
 	LookTowardsMouse();
 }
 
-UAbilitySystemComponent* AProjectBCharacter::GetAbilitySystemComponent() const
+UAbilitySystemComponent* APBCharacter::GetAbilitySystemComponent() const
 {
 	return ASC;
 }
 
-void AProjectBCharacter::BeginPlay()
+void APBCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -71,7 +71,7 @@ void AProjectBCharacter::BeginPlay()
 	}
 }
 
-void AProjectBCharacter::InitAbilityActorInfo()
+void APBCharacter::InitAbilityActorInfo()
 {
 	APBPlayerState* PBPlayerState = GetPlayerState<APBPlayerState>();
 	check(PBPlayerState);
@@ -81,15 +81,15 @@ void AProjectBCharacter::InitAbilityActorInfo()
 	AttributeSet = PBPlayerState->GetAttributeSet();
 }
 
-void AProjectBCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void APBCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) 
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AProjectBCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APBCharacter::Move);
 	}
 }
 
-void AProjectBCharacter::Move(const FInputActionValue& Value)
+void APBCharacter::Move(const FInputActionValue& Value)
 {
 	if (!Controller)
 		return;
@@ -108,7 +108,7 @@ void AProjectBCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(RightDirection, MovementVector.X);
 }
 
-void AProjectBCharacter::LookTowardsMouse()
+void APBCharacter::LookTowardsMouse()
 {
 	TObjectPtr<APlayerController> PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 

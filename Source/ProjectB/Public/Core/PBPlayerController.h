@@ -20,5 +20,5 @@ public:
 	APBPlayerController();
 
 	UFUNCTION()
-	AProjectBCharacter* GetPBCharacter();
+	APBCharacter* GetPBCharacter();
 };

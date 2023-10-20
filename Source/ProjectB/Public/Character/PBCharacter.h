@@ -8,18 +8,18 @@
 
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "ProjectBCharacter.generated.h"
+#include "PBCharacter.generated.h"
 
 class UAbilitySystemComponent;
 class UAttributeSet;
 
 UCLASS(config=Game)
-class AProjectBCharacter : public ACharacter, public IAbilitySystemInterface
+class APBCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
-	AProjectBCharacter();
+	APBCharacter();
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;

@@ -2,18 +2,18 @@
 
 
 #include "Core/PBPlayerController.h"
-#include "Character/ProjectBCharacter.h"
+#include "Character/PBCharacter.h"
 
 APBPlayerController::APBPlayerController()
 {
 }
 
-AProjectBCharacter* APBPlayerController::GetPBCharacter()
+APBCharacter* APBPlayerController::GetPBCharacter()
 {
 	APawn* MyPawn = GetPawn();
 	if (!MyPawn)
 	{
 		return nullptr;
 	}
-	return Cast<AProjectBCharacter>(MyPawn);
+	return Cast<APBCharacter>(MyPawn);
 }
