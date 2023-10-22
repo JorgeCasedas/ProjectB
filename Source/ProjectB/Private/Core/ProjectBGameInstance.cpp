@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Core/ProjectBGameInstance.h"
+#include "Core/PBGameState.h"
 
 #include "OnlineSessionSettings.h"
 
@@ -30,6 +31,7 @@ void UProjectBGameInstance::Init()
 	SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnDestroySession);
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnSessionsFound);
 	SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnJoinSession);
+
 #if !WITH_EDITOR
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS NOT EDITOR"));
 #else 
@@ -117,8 +119,6 @@ void UProjectBGameInstance::StartHostingGame()
 
 	FString LobbyPath = LobbyLevel.GetLongPackageName();
 	World->ServerTravel(LobbyPath + "?listen");
-	
-	FString CurrentSessionID = GetCurrentSessionID();
 }
 
 void UProjectBGameInstance::FindSessions()
@@ -208,4 +208,9 @@ FString UProjectBGameInstance::GetCurrentSessionID()
 	}
 
 	return ExistingSession->GetSessionIdStr();;
+}
+
+void UProjectBGameInstance::SetConnectedPlayersCount()
+{
+	ConnectedPlayersCount = GetWorld()->GetGameState()->PlayerArray.Num();
 }

@@ -32,10 +32,15 @@ public:
 	void TryFindSessions(FString GameSessionId);
 	UFUNCTION(BlueprintCallable)
 	FString GetCurrentSessionID();
+	UFUNCTION(BlueprintCallable)
+	void SetConnectedPlayersCount();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> LobbyLevel;
+	//Will only exist on the server
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 ConnectedPlayersCount;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -52,7 +57,7 @@ private:
 	void FindSessions();
 	UFUNCTION()
 	void OnSessionsFound(bool bSuccess);
-
+	
 	void OnJoinSession(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
 private:
