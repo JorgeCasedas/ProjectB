@@ -23,6 +23,9 @@
 APBCharacter::APBCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	SetReplicates(true);
+	GetCharacterMovement()->SetIsReplicated(true);
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 }
 
 void APBCharacter::PossessedBy(AController* NewController)
@@ -61,6 +64,12 @@ void APBCharacter::BeginPlay()
 	if (!IsLocallyControlled())
 		return;
 
+	if(!DefaultMappingContext || !MoveAction)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Inputs not set correctly"));
+		return;
+	}
+
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -68,6 +77,7 @@ void APBCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+		PlayerController->bShowMouseCursor = true;
 	}
 }
 
@@ -124,5 +134,5 @@ void APBCharacter::LookTowardsMouse()
 
 	float YawRotation = UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetComponentLocation(), HitResult.Location).Yaw;
 	
-	GetMesh()->SetRelativeRotation({ 0.f,  YawRotation-90.f, 0.f });
+	PlayerController->SetControlRotation({ 0.f,  YawRotation-90.f, 0.f });
 }
