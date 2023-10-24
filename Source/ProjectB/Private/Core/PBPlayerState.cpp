@@ -9,9 +9,10 @@ APBPlayerState::APBPlayerState()
 {
 	ASC = CreateDefaultSubobject<UPBAbilitySystemComponent>("ASC");
 	ASC->SetIsReplicated(true);
-	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Full);
+	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	AttributeSet = CreateDefaultSubobject<UPBAttributeSet>("AttributeSet");
+
 
 	NetUpdateFrequency = 100.f;
 }
@@ -30,4 +31,9 @@ float APBPlayerState::GetHealth()
 float APBPlayerState::GetMaxHealth()
 {
 	return Cast<UPBAttributeSet>(AttributeSet) ? Cast<UPBAttributeSet>(AttributeSet)->GetMaxHealth() : 0;
+}
+
+void APBPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
 }

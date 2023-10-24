@@ -89,8 +89,6 @@ void APBCharacter::InitAbilityActorInfo()
 	PBPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(PBPlayerState, this);
 	ASC = PBPlayerState->GetAbilitySystemComponent();
 	AttributeSet = PBPlayerState->GetAttributeSet();
-	if(HasAuthority())
-		UE_LOG(LogTemp, Error, TEXT("Player %s - PlayerState %s - AttributeSet %s"), *GetName(), *PBPlayerState->GetName(), *AttributeSet->GetName());
 }
 
 void APBCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

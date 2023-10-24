@@ -37,6 +37,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UAbilitySystemComponent> ASC;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+protected:
+	virtual void BeginPlay() override;
 };
