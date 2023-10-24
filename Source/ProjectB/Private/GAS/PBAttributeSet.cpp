@@ -11,7 +11,7 @@
 UPBAttributeSet::UPBAttributeSet()
 {
 	InitMaxHealth(100.f);
-	InitHealth(GetMaxHealth());
+	InitHealth(100.f);
 }
 
 void UPBAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
