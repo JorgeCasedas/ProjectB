@@ -25,11 +25,18 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	
+	//TODO: Test implementation change this
+	UFUNCTION(BlueprintCallable)
+		float GetHealth();
+	//TODO: Test implementation change this
+	UFUNCTION(BlueprintCallable)
+		float GetMaxHealth();
 
 protected:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UAbilitySystemComponent> ASC;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UAttributeSet> AttributeSet;
 };

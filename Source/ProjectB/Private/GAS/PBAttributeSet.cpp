@@ -25,7 +25,6 @@ void UPBAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void UPBAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
-
 	if(Attribute == GetHealthAttribute())
 	{
 		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
@@ -36,8 +35,8 @@ void UPBAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	FEffectProperties Props;
-	SetEffectProperties(Data, Props);
+	//FEffectProperties Props;
+	//SetEffectProperties(Data, Props);
 
 
 }

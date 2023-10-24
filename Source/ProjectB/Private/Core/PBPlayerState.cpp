@@ -9,7 +9,7 @@ APBPlayerState::APBPlayerState()
 {
 	ASC = CreateDefaultSubobject<UPBAbilitySystemComponent>("ASC");
 	ASC->SetIsReplicated(true);
-	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Full);
 
 	AttributeSet = CreateDefaultSubobject<UPBAttributeSet>("AttributeSet");
 
@@ -19,4 +19,15 @@ APBPlayerState::APBPlayerState()
 UAbilitySystemComponent* APBPlayerState::GetAbilitySystemComponent() const
 {
 	return ASC;
+}
+
+//TODO: Test implementation change this
+float APBPlayerState::GetHealth()
+{
+	return Cast<UPBAttributeSet>(AttributeSet) ? Cast<UPBAttributeSet>(AttributeSet)->GetHealth() : 0;
+}
+//TODO: Test implementation change this
+float APBPlayerState::GetMaxHealth()
+{
+	return Cast<UPBAttributeSet>(AttributeSet) ? Cast<UPBAttributeSet>(AttributeSet)->GetMaxHealth() : 0;
 }
