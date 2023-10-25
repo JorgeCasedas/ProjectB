@@ -4,36 +4,57 @@
 #include "Core/PBPlayerState.h"
 #include "GAS/PBAbilitySystemComponent.h"
 #include "GAS/PBAttributeSet.h"
+#include "GAS/PBHealthAttributeSet.h"
+#include "GAS/PBCombatAttributeSet.h"
+#include "GameFramework/Character.h"
 
 APBPlayerState::APBPlayerState()
 {
-	ASC = CreateDefaultSubobject<UPBAbilitySystemComponent>("ASC");
-	ASC->SetIsReplicated(true);
-	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
-
-	AttributeSet = CreateDefaultSubobject<UPBAttributeSet>("AttributeSet");
-
+	PBASC = CreateDefaultSubobject<UPBAbilitySystemComponent>("PBAbilitySystemComponent");
+	PBASC->SetIsReplicated(true);
+	PBASC->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	NetUpdateFrequency = 100.f;
+
+	AttributeSetRename = CreateDefaultSubobject<UPBHealthAttributeSet>("HealthAttributeSet");
+	//UE_LOG(LogTemp, Error, TEXT("Create Player State"));
+	//CreateDefaultSubobject<UPBCombatAttributeSet>("CombatAttributeSet");
 }
 
 UAbilitySystemComponent* APBPlayerState::GetAbilitySystemComponent() const
 {
-	return ASC;
+	return PBASC;
+}
+
+UPBAbilitySystemComponent* APBPlayerState::GetPBAbilitySystemComponent() const
+{
+	return PBASC;
 }
 
 //TODO: Test implementation change this
 float APBPlayerState::GetHealth()
 {
-	return Cast<UPBAttributeSet>(AttributeSet) ? Cast<UPBAttributeSet>(AttributeSet)->GetHealth() : 0;
+	return Cast<UPBHealthAttributeSet>(AttributeSetRename) ? Cast<UPBHealthAttributeSet>(AttributeSetRename)->GetHealth() : 0;
 }
 //TODO: Test implementation change this
 float APBPlayerState::GetMaxHealth()
 {
-	return Cast<UPBAttributeSet>(AttributeSet) ? Cast<UPBAttributeSet>(AttributeSet)->GetMaxHealth() : 0;
+	return Cast<UPBHealthAttributeSet>(AttributeSetRename) ? Cast<UPBHealthAttributeSet>(AttributeSetRename)->GetMaxHealth() : 0;
 }
 
 void APBPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
+	AActor* OwnerActor = GetOwner();
+
+	if (!PBASC) return;
+	if (!PBASC->GetAvatarActor()) return;
+	if (!Cast<ACharacter>(PBASC->GetAvatarActor())) return;
+	bool bLocallyControlled = Cast<ACharacter>(PBASC->GetAvatarActor())->IsLocallyControlled();
+	if (HasAuthority() && bLocallyControlled)
+	{
+		//ASC->RemoveAllSpawnedAttributes();
+		//ASC->RemoveSpawnedAttribute(AttributeSet);
+		
+	}
 }

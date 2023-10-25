@@ -11,6 +11,7 @@
 
 
 class UAbilitySystemComponent;
+class UPBAbilitySystemComponent;
 class UAttributeSet;
 
 /**
@@ -24,7 +25,8 @@ public:
 	APBPlayerState();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	UPBAbilitySystemComponent* GetPBAbilitySystemComponent() const;
+	UAttributeSet* GetAttributeSet() const { return AttributeSetRename; }
 	
 	//TODO: Test implementation change this
 	UFUNCTION(BlueprintCallable)
@@ -35,10 +37,12 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UAbilitySystemComponent> ASC;
+	TObjectPtr<UPBAbilitySystemComponent> ASCRename2;
 
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UAttributeSet> AttributeSetRename;
+	UPROPERTY()
+	TObjectPtr<UAttributeSet> CombatAttributeSet;
 
 protected:
 	virtual void BeginPlay() override;

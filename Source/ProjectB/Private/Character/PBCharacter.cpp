@@ -85,9 +85,10 @@ void APBCharacter::InitAbilityActorInfo()
 {
 	APBPlayerState* PBPlayerState = GetPlayerState<APBPlayerState>();
 	check(PBPlayerState);
+	check(PBPlayerState->GetPBAbilitySystemComponent())
 
-	PBPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(PBPlayerState, this);
-	ASC = PBPlayerState->GetAbilitySystemComponent();
+	PBPlayerState->GetPBAbilitySystemComponent()->InitAbilityActorInfo(PBPlayerState, this);
+	ASC = PBPlayerState->GetPBAbilitySystemComponent();
 	AttributeSet = PBPlayerState->GetAttributeSet();
 }
 

@@ -10,26 +10,13 @@
 
 UPBAttributeSet::UPBAttributeSet()
 {
-	InitMaxHealth(100.f);
-	InitHealth(100.f);
 }
 
 void UPBAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME_CONDITION_NOTIFY(UPBAttributeSet, Health, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UPBAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 }
 
-void UPBAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
-{
-	Super::PreAttributeChange(Attribute, NewValue);
-	if(Attribute == GetHealthAttribute())
-	{
-		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
-	}
-}
 
 void UPBAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
@@ -73,13 +60,3 @@ void UPBAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& 
 	}
 }
 
-
-void UPBAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBAttributeSet, Health, OldHealth);
-}
-
-void UPBAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBAttributeSet, MaxHealth, OldMaxHealth);
-}

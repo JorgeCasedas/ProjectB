@@ -7,12 +7,6 @@
 #include "AbilitySystemComponent.h"
 #include "PBAttributeSet.generated.h"
 
-#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
- 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
- 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
- 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
- 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-
 USTRUCT()
 struct FEffectProperties
 {
@@ -51,23 +45,7 @@ class PROJECTB_API UPBAttributeSet : public UAttributeSet
 public:
 	UPBAttributeSet();
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category="Core Attributes")
-	FGameplayAttributeData Health;
-	ATTRIBUTE_ACCESSORS(UPBAttributeSet, Health);
-
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Core Attributes")
-	FGameplayAttributeData MaxHealth;
-	ATTRIBUTE_ACCESSORS(UPBAttributeSet, MaxHealth);
-
-
-	UFUNCTION()
-	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
-	UFUNCTION()
-	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
 
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
