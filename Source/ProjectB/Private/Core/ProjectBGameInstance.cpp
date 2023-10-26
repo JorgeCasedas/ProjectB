@@ -81,7 +81,7 @@ void UProjectBGameInstance::CreateSession()
 	SessionSettings.bUseLobbiesIfAvailable = true;
 #endif
 
-	SessionSettings.NumPublicConnections = 2;
+	SessionSettings.NumPublicConnections = 4;
 	SessionSettings.bShouldAdvertise = true;
 
 	SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
@@ -148,13 +148,16 @@ void UProjectBGameInstance::FindSessions()
 
 void UProjectBGameInstance::OnSessionsFound(bool bSuccess)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Check sessions found"));
 	if (!bSuccess)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Could not find sessions"));
+		//UE_LOG(LogTemp, Warning, TEXT("Could not find sessions"));
+		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Could not find sessions"));
 		return;
 	}
 	if (!SessionSearch.IsValid())
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("SessionSearchNotValid"));
 		return;
 	}
 	
@@ -166,12 +169,14 @@ void UProjectBGameInstance::OnSessionsFound(bool bSuccess)
 			UE_LOG(LogTemp, Warning, TEXT("Joining"));
 			break;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr());
+		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, (TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr()));
+		//UE_LOG(LogTemp, Warning, TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr());
 		FoundSessionIndex++;
 	}
 
 	if (FoundSessionIndex < SessionSearch->SearchResults.Num())
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Try to JOIN"));
 		SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[FoundSessionIndex]);
 	}
 }
@@ -189,6 +194,7 @@ void UProjectBGameInstance::OnJoinSession(FName SessionName, EOnJoinSessionCompl
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 
+	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("JOINING"));
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
