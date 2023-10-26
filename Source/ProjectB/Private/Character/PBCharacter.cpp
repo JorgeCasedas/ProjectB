@@ -85,11 +85,12 @@ void APBCharacter::InitAbilityActorInfo()
 {
 	APBPlayerState* PBPlayerState = GetPlayerState<APBPlayerState>();
 	check(PBPlayerState);
-	check(PBPlayerState->GetPBAbilitySystemComponent())
 
-	PBPlayerState->GetPBAbilitySystemComponent()->InitAbilityActorInfo(PBPlayerState, this);
 	ASC = PBPlayerState->GetPBAbilitySystemComponent();
-	AttributeSet = PBPlayerState->GetAttributeSet();
+	check(ASC)
+
+	ASC->InitAbilityActorInfo(PBPlayerState, this);
+	AttributeSet = PBPlayerState->GetHealthAttributeSet();
 }
 
 void APBCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -135,5 +136,5 @@ void APBCharacter::LookTowardsMouse()
 
 	float YawRotation = UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetComponentLocation(), HitResult.Location).Yaw;
 	
-	PlayerController->SetControlRotation({ 0.f,  YawRotation-90.f, 0.f });
+	PlayerController->SetControlRotation({ 0.f,  YawRotation, 0.f });
 }

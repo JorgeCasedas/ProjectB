@@ -12,6 +12,7 @@
 
 class UAbilitySystemComponent;
 class UAttributeSet;
+class UPBHealthAttributeSet;
 
 UCLASS(config=Game)
 class APBCharacter : public ACharacter, public IAbilitySystemInterface
@@ -28,7 +29,7 @@ public:
 	
 #pragma region Getters
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	UPBHealthAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 #pragma endregion
 
@@ -43,7 +44,7 @@ protected:
 		TObjectPtr<UAbilitySystemComponent> ASC;
 
 	UPROPERTY()
-		TObjectPtr<UAttributeSet> AttributeSet;
+		TObjectPtr<UPBHealthAttributeSet> AttributeSet;
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	

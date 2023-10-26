@@ -13,6 +13,7 @@
 class UAbilitySystemComponent;
 class UPBAbilitySystemComponent;
 class UAttributeSet;
+class UPBHealthAttributeSet;
 
 /**
  * 
@@ -26,7 +27,7 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UPBAbilitySystemComponent* GetPBAbilitySystemComponent() const;
-	UAttributeSet* GetAttributeSet() const { return AttributeSetRename; }
+	UPBHealthAttributeSet* GetHealthAttributeSet() const { return HealthAttributeSet; }
 	
 	//TODO: Test implementation change this
 	UFUNCTION(BlueprintCallable)
@@ -37,13 +38,8 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UPBAbilitySystemComponent> ASCRename2;
+	TObjectPtr<UPBAbilitySystemComponent> PBASC;
 
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSetRename;
-	UPROPERTY()
-	TObjectPtr<UAttributeSet> CombatAttributeSet;
-
-protected:
-	virtual void BeginPlay() override;
+	TObjectPtr<UPBHealthAttributeSet> HealthAttributeSet;
 };
