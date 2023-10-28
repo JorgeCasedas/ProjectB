@@ -3,6 +3,8 @@
 #include "Core/ProjectBGameInstance.h"
 #include "Core/PBGameState.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/SaveGame.h"
 #include "OnlineSessionSettings.h"
 
 const static FName SESSION_NAME = TEXT("My Session Game");
@@ -219,4 +221,15 @@ FString UProjectBGameInstance::GetCurrentSessionID()
 void UProjectBGameInstance::SetConnectedPlayersCount()
 {
 	ConnectedPlayersCount = GetWorld()->GetGameState()->PlayerArray.Num();
+}
+
+void UProjectBGameInstance::SetInitialSaveGame()
+{
+	//PBTODO: create my own save game
+
+	if (!PlayersInfoSaveGameClass)
+		return;
+	USaveGame* TestSaveGame = UGameplayStatics::CreateSaveGameObject(PlayersInfoSaveGameClass);
+	UGameplayStatics::SaveGameToSlot(TestSaveGame, TEXT("TestSlot"), 0);
+	TESTInitialSaveGame();
 }

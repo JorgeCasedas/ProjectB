@@ -12,6 +12,7 @@
 
 #include "Core/PBPlayerState.h"
 #include "GAS/PBAbilitySystemComponent.h"
+#include "GAS/PBHealthAttributeSet.h"
 
 #include "Kismet/KismetMathLibrary.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
@@ -91,6 +92,21 @@ void APBCharacter::InitAbilityActorInfo()
 
 	ASC->InitAbilityActorInfo(PBPlayerState, this);
 	AttributeSet = PBPlayerState->GetHealthAttributeSet();
+	check(AttributeSet);
+	ASC->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &APBCharacter::HealthChanged);
+}
+
+void APBCharacter::HealthChanged(const FOnAttributeChangeData& HealthData)
+{
+	if (HealthData.NewValue <= 0)
+	{
+		Death();
+	}
+}
+
+void APBCharacter::Death()
+{
+	OnDeath.Broadcast();
 }
 
 void APBCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

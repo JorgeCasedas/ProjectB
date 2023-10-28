@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "AbilitySystemInterface.h"
+#include "GameplayEffectTypes.h"
 
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
@@ -13,6 +14,8 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 class UPBHealthAttributeSet;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS(config=Game)
 class APBCharacter : public ACharacter, public IAbilitySystemInterface
@@ -30,8 +33,11 @@ public:
 #pragma region Getters
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UPBHealthAttributeSet* GetAttributeSet() const { return AttributeSet; }
-
 #pragma endregion
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FOnDeath OnDeath;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -55,6 +61,11 @@ protected:
 	void LookTowardsMouse();
 
 private:
+	UFUNCTION()
 	void InitAbilityActorInfo();
+
+	virtual void HealthChanged(const FOnAttributeChangeData& HealthData);
+	UFUNCTION()
+	void Death();
 };
 

@@ -16,7 +16,7 @@ class USaveGame;
  * 
  */
 
-//PBTODO: Rename UProjectBGameInstance to UPBGameInstance
+//TODO: Rename UProjectBGameInstance to UPBGameInstance
 
 UCLASS()
 class PROJECTB_API UProjectBGameInstance : public UGameInstance
