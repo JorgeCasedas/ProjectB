@@ -4,10 +4,12 @@
 #include "Core/PBPlayerController.h"
 #include "Core/PBGameState.h"
 #include "Character/PBCharacter.h"
+#include "SaveGame/SaveGamePlayerInfo.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/PlayerState.h"
+#include "Blueprint/UserWidget.h"
 
 
 APBGameMode::APBGameMode()
@@ -39,6 +41,7 @@ void APBGameMode::PlayerDeath(APBCharacter* DeadCharacter)
 {
 	AliveCharacters.Remove(DeadCharacter);
 	DeadCharacters.Add(DeadCharacter);
+	CheckWinCon();
 }
 
 void APBGameMode::CheckWinCon()
@@ -48,10 +51,16 @@ void APBGameMode::CheckWinCon()
 
 void APBGameMode::GivePointsToPlayers()
 {
+	
 }
 
 void APBGameMode::MatchFinished()
 {
+	check(GetWorld());
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	check(PC);
+	ScoreboardWidget = CreateWidget<UUserWidget>(PC, ScoreboardWidgetClass);
+	ScoreboardWidget->AddToViewport();
 	TravelToNextMap();
 }
 

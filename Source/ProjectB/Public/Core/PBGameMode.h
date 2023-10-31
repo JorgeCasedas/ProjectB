@@ -40,12 +40,18 @@ public:
 	FOnPlayerLoggedIn OnPlayerLoggedIn;
 	UPROPERTY(BlueprintAssignable)
 	FOnMatchStarted OnMatchStarted;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<APBCharacter*> AliveCharacters;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<APBCharacter*> DeadCharacters;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> ScoreboardWidgetClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UUserWidget> ScoreboardWidget = nullptr;
 
 protected:
 	virtual void BeginPlay() override;
