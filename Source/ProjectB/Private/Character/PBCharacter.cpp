@@ -33,6 +33,8 @@ void APBCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
+	//GetMesh()->bOnlyAllowAutonomousTickPose = false;
+
 	//Init ability actor info for the Server
 	InitAbilityActorInfo();
 }

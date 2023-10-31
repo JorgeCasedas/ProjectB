@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/SaveGame.h"
 #include "OnlineSessionSettings.h"
+#include "SaveGame/SaveGamePlayerInfo.h"
 
 const static FName SESSION_NAME = TEXT("My Session Game");
 
@@ -229,7 +230,7 @@ void UProjectBGameInstance::SetInitialSaveGame()
 
 	if (!PlayersInfoSaveGameClass)
 		return;
-	USaveGame* TestSaveGame = UGameplayStatics::CreateSaveGameObject(PlayersInfoSaveGameClass);
+	USaveGamePlayerInfo* TestSaveGame = Cast<USaveGamePlayerInfo>(UGameplayStatics::CreateSaveGameObject(USaveGamePlayerInfo::StaticClass()));
 	UGameplayStatics::SaveGameToSlot(TestSaveGame, TEXT("TestSlot"), 0);
 	TESTInitialSaveGame();
 }

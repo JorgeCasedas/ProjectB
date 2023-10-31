@@ -11,7 +11,7 @@
 
 
 class FOnlineSessionSearch;
-class USaveGame;
+class USaveGamePlayerInfo;
 /**
  * 
  */
@@ -49,7 +49,7 @@ public:
 	int32 ConnectedPlayersCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<USaveGame> PlayersInfoSaveGameClass;
+	TSubclassOf<USaveGamePlayerInfo> PlayersInfoSaveGameClass;
 
 private:
 	UFUNCTION(BlueprintCallable)

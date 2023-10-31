@@ -35,6 +35,12 @@ void APBGameMode::StartPBMatch()
 	OnMatchStarted.Broadcast();
 }
 
+void APBGameMode::PlayerDeath(APBCharacter* DeadCharacter)
+{
+	AliveCharacters.Remove(DeadCharacter);
+	DeadCharacters.Add(DeadCharacter);
+}
+
 void APBGameMode::CheckWinCon()
 {
 	MatchFinished();

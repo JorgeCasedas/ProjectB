@@ -7,12 +7,6 @@ APBLastOneStadingGameMode::APBLastOneStadingGameMode()
 {
 }
 
-void APBLastOneStadingGameMode::PlayerDeath(APBCharacter* DeadCharacter)
-{
-	AliveCharacters.Remove(DeadCharacter);
-	DeadCharacters.Add(DeadCharacter);
-}
-
 void APBLastOneStadingGameMode::CheckWinCon()
 {
 	if (AliveCharacters.Num() <= 1)

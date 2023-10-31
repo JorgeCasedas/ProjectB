@@ -16,14 +16,7 @@ class PROJECTB_API APBLastOneStadingGameMode : public APBGameMode
 public:
 	APBLastOneStadingGameMode();
 
-	UFUNCTION()
-	void PlayerDeath(APBCharacter* DeadCharacter);
-
 	virtual void CheckWinCon() override;
 	virtual void GivePointsToPlayers() override;
 	virtual void MatchFinished() override;
-
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<APBCharacter*> DeadCharacters;
 };

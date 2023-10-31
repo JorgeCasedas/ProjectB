@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartPBMatch();
 	UFUNCTION(BlueprintCallable)
+	void PlayerDeath(APBCharacter* DeadCharacter);
+
+	UFUNCTION(BlueprintCallable)
 	virtual void CheckWinCon();
 	UFUNCTION(BlueprintCallable)
 	virtual void GivePointsToPlayers();
@@ -39,6 +42,8 @@ public:
 	FOnMatchStarted OnMatchStarted;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<APBCharacter*> AliveCharacters;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<APBCharacter*> DeadCharacters;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
 
