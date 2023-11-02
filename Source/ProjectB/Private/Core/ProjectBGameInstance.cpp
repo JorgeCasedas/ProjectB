@@ -226,11 +226,17 @@ void UProjectBGameInstance::SetConnectedPlayersCount()
 
 void UProjectBGameInstance::SetInitialSaveGame()
 {
-	//PBTODO: create my own save game
-
-	if (!PlayersInfoSaveGameClass)
+	if (!PlayersInfoSaveGameClass || bSaveGameAlreadyCreated)
 		return;
+
 	USaveGamePlayerInfo* TestSaveGame = Cast<USaveGamePlayerInfo>(UGameplayStatics::CreateSaveGameObject(USaveGamePlayerInfo::StaticClass()));
+	check(GetWorld()->GetGameState());
+	
+	for (APlayerState* Player : GetWorld()->GetGameState()->PlayerArray)
+	{
+		TestSaveGame->AddPlayerToInfo(Cast<APBPlayerState>(Player));
+	}
+	
 	UGameplayStatics::SaveGameToSlot(TestSaveGame, TEXT("TestSlot"), 0);
-	TESTInitialSaveGame();
+	bSaveGameAlreadyCreated = true;
 }

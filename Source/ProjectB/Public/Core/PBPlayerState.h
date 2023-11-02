@@ -31,10 +31,14 @@ public:
 	
 	//TODO: Test implementation change this
 	UFUNCTION(BlueprintCallable)
-		float GetHealth();
+	float GetHealth();
 	//TODO: Test implementation change this
 	UFUNCTION(BlueprintCallable)
-		float GetMaxHealth();
+	float GetMaxHealth();
+
+
+	UFUNCTION(BlueprintCallable)
+	bool CheckUniqueNetID(const FString& UIDString);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

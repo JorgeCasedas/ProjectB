@@ -37,9 +37,6 @@ public:
 	void SetConnectedPlayersCount();
 	UFUNCTION(BlueprintCallable)
 	void SetInitialSaveGame();
-	//PBTODO: Change this, just test
-	UFUNCTION(BlueprintImplementableEvent)
-	void TESTInitialSaveGame();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -73,4 +70,6 @@ private:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	FString GameSessionIdToJoin;
+
+	bool bSaveGameAlreadyCreated = false;
 };

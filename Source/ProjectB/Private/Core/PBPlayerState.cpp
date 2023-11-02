@@ -39,3 +39,16 @@ float APBPlayerState::GetMaxHealth()
 {
 	return HealthAttributeSet->GetMaxHealth();
 }
+
+bool APBPlayerState::CheckUniqueNetID(const FString& UIDString)
+{
+	UE_LOG(LogTemp, Error, TEXT("Incomming %s"), *UIDString);
+	UE_LOG(LogTemp, Error, TEXT("Mine %s"), *GetUniqueId()->ToString());
+
+	if (UIDString == GetUniqueId()->ToString())
+	{
+		return true;
+	}
+	return false;
+}
+	 
