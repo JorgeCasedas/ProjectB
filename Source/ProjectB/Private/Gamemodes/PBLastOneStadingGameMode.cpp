@@ -38,10 +38,10 @@ void APBLastOneStadingGameMode::GivePointsToPlayers()
 
 	UGameplayStatics::SaveGameToSlot(TestSaveGame, TEXT("TestSlot"), 0);
 
-	MatchFinished();
+	MatchFinished(TestSaveGame->PlayersInfo);
 }
 
-void APBLastOneStadingGameMode::MatchFinished()
+void APBLastOneStadingGameMode::MatchFinished(const TArray<FPlayerInfo>& PlayersInfo)
 {
-	Super::MatchFinished();
+	Super::MatchFinished(PlayersInfo);
 }

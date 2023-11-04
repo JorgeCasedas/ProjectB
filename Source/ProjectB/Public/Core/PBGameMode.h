@@ -31,7 +31,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void GivePointsToPlayers();
 	UFUNCTION(BlueprintCallable)
-	virtual void MatchFinished();
+	virtual void MatchFinished(const TArray<FPlayerInfo>& PlayersInfo);
 	UFUNCTION(BlueprintCallable)
 	virtual void TravelToNextMap();
 
@@ -48,10 +48,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UUserWidget> ScoreboardWidgetClass;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UUserWidget> ScoreboardWidget = nullptr;
 
 protected:
 	virtual void BeginPlay() override;

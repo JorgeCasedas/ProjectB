@@ -18,5 +18,5 @@ public:
 
 	virtual void CheckWinCon() override;
 	virtual void GivePointsToPlayers() override;
-	virtual void MatchFinished() override;
+	virtual void MatchFinished(const TArray<FPlayerInfo>& PlayersInfo) override;
 };

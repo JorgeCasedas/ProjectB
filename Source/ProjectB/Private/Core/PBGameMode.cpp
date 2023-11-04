@@ -9,7 +9,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/PlayerState.h"
-#include "Blueprint/UserWidget.h"
 
 
 APBGameMode::APBGameMode()
@@ -46,22 +45,23 @@ void APBGameMode::PlayerDeath(APBCharacter* DeadCharacter)
 
 void APBGameMode::CheckWinCon()
 {
-	MatchFinished();
+	//Make to force implement in children
 }
 
 void APBGameMode::GivePointsToPlayers()
 {
-	
+	//Make to force implement in children
 }
 
-void APBGameMode::MatchFinished()
+void APBGameMode::MatchFinished(const TArray<FPlayerInfo>& PlayersInfo)
 {
 	check(GetWorld());
-	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	check(PC);
-	ScoreboardWidget = CreateWidget<UUserWidget>(PC, ScoreboardWidgetClass);
-	ScoreboardWidget->AddToViewport();
-	TravelToNextMap();
+	TArray< APlayerState*> PlayerArray = Cast<APBGameState>(UGameplayStatics::GetGameState(this))->PlayerArray;
+
+	for (APlayerState* PS : PlayerArray)
+	{
+		Cast<APBPlayerController>(PS->GetPlayerController())->ClientShowPoints(PlayersInfo);
+	}
 }
 
 void APBGameMode::TravelToNextMap()

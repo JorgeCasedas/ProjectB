@@ -23,9 +23,18 @@ public:
 	UFUNCTION()
 	void StartMatch();
 
+	UFUNCTION(Client, Reliable)
+	void ClientShowPoints(const TArray<FPlayerInfo>& PlayersInfo);
+
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnClientMatchStarted OnMatchStarted;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> ScoreboardWidgetClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UUserWidget> ScoreboardWidget = nullptr;
+
 
 protected:
 	virtual void BeginPlay();
