@@ -32,6 +32,6 @@ public:
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray< FPBInputAction> AbilityInputActions;
+		TArray< FPBInputAction> AbilityInputActions;
 
 };
