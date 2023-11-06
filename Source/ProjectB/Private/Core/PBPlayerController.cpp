@@ -5,10 +5,15 @@
 #include "Character/PBCharacter.h"
 #include "Core/PBGameMode.h"
 #include "SaveGame/SaveGamePlayerInfo.h"
+#include "Input/PBInputComponent.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "EnhancedInputSubsystems.h"
+#include "../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/AbilitySystemBlueprintLibrary.h"
+#include "GAS/PBAbilitySystemComponent.h"
 
 APBPlayerController::APBPlayerController()
 {
@@ -18,12 +23,36 @@ APBPlayerController::APBPlayerController()
 void APBPlayerController::BeginPlay()
 {
 	APBGameMode* PBGameMode = Cast<APBGameMode>(GetWorld()->GetAuthGameMode());
-	if (!PBGameMode)
+	if (PBGameMode)
 	{
-		return;
+		PBGameMode->OnMatchStarted.AddDynamic(this, &APBPlayerController::StartMatch);
 	}
 
-	PBGameMode->OnMatchStarted.AddDynamic(this, &APBPlayerController::StartMatch);
+	if (IsLocalController())
+	{
+		if (!DefaultMappingContext || !MoveAction)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Inputs not set correctly"));
+			return;
+		}
+
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+		bShowMouseCursor = true;
+	}
+}
+
+void APBPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	UPBInputComponent* PBInputComponent = CastChecked<UPBInputComponent>(InputComponent);
+	check(PBInputComponent);
+
+	PBInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APBPlayerController::Move);
+	PBInputComponent->BindAbilityActions(InputConfig, this, &APBPlayerController::AbilityInputTagPressed, &APBPlayerController::AbilityInputTagReleased, &APBPlayerController::AbilityInputTagHeld);
 }
 
 APBCharacter* APBPlayerController::GetPBCharacter()
@@ -48,6 +77,35 @@ void APBPlayerController::ClientStartMatch_Implementation()
 	OnMatchStarted.Broadcast();
 }
 
+UPBAbilitySystemComponent* APBPlayerController::GetPBASC()
+{
+	if (PBASC == nullptr)
+	{
+		PBASC = Cast< UPBAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return PBASC;
+}
+
+void APBPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	//GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
+}
+
+void APBPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (!GetPBASC()) return;
+
+	GetPBASC()->AbilityInputTagReleased(InputTag);
+
+}
+
+void APBPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	if (!GetPBASC()) return;
+
+	GetPBASC()->AbilityInputTagHeld(InputTag);
+}
+
 void APBPlayerController::ClientShowPoints_Implementation(const TArray<FPlayerInfo>& PlayersInfo)
 {
 	if (!ScoreboardWidgetClass)
@@ -63,4 +121,23 @@ void APBPlayerController::ClientShowPoints_Implementation(const TArray<FPlayerIn
 	
 	ScoreboardWidget = CreateWidget<UUserWidget>(this, ScoreboardWidgetClass);
 	ScoreboardWidget->AddToViewport();
+}
+
+void APBPlayerController::Move(const FInputActionValue& Value)
+{
+	
+	AActor* ViewTarget = GetViewTarget();
+	if (!ViewTarget)
+		return;
+
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	// Get camera rotation
+	const FRotator Rotation = ViewTarget->GetActorRotation();
+
+	const FVector ForwardDirection = UKismetMathLibrary::GetForwardVector({ 0.f, 0.f, Rotation.Yaw });
+	const FVector RightDirection = UKismetMathLibrary::GetRightVector({ Rotation.Roll, 0.f, Rotation.Yaw });
+
+	GetPBCharacter()->AddMovementInput(ForwardDirection, -MovementVector.Y);
+	GetPBCharacter()->AddMovementInput(RightDirection, MovementVector.X);
 }

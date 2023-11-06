@@ -4,9 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "PBGameplayTags.h"
+#include "InputActionValue.h"
 #include "PBPlayerController.generated.h"
 
 class AProjectCharacter;
+class UPBInputConfig;
+class UPBAbilitySystemComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClientMatchStarted);
 
@@ -38,7 +42,27 @@ public:
 
 protected:
 	virtual void BeginPlay();
-
+	virtual void SetupInputComponent() override;
 	UFUNCTION(Client, Reliable)
 	void ClientStartMatch();
+
+private:
+
+	UPBAbilitySystemComponent* GetPBASC();
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	void Move(const FInputActionValue& Value);
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UPBInputConfig> InputConfig;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputMappingContext* DefaultMappingContext;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* MoveAction;
+
+	TObjectPtr<UPBAbilitySystemComponent> PBASC;
 };

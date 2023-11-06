@@ -8,7 +8,6 @@
 #include "GameplayEffectTypes.h"
 
 #include "GameFramework/Character.h"
-#include "InputActionValue.h"
 #include "PBCharacter.generated.h"
 
 class UAbilitySystemComponent;
@@ -40,12 +39,6 @@ public:
 	FOnDeath OnDeath;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputMappingContext* DefaultMappingContext;
-	//TODO: Find a better way to have this input action in a DataTable
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* MoveAction;
-
 	UPROPERTY()
 		TObjectPtr<UAbilitySystemComponent> ASC;
 
@@ -53,11 +46,8 @@ protected:
 		TObjectPtr<UPBHealthAttributeSet> AttributeSet;
 
 protected:
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	
-	
 	virtual void BeginPlay();
 
-	void Move(const FInputActionValue& Value);
 	void LookTowardsMouse();
 
 private:
