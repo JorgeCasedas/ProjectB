@@ -224,10 +224,10 @@ void UProjectBGameInstance::SetConnectedPlayersCount()
 	ConnectedPlayersCount = GetWorld()->GetGameState()->PlayerArray.Num();
 }
 
-void UProjectBGameInstance::SetInitialSaveGame()
+bool UProjectBGameInstance::SetInitialSaveGame()
 {
 	if (!PlayersInfoSaveGameClass || bSaveGameAlreadyCreated)
-		return;
+		return false;
 
 	USaveGamePlayerInfo* TestSaveGame = Cast<USaveGamePlayerInfo>(UGameplayStatics::CreateSaveGameObject(USaveGamePlayerInfo::StaticClass()));
 	check(GetWorld()->GetGameState());
@@ -239,4 +239,5 @@ void UProjectBGameInstance::SetInitialSaveGame()
 	
 	UGameplayStatics::SaveGameToSlot(TestSaveGame, TEXT("TestSlot"), 0);
 	bSaveGameAlreadyCreated = true;
+	return true;
 }

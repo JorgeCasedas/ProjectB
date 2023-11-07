@@ -36,7 +36,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetConnectedPlayersCount();
 	UFUNCTION(BlueprintCallable)
-	void SetInitialSaveGame();
+	bool SetInitialSaveGame();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
