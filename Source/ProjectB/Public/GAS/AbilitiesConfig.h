@@ -16,13 +16,13 @@ struct FPBAbilityInfo
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UPBGameplayAbility> AbilityClass;
-	UPROPERTY(EditDefaultsOnly)
-	TSoftObjectPtr<UTexture2D> Icon;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UTexture2D> Icon;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FString Name;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FString Info;
 };
 

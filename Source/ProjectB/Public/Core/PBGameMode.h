@@ -8,7 +8,6 @@
 
 class APBPlayerController;
 class APBCharacter;
-class UAbilitiesConfig;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLoggedIn, APBPlayerController*, PlayerController);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
@@ -49,9 +48,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	UAbilitiesConfig* AbilitiesDataAsset;
 
 protected:
 	virtual void BeginPlay() override;

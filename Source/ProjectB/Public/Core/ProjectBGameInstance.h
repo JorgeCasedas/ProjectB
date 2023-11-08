@@ -12,6 +12,7 @@
 
 class FOnlineSessionSearch;
 class USaveGamePlayerInfo;
+class UAbilitiesConfig;
 /**
  * 
  */
@@ -47,6 +48,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<USaveGamePlayerInfo> PlayersInfoSaveGameClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UAbilitiesConfig> AbilitiesDataAsset;
 
 private:
 	UFUNCTION(BlueprintCallable)
