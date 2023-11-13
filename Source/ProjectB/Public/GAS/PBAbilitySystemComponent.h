@@ -6,6 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "PBAbilitySystemComponent.generated.h"
 
+class UPBGameplayAbility;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilitySystemComponentInitialized);
 /**
  * 
@@ -20,7 +22,11 @@ public:
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAdd);
+	void AddCharacterDefaultAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAdd);
+	UFUNCTION(BlueprintCallable)
+	void AddCharacterAbility(const TSubclassOf<UGameplayAbility>& Ability, const FGameplayTag& InputTag);
+	UFUNCTION(BlueprintCallable)
+	UClass* GetGameplayClassFromInput(const FGameplayTag& InputTag);
 
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);

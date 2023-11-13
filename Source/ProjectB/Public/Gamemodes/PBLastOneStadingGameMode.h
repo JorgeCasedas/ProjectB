@@ -15,8 +15,9 @@ class UPBGameplayAbility;
 USTRUCT(BlueprintType)
 struct FGameplayAbilitiesArray
 {
-	GENERATED_BODY();
+	GENERATED_BODY()
 
+	UPROPERTY(BlueprintReadWrite)
 	TArray<TSubclassOf<UPBGameplayAbility>> Abilities;
 };
 

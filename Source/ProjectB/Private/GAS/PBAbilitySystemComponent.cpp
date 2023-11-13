@@ -15,7 +15,7 @@ void UPBAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActo
 	OnAbilitySystemComponentInitialized.Broadcast();	
 }
 
-void UPBAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAdd)
+void UPBAbilitySystemComponent::AddCharacterDefaultAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAdd)
 {
 	for (const TSubclassOf<UGameplayAbility> AbilityClass : AbilitiesToAdd)
 	{
@@ -26,6 +26,39 @@ void UPBAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<U
 			GiveAbility(AbilitySpec);
 		}
 	}
+}
+
+void UPBAbilitySystemComponent::AddCharacterAbility(const TSubclassOf<UGameplayAbility>& Ability, const FGameplayTag& InputTag)
+{
+	//First -> Clear any ability binded to the input
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTag(InputTag))
+		{
+			ClearAbility(AbilitySpec.Handle);
+			break;
+		}		
+	}
+	//Second -> Add and bind the new ability
+	FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability);
+	if (Cast<UPBGameplayAbility>(AbilitySpec.Ability))
+	{
+		AbilitySpec.DynamicAbilityTags.AddTag(InputTag);
+		GiveAbility(AbilitySpec);
+	}
+}
+
+UClass* UPBAbilitySystemComponent::GetGameplayClassFromInput(const FGameplayTag& InputTag)
+{
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTag(InputTag))
+		{
+			return AbilitySpec.Ability->GetClass();
+		}
+	}
+
+	return nullptr;
 }
 
 void UPBAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
