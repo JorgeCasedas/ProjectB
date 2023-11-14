@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "GameplayTagContainer.h"
 #include "SaveGamePlayerInfo.generated.h"
 
 class UPBGameplayAbility;
@@ -11,6 +12,28 @@ class APBPlayerState;
 /**
  * 
  */
+
+USTRUCT(BlueprintType)
+struct FAbilityInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UPBGameplayAbility> Ability;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTag InputTag = FGameplayTag();
+
+	FAbilityInfo()
+	{
+	}
+
+	FAbilityInfo(TSubclassOf<UPBGameplayAbility> InAbility, FGameplayTag InInputTag)
+	{
+		Ability = InAbility;
+		InputTag = InInputTag;
+	}
+};
 
 USTRUCT(BlueprintType)
 struct FPlayerInfo
@@ -24,20 +47,18 @@ struct FPlayerInfo
 	uint8 PointsWon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<TSubclassOf<UPBGameplayAbility>> GameplayAbilities;
+	TArray<FAbilityInfo> GameplayAbilities;
 
 	FPlayerInfo()
 	{
 		UID = "INVALID";
 		PointsWon = 0;
-		GameplayAbilities = {};
 	}
 
 	FPlayerInfo(FString& NewUID)
 	{
 		UID = NewUID;
 		PointsWon = 0;
-		GameplayAbilities = {};
 	}
 
 };
@@ -54,7 +75,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddPoints(APBPlayerState* PlayerState, uint8 NewPoints);
 	UFUNCTION(BlueprintCallable)
-	void AddGameplayAbilities(APBPlayerState* PlayerState, TArray<TSubclassOf<UPBGameplayAbility>> NewGameplayAbilities);
+	void SaveGameplayAbilities(APBPlayerState* PlayerState);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

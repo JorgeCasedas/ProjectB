@@ -5,6 +5,8 @@
 #include "Core/PBPlayerState.h"
 #include "Online/CoreOnline.h"
 #include "GAS/PBGameplayAbility.h"
+#include "GAS/PBAbilitySystemComponent.h"
+#include "PBGameplayTags.h"
 
 USaveGamePlayerInfo::USaveGamePlayerInfo()
 {
@@ -19,19 +21,19 @@ void USaveGamePlayerInfo::AddPlayerToInfo(APBPlayerState* PlayerState)
 	{
 		if (Info.UID == UID)
 		{
-			//User already has info
+			SaveGameplayAbilities(PlayerState);
 			return;
 		}		
 	}
 
-	PlayersInfo.Add(FPlayerInfo(UID));
+	PlayersInfo.Add(FPlayerInfo(UID));	
 }
 
 void USaveGamePlayerInfo::AddPoints(APBPlayerState* PlayerState, uint8 NewPoints)
 {
 	FString UID = PlayerState->GetUniqueId()->ToString();
 
-	for (FPlayerInfo Info : PlayersInfo)
+	for (FPlayerInfo& Info : PlayersInfo)
 	{
 		if (Info.UID == UID)
 		{
@@ -41,18 +43,23 @@ void USaveGamePlayerInfo::AddPoints(APBPlayerState* PlayerState, uint8 NewPoints
 	}
 }
 
-void USaveGamePlayerInfo::AddGameplayAbilities(APBPlayerState* PlayerState, TArray<TSubclassOf<UPBGameplayAbility>> NewGameplayAbilities)
+void USaveGamePlayerInfo::SaveGameplayAbilities(APBPlayerState* PlayerState)
 {
 	FString UID = PlayerState->GetUniqueId()->ToString();
 
-	for (FPlayerInfo Info : PlayersInfo)
+	for (FPlayerInfo& Info : PlayersInfo)
 	{
 		if (Info.UID == UID)
 		{
-			for (TSubclassOf<UPBGameplayAbility> GAClass : NewGameplayAbilities)
+			
+			check(PlayerState->GetPBAbilitySystemComponent())
+			Info.GameplayAbilities.Empty();
+			
+			for (const FGameplayAbilitySpec AbilitySpec : PlayerState->GetPBAbilitySystemComponent()->GetActivatableAbilities())
 			{
-				Info.GameplayAbilities.AddUnique(GAClass);
+				Info.GameplayAbilities.Add(FAbilityInfo(AbilitySpec.Ability.GetClass(), AbilitySpec.DynamicAbilityTags.GetByIndex(0)));
 			}
+			
 			return;
 		}
 	}
