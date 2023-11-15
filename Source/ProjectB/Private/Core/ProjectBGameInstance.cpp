@@ -119,6 +119,8 @@ void UProjectBGameInstance::StartHostingGame()
 	{
 		return;
 	}
+	//Clear PlayersInfoSaveGame
+	UGameplayStatics::DeleteGameInSlot(SaveGameSlotName, 0);
 
 	FString LobbyPath = LobbyLevel.GetLongPackageName();
 	World->ServerTravel(LobbyPath + "?listen");
@@ -237,7 +239,16 @@ bool UProjectBGameInstance::SetInitialSaveGame()
 		TestSaveGame->AddPlayerToInfo(Cast<APBPlayerState>(Player));
 	}
 	
-	UGameplayStatics::SaveGameToSlot(TestSaveGame, TEXT("TestSlot"), 0);
+	UGameplayStatics::SaveGameToSlot(TestSaveGame, SaveGameSlotName, 0);
 	bSaveGameAlreadyCreated = true;
 	return true;
+}
+USaveGamePlayerInfo* UProjectBGameInstance::GetPlayerInfoSaveGame()
+{
+	return Cast<USaveGamePlayerInfo>(UGameplayStatics::LoadGameFromSlot(SaveGameSlotName, 0));
+}
+
+void UProjectBGameInstance::SavePlayersInfoSaveGame(USaveGamePlayerInfo* SaveGame)
+{
+	UGameplayStatics::SaveGameToSlot(SaveGame, SaveGameSlotName, 0);
 }

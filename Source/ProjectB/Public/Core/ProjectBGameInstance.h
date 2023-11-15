@@ -36,8 +36,13 @@ public:
 	FString GetCurrentSessionID();
 	UFUNCTION(BlueprintCallable)
 	void SetConnectedPlayersCount();
+
 	UFUNCTION(BlueprintCallable)
 	bool SetInitialSaveGame();
+	UFUNCTION(BlueprintCallable)
+	USaveGamePlayerInfo* GetPlayerInfoSaveGame();
+	UFUNCTION(BlueprintCallable)
+	void SavePlayersInfoSaveGame(USaveGamePlayerInfo* SaveGame);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -50,7 +55,12 @@ public:
 	TSubclassOf<USaveGamePlayerInfo> PlayersInfoSaveGameClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FString SaveGameSlotName = "TestSlot";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UAbilitiesConfig> AbilitiesDataAsset;
+	
+	bool bSaveGameAlreadyCreated = false;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -73,7 +83,6 @@ private:
 private:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+	UPROPERTY()
 	FString GameSessionIdToJoin;
-
-	bool bSaveGameAlreadyCreated = false;
 };

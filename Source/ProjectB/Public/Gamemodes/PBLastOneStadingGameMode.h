@@ -8,6 +8,7 @@
 
 class APBPlayerController;
 class UPBGameplayAbility;
+class UProjectBGameInstance;
 /**
  * 
  */
@@ -32,8 +33,18 @@ public:
 	virtual void GivePointsToPlayers() override;
 	virtual void MatchFinished(const TArray<FPlayerInfo>& PlayersInfo) override;
 
+	virtual void GiveAbilitiesToPlayer(AController* NewPlayer);
+	virtual void MatchStarted();
+
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<TObjectPtr<APBPlayerController>, FGameplayAbilitiesArray> TempAbilitiesGivenToPlayers;
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UProjectBGameInstance> PBGameInstance;
 };
