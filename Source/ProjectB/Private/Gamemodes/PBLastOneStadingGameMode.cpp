@@ -21,9 +21,14 @@ void APBLastOneStadingGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	OnMatchStarted.AddDynamic(this, &APBLastOneStadingGameMode::MatchStarted);
-	OnPostLogin.Add(this, &APBLastOneStadingGameMode::GiveAbilitiesToPlayer);
 
 	PBGameInstance = Cast<UProjectBGameInstance>(UGameplayStatics::GetGameInstance(this));
+}
+
+void APBLastOneStadingGameMode::OnPostLogin(AController* NewPlayer)
+{
+	Super::OnPostLogin(NewPlayer);
+	GiveAbilitiesToPlayer(NewPlayer);
 }
 
 void APBLastOneStadingGameMode::CheckWinCon()
@@ -62,6 +67,10 @@ void APBLastOneStadingGameMode::MatchFinished(const TArray<FPlayerInfo>& Players
 
 void APBLastOneStadingGameMode::GiveAbilitiesToPlayer(AController* NewPlayer)
 {
+	if (!PBGameInstance)
+	{
+		PBGameInstance = Cast<UProjectBGameInstance>(UGameplayStatics::GetGameInstance(this));
+	}
 	if (!PBGameInstance->bSaveGameAlreadyCreated)
 		return;
 	if (!NewPlayer)

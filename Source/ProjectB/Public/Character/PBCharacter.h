@@ -34,6 +34,9 @@ public:
 	UPBHealthAttributeSet* GetAttributeSet() const { return AttributeSet; }
 #pragma endregion
 
+	UFUNCTION(Reliable, Client, BlueprintCallable)
+	void ClientOpenAbilitiesSelection(TArray<TSubclassOf<UPBGameplayAbility>> AbilitiesToSelectFrom);
+
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnDeath OnDeath;
@@ -57,5 +60,7 @@ private:
 	virtual void HealthChanged(const FOnAttributeChangeData& HealthData);
 	UFUNCTION()
 	void Death();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OpenAbilitiesSelection(TArray<TSubclassOf<UPBGameplayAbility>> AbilitiesToSelectFrom);
 };
 
