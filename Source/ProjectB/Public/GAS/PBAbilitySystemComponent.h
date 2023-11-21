@@ -28,6 +28,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UClass* GetGameplayClassFromInput(const FGameplayTag& InputTag);
 
+	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 

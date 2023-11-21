@@ -88,7 +88,9 @@ UPBAbilitySystemComponent* APBPlayerController::GetPBASC()
 
 void APBPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	//GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
+	if (!GetPBASC()) return;
+
+	GetPBASC()->AbilityInputTagPressed(InputTag);
 }
 
 void APBPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)

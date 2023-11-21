@@ -60,7 +60,22 @@ UClass* UPBAbilitySystemComponent::GetGameplayClassFromInput(const FGameplayTag&
 
 	return nullptr;
 }
+void UPBAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid()) return;
 
+	for (FGameplayAbilitySpec Spec : GetActivatableAbilities())
+	{
+		if (Spec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputPressed(Spec);
+			if (!Spec.IsActive())
+			{
+				TryActivateAbility(Spec.Handle);
+			}
+		}
+	}
+}
 void UPBAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
