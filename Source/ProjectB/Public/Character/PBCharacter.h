@@ -13,6 +13,25 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 class UPBHealthAttributeSet;
+class UPBGameplayAbility;
+
+USTRUCT(BlueprintType)
+struct FAbilitySelectionArguments
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UPBGameplayAbility> Ability;
+
+	FAbilitySelectionArguments()
+	{
+	}
+
+	FAbilitySelectionArguments(TSubclassOf<UPBGameplayAbility> InAbility)
+	{
+		Ability = InAbility;
+	}	
+};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
@@ -35,7 +54,10 @@ public:
 #pragma endregion
 
 	UFUNCTION(Reliable, Client, BlueprintCallable)
-	void ClientOpenAbilitiesSelection(TArray<TSubclassOf<UPBGameplayAbility>> AbilitiesToSelectFrom);
+	void ClientOpenAbilitiesSelection(const TArray<FAbilitySelectionArguments>& AbilitiesToSelectFrom);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (AllowPrivateAccess = true))
+	void OpenAbilitiesSelection(const TArray<FAbilitySelectionArguments>& AbilitiesToSelectFrom);
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -60,7 +82,6 @@ private:
 	virtual void HealthChanged(const FOnAttributeChangeData& HealthData);
 	UFUNCTION()
 	void Death();
-	UFUNCTION(BlueprintImplementableEvent)
-	void OpenAbilitiesSelection(TArray<TSubclassOf<UPBGameplayAbility>> AbilitiesToSelectFrom);
+
 };
 

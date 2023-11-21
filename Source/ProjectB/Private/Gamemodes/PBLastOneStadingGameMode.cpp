@@ -4,11 +4,15 @@
 #include "Gamemodes/PBLastOneStadingGameMode.h"
 #include "Character/PBCharacter.h"
 #include "Core/PBPlayerState.h"
+#include "Core/PBPlayerController.h"
 #include "SaveGame/SaveGamePlayerInfo.h"
 #include "Core/ProjectBGameInstance.h"
 #include "GAS/PBAbilitySystemComponent.h"
+#include "GAS/AbilitiesConfig.h"
+#include "GAS/PBGameplayAbility.h"
 
 #include "GameFramework/GameStateBase.h"
+#include "Abilities/GameplayAbility.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -28,6 +32,7 @@ void APBLastOneStadingGameMode::BeginPlay()
 void APBLastOneStadingGameMode::OnPostLogin(AController* NewPlayer)
 {
 	Super::OnPostLogin(NewPlayer);
+
 	GiveAbilitiesToPlayer(NewPlayer);
 }
 
@@ -90,14 +95,55 @@ void APBLastOneStadingGameMode::GiveAbilitiesToPlayer(AController* NewPlayer)
 
 			if (PBPS->GetUniqueId()->ToString() == PlayerInfo.UID)
 			{
-				for (const FAbilityInfo AbilityInfo : PlayerInfo.GameplayAbilities)
+				for (const FAbilityInfo& AbilityInfo : PlayerInfo.GameplayAbilities)
 				{
-					PBPS->GetPBAbilitySystemComponent()->AddCharacterAbility(AbilityInfo.Ability, AbilityInfo.InputTag);
+					PBPS->GetPBAbilitySystemComponent()->AddCharacterAbility(TSubclassOf<UGameplayAbility>(AbilityInfo.Ability), AbilityInfo.InputTag);
 				}
 			}
 		}
 	}
-	
+	OpenPlayerAbilitiesSelection(NewPlayer, 3);
+}
+
+void APBLastOneStadingGameMode::OpenPlayerAbilitiesSelection(AController* NewPlayer, int AbilitiesToSelect)
+{
+	if (APBCharacter* Character = Cast< APBCharacter>(NewPlayer->GetPawn()))
+	{
+		check(PBGameInstance);
+		check(PBGameInstance->AbilitiesDataAsset);
+
+		TArray<FAbilitySelectionArguments> AbilitiesForSelection;
+		FGameplayAbilitiesArray AbilitiesArray;
+
+		int AblitiesNumber = PBGameInstance->AbilitiesDataAsset->AbilitiesInfo.Num();
+
+		if (AbilitiesToSelect > AblitiesNumber)
+		{
+			AbilitiesToSelect = AblitiesNumber;
+		}
+
+		TArray<int> AbilitiesIndexes;
+
+		for (int i = 0; AbilitiesIndexes.Num() < AbilitiesToSelect; i++) {
+
+			AbilitiesIndexes.AddUnique(FMath::RandRange(0, AblitiesNumber-1));
+		}
+		
+		for (int index : AbilitiesIndexes)
+		{
+			AbilitiesForSelection.Add({PBGameInstance->AbilitiesDataAsset->AbilitiesInfo[index].AbilityClass });
+			AbilitiesArray.Abilities.Add({ PBGameInstance->AbilitiesDataAsset->AbilitiesInfo[index].AbilityClass });
+		}
+
+		TempAbilitiesGivenToPlayers.Add(Cast<APBPlayerController>(NewPlayer), AbilitiesArray);
+		Character->ClientOpenAbilitiesSelection(AbilitiesForSelection);
+	}
+	else 
+	{
+		FTimerHandle TimerHandle;
+		FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &APBLastOneStadingGameMode::OpenPlayerAbilitiesSelection, NewPlayer, AbilitiesToSelect);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.5f, false);
+	}
 }
 
 void APBLastOneStadingGameMode::MatchStarted()

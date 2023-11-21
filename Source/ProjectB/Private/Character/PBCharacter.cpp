@@ -58,6 +58,11 @@ UAbilitySystemComponent* APBCharacter::GetAbilitySystemComponent() const
 	return ASC;
 }
 
+void APBCharacter::ClientOpenAbilitiesSelection_Implementation(const TArray<FAbilitySelectionArguments>& AbilitiesToSelectFrom)
+{
+	OpenAbilitiesSelection(AbilitiesToSelectFrom);
+}
+
 void APBCharacter::BeginPlay()
 {
 	Super::BeginPlay();

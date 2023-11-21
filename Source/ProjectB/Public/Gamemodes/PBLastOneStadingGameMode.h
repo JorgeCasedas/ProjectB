@@ -34,6 +34,7 @@ public:
 	virtual void MatchFinished(const TArray<FPlayerInfo>& PlayersInfo) override;
 
 	virtual void GiveAbilitiesToPlayer(AController* NewPlayer);
+	virtual void OpenPlayerAbilitiesSelection(AController* NewPlayer, int AbilitiesToSelect);
 	virtual void MatchStarted();
 
 public:
