@@ -97,6 +97,9 @@ void APBCharacter::Death()
 
 void APBCharacter::LookTowardsMouse()
 {
+	if (!bLookTowardsMouse)
+		return;
+
 	TObjectPtr<APlayerController> PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
 	if (!GetMesh())

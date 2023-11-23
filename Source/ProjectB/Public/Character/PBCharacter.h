@@ -62,6 +62,8 @@ public:
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnDeath OnDeath;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bLookTowardsMouse;
 
 protected:
 	UPROPERTY()
