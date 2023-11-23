@@ -78,7 +78,7 @@ void UPBAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Input
 }
 void UPBAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
-	if (!InputTag.IsValid()) return;
+	/*if (!InputTag.IsValid()) return;
 
 	for (FGameplayAbilitySpec Spec : GetActivatableAbilities())
 	{
@@ -90,7 +90,7 @@ void UPBAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag
 				TryActivateAbility(Spec.Handle);
 			}
 		}
-	}
+	}*/
 }
 
 void UPBAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
