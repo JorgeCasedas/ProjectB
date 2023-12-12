@@ -35,6 +35,11 @@ protected:
 	float InitPlayersDistance;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<TObjectPtr<APBCharacter>> Characters;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bSmoothZoom;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.01", ClampMax = "1.0", UIMin = "0.01", UIMax = "1.0"))
+	float ZoomSpeed;
 
 protected:
 	virtual void BeginPlay() override;
@@ -52,6 +57,8 @@ protected:
 	void RepositionCamera();
 	UFUNCTION()
 	void ReZoomCamera();
+	UFUNCTION()
+	void SmoothCameraZoom(float TargetArmLength);
 
 public:	
 	virtual void Tick(float DeltaTime) override;

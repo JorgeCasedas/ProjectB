@@ -96,8 +96,21 @@ void APBLevelCamera::ReZoomCamera()
 		return;
 	}
 	//Calculation based on an initial arm length adecuated to the characters spawn points;
-	float UnClampedZoom = InitArmLength * (GetMaxPlayersDistance() / InitPlayersDistance);
-	SpringArm->TargetArmLength = FMath::Clamp(UnClampedZoom, MinArmLength, MaxArmLength);
+	float ClampedZoom = FMath::Clamp(InitArmLength * (GetMaxPlayersDistance() / InitPlayersDistance), MinArmLength, MaxArmLength);
+	if (!bSmoothZoom)
+	{
+		SpringArm->TargetArmLength = ClampedZoom;
+	}
+	else 
+	{
+		SmoothCameraZoom(ClampedZoom);
+	}
+}
+
+void APBLevelCamera::SmoothCameraZoom(float TargetArmLength)
+{
+	TargetArmLength = FMath::Lerp(SpringArm->TargetArmLength, TargetArmLength, ZoomSpeed);
+	SpringArm->TargetArmLength = TargetArmLength;
 }
 
 float APBLevelCamera::GetMaxPlayersDistance()
