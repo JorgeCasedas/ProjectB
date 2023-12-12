@@ -93,6 +93,7 @@ void APBCharacter::HealthChanged(const FOnAttributeChangeData& HealthData)
 void APBCharacter::Death()
 {
 	OnDeath.Broadcast();
+	bLookTowardsMouse = false;
 }
 
 void APBCharacter::LookTowardsMouse()
