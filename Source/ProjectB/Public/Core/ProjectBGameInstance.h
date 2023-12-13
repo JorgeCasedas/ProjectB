@@ -60,6 +60,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UAbilitiesConfig> AbilitiesDataAsset;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bSaveGameAlreadyCreated = false;
 
 private:

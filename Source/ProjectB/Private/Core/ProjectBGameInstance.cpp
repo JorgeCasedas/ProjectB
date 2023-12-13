@@ -2,6 +2,7 @@
 
 #include "Core/ProjectBGameInstance.h"
 #include "Core/PBGameState.h"
+#include "Core/PBPlayerState.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/SaveGame.h"
