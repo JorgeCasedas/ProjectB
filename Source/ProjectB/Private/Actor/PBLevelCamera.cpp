@@ -3,6 +3,7 @@
 
 #include "Actor/PBLevelCamera.h"
 #include "Kismet/GameplayStatics.h"
+#include "AbilitySystemComponent.h"
 
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -12,6 +13,7 @@
 #include "Core/PBGameState.h"
 #include "GameFramework/GameState.h"
 #include "Core/PBPlayerState.h"
+#include "PBGameplayTags.h"
 
 // Sets default values
 APBLevelCamera::APBLevelCamera()
@@ -51,7 +53,9 @@ void APBLevelCamera::InitCameraStats()
 {
 	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
 	{
-		Characters.Add(Cast<APBCharacter>(PlayerState->GetPawn()));
+		APBCharacter* Character = Cast<APBCharacter>(PlayerState->GetPawn());
+		Characters.Add(Character);
+		Character->OnDeath.AddDynamic(this, &APBLevelCamera::OnPlayerDeath);
 	}
 
 	InitArmLength = SpringArm->TargetArmLength;
@@ -111,6 +115,18 @@ void APBLevelCamera::SmoothCameraZoom(float TargetArmLength)
 {
 	TargetArmLength = FMath::Lerp(SpringArm->TargetArmLength, TargetArmLength, ZoomSpeed);
 	SpringArm->TargetArmLength = TargetArmLength;
+}
+
+void APBLevelCamera::OnPlayerDeath()
+{
+	for (APBCharacter* Character : Characters)
+	{
+		if (Character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FPBGameplayTags::Get().State_Dead))
+		{
+			Characters.Remove(Character);
+			break;
+		}
+	}
 }
 
 float APBLevelCamera::GetMaxPlayersDistance()

@@ -50,6 +50,8 @@ protected:
 	void OnMatchStarted();
 	UFUNCTION(NetMulticast, Reliable)
 	void Mulicast_OnMatchStarted();
+	UFUNCTION()
+	void OnPlayerDeath();
 
 	UFUNCTION()
 	float GetMaxPlayersDistance();
