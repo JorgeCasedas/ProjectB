@@ -22,6 +22,8 @@ APBPlayerController::APBPlayerController()
 
 void APBPlayerController::BeginPlay()
 {
+	Super::BeginPlay();
+
 	APBGameMode* PBGameMode = Cast<APBGameMode>(GetWorld()->GetAuthGameMode());
 	if (PBGameMode)
 	{

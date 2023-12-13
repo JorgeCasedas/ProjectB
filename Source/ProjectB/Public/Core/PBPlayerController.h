@@ -41,7 +41,7 @@ public:
 
 
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	UFUNCTION(Client, Reliable)
 	void ClientStartMatch();
