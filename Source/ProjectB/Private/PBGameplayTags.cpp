@@ -58,6 +58,16 @@ void FPBGameplayTags::InitializeNativeGameplayTags()
 		FName("Ability.Active.Explode"),
 		FString("Explode ability")
 	);
+	GameplayTags.Ability_Active_Mistborn = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Ability.Active.Mistborn"),
+		FString("Mistborn ability")
+	);
+	GameplayTags.Ability_Active_Mistborn_NailReached = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Ability.Active.Mistborn.NailReached"),
+		FString("Mistborn ability when nail reaches a target")
+	);
 
 	/*
 	 *		Passive Abilities
@@ -94,7 +104,12 @@ void FPBGameplayTags::InitializeNativeGameplayTags()
 		FName("Cooldown.Explode"),
 		FString("Explode ability cooldown")
 	);
-
+	GameplayTags.Cooldown_Mistborn = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Cooldown.Mistborn"),
+		FString("Mistborn ability cooldown")
+	);
+	
 	/*
 	 *		Attributes
 	 */

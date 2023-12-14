@@ -28,6 +28,8 @@ public:
 	FGameplayTag Ability_Active_JumpAttack;
 	FGameplayTag Ability_Active_Dash;
 	FGameplayTag Ability_Active_Explode;
+	FGameplayTag Ability_Active_Mistborn;
+	FGameplayTag Ability_Active_Mistborn_NailReached;
 	
 	//Passive Abilities
 	FGameplayTag Ability_Passive_FireTrail;
@@ -37,6 +39,7 @@ public:
 	FGameplayTag Cooldown_JumpAttack;
 	FGameplayTag Cooldown_Dash;
 	FGameplayTag Cooldown_Explode;
+	FGameplayTag Cooldown_Mistborn;
 
 	//Attributes
 	FGameplayTag Attributes_Core_Health;
