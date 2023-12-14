@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "GameplayTagContainer.h"
 #include "AbilitiesConfig.generated.h"
 
 class UPBGameplayAbility;
@@ -18,6 +19,8 @@ struct FPBAbilityInfo
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UPBGameplayAbility> AbilityClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag CooldownTag;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UTexture2D> Icon;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

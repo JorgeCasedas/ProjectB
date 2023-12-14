@@ -29,6 +29,8 @@ public:
 	void AddCharacterAbility(const TSubclassOf<UGameplayAbility>& Ability, const FGameplayTag& InputTag);
 	UFUNCTION(BlueprintCallable)
 	UClass* GetGameplayClassFromInput(const FGameplayTag& InputTag);
+	UFUNCTION(BlueprintCallable)
+	const UGameplayAbility* GetGameplayAbilityFromInput(const FGameplayTag& InputTag);
 
 	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
