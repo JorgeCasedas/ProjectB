@@ -44,7 +44,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void OnPostLogin(AController* NewPlayer) override;
+	virtual void GenericPlayerInitialization(AController* Controller) override;
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
