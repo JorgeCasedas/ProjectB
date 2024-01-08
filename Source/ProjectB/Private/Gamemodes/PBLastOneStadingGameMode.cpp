@@ -29,11 +29,10 @@ void APBLastOneStadingGameMode::BeginPlay()
 	PBGameInstance = Cast<UProjectBGameInstance>(UGameplayStatics::GetGameInstance(this));
 }
 
-void APBLastOneStadingGameMode::OnPostLogin(AController* NewPlayer)
+void APBLastOneStadingGameMode::GenericPlayerInitialization(AController* Controller)
 {
-	Super::OnPostLogin(NewPlayer);
-
-	GiveAbilitiesToPlayer(NewPlayer);
+	Super::GenericPlayerInitialization(Controller);
+	GiveAbilitiesToPlayer(Controller);
 }
 
 void APBLastOneStadingGameMode::CheckWinCon()

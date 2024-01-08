@@ -15,15 +15,12 @@ APBGameMode::APBGameMode()
 {
 }
 
-void APBGameMode::BeginPlay()
+void APBGameMode::GenericPlayerInitialization(AController* Controller)
 {
-	Super::BeginPlay();
-	OnPlayerLoggedIn.Broadcast(Cast<APBPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0)));
-}
-
-void APBGameMode::OnPostLogin(AController* NewPlayer)
-{
-	OnPlayerLoggedIn.Broadcast(Cast<APBPlayerController>(NewPlayer));
+	Super::GenericPlayerInitialization(Controller);
+	APBPlayerController* PBPlayerController = Cast<APBPlayerController>(Controller);
+	OnPlayerLoggedIn.Broadcast(PBPlayerController);
+	PBPlayerController->JoinedToMap();
 }
 
 void APBGameMode::StartPBMatch()

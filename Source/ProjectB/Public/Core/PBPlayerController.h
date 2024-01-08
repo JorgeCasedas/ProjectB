@@ -25,6 +25,8 @@ public:
 	UFUNCTION()
 	APBCharacter* GetPBCharacter();
 	UFUNCTION()
+	void JoinedToMap();
+	UFUNCTION()
 	void StartMatch();
 
 	UFUNCTION(Client, Reliable)

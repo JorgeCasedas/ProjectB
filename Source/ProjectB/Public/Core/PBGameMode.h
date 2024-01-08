@@ -50,9 +50,7 @@ public:
 	TSoftObjectPtr<UWorld> NextLevel;
 
 protected:
-	virtual void BeginPlay() override;
-	virtual void OnPostLogin(AController* NewPlayer) override;
-	
+	virtual void GenericPlayerInitialization(AController* Controller) override;
 };
 
 

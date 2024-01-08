@@ -23,13 +23,7 @@ APBPlayerController::APBPlayerController()
 void APBPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	APBGameMode* PBGameMode = Cast<APBGameMode>(GetWorld()->GetAuthGameMode());
-	if (PBGameMode)
-	{
-		PBGameMode->OnMatchStarted.AddDynamic(this, &APBPlayerController::StartMatch);
-	}
-
+	
 	if (IsLocalController())
 	{
 		if (!DefaultMappingContext || !MoveAction)
@@ -57,6 +51,17 @@ void APBPlayerController::SetupInputComponent()
 	PBInputComponent->BindAbilityActions(InputConfig, this, &APBPlayerController::AbilityInputTagPressed, &APBPlayerController::AbilityInputTagReleased, &APBPlayerController::AbilityInputTagHeld);
 }
 
+void APBPlayerController::JoinedToMap()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("MapJoined"));
+	APBGameMode* PBGameMode = Cast<APBGameMode>(GetWorld()->GetAuthGameMode());
+	if (PBGameMode)
+	{
+		PBGameMode->OnMatchStarted.AddDynamic(this, &APBPlayerController::StartMatch);
+	}
+
+}
+
 APBCharacter* APBPlayerController::GetPBCharacter()
 {
 	APawn* MyPawn = GetPawn();
@@ -69,11 +74,13 @@ APBCharacter* APBPlayerController::GetPBCharacter()
 
 void APBPlayerController::StartMatch()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Server - ControllerClientStarted"));
 	ClientStartMatch();
 }
 
 void APBPlayerController::ClientStartMatch_Implementation()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Client - ControllerClientStarted"));
 	UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx(this, nullptr, EMouseLockMode::DoNotLock, false, false);
 	SetShowMouseCursor(true);
 	OnMatchStarted.Broadcast();
