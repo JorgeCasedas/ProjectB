@@ -32,10 +32,16 @@ public:
 	virtual void CheckWinCon() override;
 	virtual void GivePointsToPlayers() override;
 	virtual void MatchFinished(const TArray<FPlayerInfo>& PlayersInfo) override;
-
+	
+	UFUNCTION()
 	virtual void GiveAbilitiesToPlayer(AController* NewPlayer);
+	UFUNCTION()
 	virtual void OpenPlayerAbilitiesSelection(AController* NewPlayer, int AbilitiesToSelect);
+	UFUNCTION()
 	virtual void MatchStarted();
+
+	UFUNCTION(BlueprintCallable)
+	void CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC);
 
 public:
 

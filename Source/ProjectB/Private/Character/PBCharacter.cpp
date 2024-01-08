@@ -58,6 +58,13 @@ UAbilitySystemComponent* APBCharacter::GetAbilitySystemComponent() const
 	return ASC;
 }
 
+void APBCharacter::AddSelectedAbility(const TSubclassOf<UPBGameplayAbility>& Ability, const FGameplayTag& GameplayTag)
+{
+	const TSubclassOf<UGameplayAbility> DefaultAblityClass = Ability;
+	Cast<APBPlayerState>(GetPlayerState())->GetPBAbilitySystemComponent()->AddCharacterAbility(DefaultAblityClass, GameplayTag);
+
+}
+
 void APBCharacter::ClientOpenAbilitiesSelection_Implementation(const TArray<FAbilitySelectionArguments>& AbilitiesToSelectFrom)
 {
 	OpenAbilitiesSelection(AbilitiesToSelectFrom);

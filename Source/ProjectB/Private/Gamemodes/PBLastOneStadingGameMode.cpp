@@ -159,3 +159,22 @@ void APBLastOneStadingGameMode::MatchStarted()
 	}
 	PBGameInstance->SavePlayersInfoSaveGame(TestSaveGame);
 }
+
+void APBLastOneStadingGameMode::CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC)
+{
+	for (const TPair <TObjectPtr<APBPlayerController>, FGameplayAbilitiesArray> Pair : TempAbilitiesGivenToPlayers)
+	{
+		if (PC == Pair.Key)
+		{
+			int i = 0;
+			for (const TSubclassOf<UPBGameplayAbility> Ability : Pair.Value.Abilities)
+			{
+				if (SelectedAbilityIndex == i)
+				{
+					Cast<APBCharacter>(PC->GetPawn())->AddSelectedAbility(Ability, GameplayTag);
+				}
+				i++;
+			}	
+		}
+	}
+}

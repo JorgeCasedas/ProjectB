@@ -58,6 +58,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (AllowPrivateAccess = true))
 	void OpenAbilitiesSelection(const TArray<FAbilitySelectionArguments>& AbilitiesToSelectFrom);
+	UFUNCTION()
+	void AddSelectedAbility(const TSubclassOf<UPBGameplayAbility>& Ability, const FGameplayTag& GameplayTag);
 
 public:
 	UPROPERTY(BlueprintAssignable)
