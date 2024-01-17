@@ -92,7 +92,14 @@ const UGameplayAbility* UPBAbilitySystemComponent::GetGameplayAbilityFromInput(c
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTag(InputTag))
 		{
-			return AbilitySpec.Ability;
+			if (AbilitySpec.GetAbilityInstances().Num() > 0)
+			{
+				return AbilitySpec.GetAbilityInstances()[0];
+			}
+			else 
+			{
+				return AbilitySpec.Ability;
+			}	
 		}
 	}
 	return nullptr;

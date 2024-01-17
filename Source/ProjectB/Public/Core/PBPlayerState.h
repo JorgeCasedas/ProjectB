@@ -36,9 +36,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetMaxHealth();
 
-
 	UFUNCTION(BlueprintCallable)
 	bool CheckUniqueNetID(const FString& UIDString);
+
+	UFUNCTION(BlueprintCallable)
+	bool IsEqualTo(const APlayerState* InPlayerState);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
