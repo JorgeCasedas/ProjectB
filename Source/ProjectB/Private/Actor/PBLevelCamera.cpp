@@ -51,6 +51,11 @@ void APBLevelCamera::BeginPlay()
 
 void APBLevelCamera::InitCameraStats()
 {
+	if (!GetWorld())
+		return;
+	if (!GetWorld()->GetGameState())
+		return;
+
 	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
 	{
 		APBCharacter* Character = Cast<APBCharacter>(PlayerState->GetPawn());
