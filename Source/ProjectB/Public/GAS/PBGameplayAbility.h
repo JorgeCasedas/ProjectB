@@ -18,5 +18,8 @@ class PROJECTB_API UPBGameplayAbility : public UGameplayAbility
 public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag;
-	
+
+	//This is only intended to be used when the gameplay abilities are being set up not while being in the gameplay phase of the game
+	UFUNCTION(BlueprintCallable)
+	void SetCooldownGameplayEffectClass(TSubclassOf<class UGameplayEffect> CooldownClass);
 };

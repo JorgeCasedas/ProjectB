@@ -41,14 +41,21 @@ void UPBAbilitySystemComponent::AbilitySpecInputReleased(FGameplayAbilitySpec& S
 	}
 }
 
-void UPBAbilitySystemComponent::AddCharacterDefaultAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAdd)
+void UPBAbilitySystemComponent::AddCharacterDefaultAbilities(const TArray<FDefaultCharacterAbility>& AbilitiesToAdd)
 {
-	for (const TSubclassOf<UGameplayAbility> AbilityClass : AbilitiesToAdd)
+	for (const FDefaultCharacterAbility AbilityToAdd : AbilitiesToAdd)
 	{
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		if (const UPBGameplayAbility* Ability = Cast<UPBGameplayAbility>(AbilitySpec.Ability))
+		//TSubclassOf<class UGameplayEffect> CooldownClass;
+
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityToAdd.Ability, 1);
+		if (UPBGameplayAbility* Ability = Cast<UPBGameplayAbility>(AbilitySpec.Ability))
 		{
-			AbilitySpec.DynamicAbilityTags.AddTag(Ability->StartupInputTag);
+			if(AbilityToAdd.InputTag.IsValid())
+				AbilitySpec.DynamicAbilityTags.AddTag(AbilityToAdd.InputTag);
+			else
+				AbilitySpec.DynamicAbilityTags.AddTag(Ability->StartupInputTag);
+			//CooldownClass->
+			//Ability->SetCooldownGameplayEffectClass(CooldownClass);
 			GiveAbility(AbilitySpec);
 		}
 	}

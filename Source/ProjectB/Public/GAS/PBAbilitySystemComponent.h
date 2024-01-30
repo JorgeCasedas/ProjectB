@@ -8,6 +8,18 @@
 
 class UPBGameplayAbility;
 
+USTRUCT(BlueprintType)
+struct FDefaultCharacterAbility
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+	TSubclassOf<UPBGameplayAbility> Ability;
+
+	UPROPERTY(BlueprintReadWrite)
+	FGameplayTag InputTag;
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilitySystemComponentInitialized);
 /**
  * 
@@ -24,7 +36,7 @@ public:
 	virtual void AbilitySpecInputReleased(FGameplayAbilitySpec& Spec) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddCharacterDefaultAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAdd);
+	void AddCharacterDefaultAbilities(const TArray<FDefaultCharacterAbility>& AbilitiesToAdd);
 	UFUNCTION(BlueprintCallable)
 	void AddCharacterAbility(const TSubclassOf<UGameplayAbility>& Ability, const FGameplayTag& InputTag);
 	UFUNCTION(BlueprintCallable)
