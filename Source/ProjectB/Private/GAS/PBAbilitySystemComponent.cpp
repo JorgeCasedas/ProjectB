@@ -139,9 +139,15 @@ const UGameplayAbility* UPBAbilitySystemComponent::GetGameplayAbilityFromInput(c
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTag(InputTag))
 		{
-			if (AbilitySpec.GetAbilityInstances().Num() > 0)
+			float InstancesNum = AbilitySpec.GetAbilityInstances().Num();
+			if (InstancesNum > 0)
 			{
-				return AbilitySpec.GetAbilityInstances()[0]; ERROR check later
+				for (auto AbilityInstance : AbilitySpec.GetAbilityInstances())
+				{
+					//Cast<UPBGameplayAbility>(AbilityInstance)->input
+					//if (!Cast<UPBGameplayAbility>(AbilityInstance)->CooldownTag.IsValid())
+						return AbilityInstance;
+				}
 			}
 			else 
 			{

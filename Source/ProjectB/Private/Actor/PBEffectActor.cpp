@@ -8,6 +8,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "GAS/PBAttributeSet.h"
+#include "PBGameplayTags.h"
 
 
 APBEffectActor::APBEffectActor()
@@ -32,6 +33,7 @@ void APBEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGamep
 
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
-	const FGameplayEffectSpecHandle EffectSpedHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, ActorLevel, EffectContextHandle);
+	FGameplayEffectSpecHandle EffectSpedHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, ActorLevel, EffectContextHandle);
+	EffectSpedHandle.Data.Get()->DynamicGrantedTags.AddTag(FPBGameplayTags::Get().Cooldown_E);		//SpecHandle.Data->
 	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpedHandle.Data.Get());
 }

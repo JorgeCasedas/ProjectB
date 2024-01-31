@@ -16,17 +16,25 @@ class PROJECTB_API UPBGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly, Category="Input")
-	FGameplayTag StartupInputTag;
+	UPBGameplayAbility();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void ApplyCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
+	virtual const FGameplayTagContainer* GetCooldownTags() const override;
 
 	//This is only intended to be used when the gameplay abilities are being set up not while being in the gameplay phase of the game
 	UFUNCTION(BlueprintCallable)
 	void SetCooldownGameplayTag(const FGameplayTag& Tag);
 
-	virtual void ApplyCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	FGameplayTag StartupInputTag;
+
+	UPROPERTY(BlueprintReadOnly, Replicated)
+	FGameplayTag CooldownTag;
+
 	
+
 private:
-	UPROPERTY()
-		FGameplayTag CooldownTag;
+	UPROPERTY(Replicated)
+	FGameplayTagContainer ReturnContainer;
 };
