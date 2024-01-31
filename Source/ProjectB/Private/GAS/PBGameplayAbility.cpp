@@ -7,21 +7,21 @@
 
 UPBGameplayAbility::UPBGameplayAbility()
 {
-	ReturnContainer.Reset();
+	ReturnCooldownTagContainer.Reset();
 }
 
 void UPBGameplayAbility::SetCooldownGameplayTag(const FGameplayTag& Tag)
 {
-	ReturnContainer.EmptyContainer;
+	ReturnCooldownTagContainer.EmptyContainer;
 	CooldownTag = Tag;
-	ReturnContainer = FGameplayTagContainer::EmptyContainer;
+	ReturnCooldownTagContainer.AddTag(CooldownTag);
 }
 
 void UPBGameplayAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(UPBGameplayAbility,CooldownTag);
-	DOREPLIFETIME(UPBGameplayAbility, ReturnContainer);
+	DOREPLIFETIME(UPBGameplayAbility, ReturnCooldownTagContainer);
 }
 
 void UPBGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const
@@ -45,5 +45,5 @@ void UPBGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Handle, 
 const FGameplayTagContainer* UPBGameplayAbility::GetCooldownTags() const
 {
 	//return Super::GetCooldownTags();
-	return &ReturnContainer;
+	return &ReturnCooldownTagContainer;
 }

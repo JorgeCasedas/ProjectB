@@ -36,5 +36,5 @@ public:
 
 private:
 	UPROPERTY(Replicated)
-	FGameplayTagContainer ReturnContainer;
+	FGameplayTagContainer ReturnCooldownTagContainer;
 };
