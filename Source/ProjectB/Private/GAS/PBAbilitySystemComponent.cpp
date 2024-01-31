@@ -3,6 +3,7 @@
 
 #include "GAS/PBAbilitySystemComponent.h"
 #include "GAS/PBGameplayAbility.h"
+#include "PBGameplayTags.h"
 
 UPBAbilitySystemComponent::UPBAbilitySystemComponent(const FObjectInitializer& ObjectInitializer)
 {
@@ -45,17 +46,21 @@ void UPBAbilitySystemComponent::AddCharacterDefaultAbilities(const TArray<FDefau
 {
 	for (const FDefaultCharacterAbility AbilityToAdd : AbilitiesToAdd)
 	{
-		//TSubclassOf<class UGameplayEffect> CooldownClass;
-
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityToAdd.Ability, 1);
 		if (UPBGameplayAbility* Ability = Cast<UPBGameplayAbility>(AbilitySpec.Ability))
 		{
-			if(AbilityToAdd.InputTag.IsValid())
-				AbilitySpec.DynamicAbilityTags.AddTag(AbilityToAdd.InputTag);
+#pragma region SetTags
+
+			FGameplayTag InputTag;
+			FGameplayTag CooldownTag;
+			if (AbilityToAdd.InputTag.IsValid())
+				InputTag = AbilityToAdd.InputTag;
 			else
-				AbilitySpec.DynamicAbilityTags.AddTag(Ability->StartupInputTag);
-			//CooldownClass->
-			//Ability->SetCooldownGameplayEffectClass(CooldownClass);
+				InputTag = Ability->StartupInputTag;
+
+			AbilitySpec.DynamicAbilityTags.AddTag(InputTag);
+#pragma endregion
+
 			GiveAbility(AbilitySpec);
 		}
 	}
@@ -81,6 +86,41 @@ void UPBAbilitySystemComponent::AddCharacterAbility(const TSubclassOf<UGameplayA
 	}
 }
 
+void UPBAbilitySystemComponent::SetAbilitiesCooldownTags()
+{
+	//PBTODO: ILLEGAL CONST_CAST THIS IS AN ABOMINATION CHANGE ASAP, it works for now but AT WHAT COST? MY OWN SANITY?
+	if (const UGameplayAbility* AbilityFromInputQ = GetGameplayAbilityFromInput(FPBGameplayTags::Get().InputTag_Q))
+	{
+		AbilityFromInputQ->GetCooldownTags();
+		const UPBGameplayAbility* PBAbility = Cast<const UPBGameplayAbility>(AbilityFromInputQ);
+		const_cast<UPBGameplayAbility*>(PBAbility)->SetCooldownGameplayTag(FPBGameplayTags::Get().Cooldown_Q);
+	}
+	if (const UGameplayAbility* AbilityFromInputE = GetGameplayAbilityFromInput(FPBGameplayTags::Get().InputTag_E))
+	{
+		AbilityFromInputE->GetCooldownTags();
+		const UPBGameplayAbility* PBAbility = Cast<const UPBGameplayAbility>(AbilityFromInputE);
+		const_cast<UPBGameplayAbility*>(PBAbility)->SetCooldownGameplayTag(FPBGameplayTags::Get().Cooldown_E);
+	}
+	if (const UGameplayAbility* AbilityFromInputR = GetGameplayAbilityFromInput(FPBGameplayTags::Get().InputTag_R))
+	{
+		AbilityFromInputR->GetCooldownTags();
+		const UPBGameplayAbility* PBAbility = Cast<const UPBGameplayAbility>(AbilityFromInputR);
+		const_cast<UPBGameplayAbility*>(PBAbility)->SetCooldownGameplayTag(FPBGameplayTags::Get().Cooldown_R);
+	}
+	if (const UGameplayAbility* AbilityFromInputRMB = GetGameplayAbilityFromInput(FPBGameplayTags::Get().InputTag_RMB))
+	{
+		AbilityFromInputRMB->GetCooldownTags();
+		const UPBGameplayAbility* PBAbility = Cast<const UPBGameplayAbility>(AbilityFromInputRMB);
+		const_cast<UPBGameplayAbility*>(PBAbility)->SetCooldownGameplayTag(FPBGameplayTags::Get().Cooldown_RMB);
+	}
+	if (const UGameplayAbility* AbilityFromInputLMB = GetGameplayAbilityFromInput(FPBGameplayTags::Get().InputTag_LMB))
+	{
+		AbilityFromInputLMB->GetCooldownTags();
+		const UPBGameplayAbility* PBAbility = Cast<const UPBGameplayAbility>(AbilityFromInputLMB);
+		const_cast<UPBGameplayAbility*>(PBAbility)->SetCooldownGameplayTag(FPBGameplayTags::Get().Cooldown_LMB);
+	}
+}
+
 UClass* UPBAbilitySystemComponent::GetGameplayClassFromInput(const FGameplayTag& InputTag)
 {
 	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
@@ -101,7 +141,7 @@ const UGameplayAbility* UPBAbilitySystemComponent::GetGameplayAbilityFromInput(c
 		{
 			if (AbilitySpec.GetAbilityInstances().Num() > 0)
 			{
-				return AbilitySpec.GetAbilityInstances()[0];
+				return AbilitySpec.GetAbilityInstances()[0]; ERROR check later
 			}
 			else 
 			{

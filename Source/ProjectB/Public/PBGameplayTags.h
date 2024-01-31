@@ -40,6 +40,11 @@ public:
 	FGameplayTag Cooldown_Dash;
 	FGameplayTag Cooldown_Explode;
 	FGameplayTag Cooldown_Mistborn;
+	FGameplayTag Cooldown_Q;
+	FGameplayTag Cooldown_E;
+	FGameplayTag Cooldown_R;
+	FGameplayTag Cooldown_RMB;
+	FGameplayTag Cooldown_LMB;
 
 	//Attributes
 	FGameplayTag Attributes_Core_Health;

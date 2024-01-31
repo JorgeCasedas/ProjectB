@@ -19,7 +19,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag;
 
+
 	//This is only intended to be used when the gameplay abilities are being set up not while being in the gameplay phase of the game
 	UFUNCTION(BlueprintCallable)
-	void SetCooldownGameplayEffectClass(TSubclassOf<class UGameplayEffect> CooldownClass);
+	void SetCooldownGameplayTag(const FGameplayTag& Tag);
+
+	virtual void ApplyCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
+	
+private:
+	UPROPERTY()
+		FGameplayTag CooldownTag;
 };

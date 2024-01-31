@@ -40,6 +40,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddCharacterAbility(const TSubclassOf<UGameplayAbility>& Ability, const FGameplayTag& InputTag);
 	UFUNCTION(BlueprintCallable)
+	void SetAbilitiesCooldownTags();
+	UFUNCTION(BlueprintCallable)
 	UClass* GetGameplayClassFromInput(const FGameplayTag& InputTag);
 	UFUNCTION(BlueprintCallable)
 	const UGameplayAbility* GetGameplayAbilityFromInput(const FGameplayTag& InputTag);

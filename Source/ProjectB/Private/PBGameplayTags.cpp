@@ -109,6 +109,31 @@ void FPBGameplayTags::InitializeNativeGameplayTags()
 		FName("Cooldown.Mistborn"),
 		FString("Mistborn ability cooldown")
 	);
+	GameplayTags.Cooldown_Q = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Cooldown.Q"),
+		FString("Q input cooldown")
+	);
+	GameplayTags.Cooldown_E = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Cooldown.E"),
+		FString("E input cooldown")
+	);
+	GameplayTags.Cooldown_R = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Cooldown.R"),
+		FString("R input cooldown")
+	);
+	GameplayTags.Cooldown_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Cooldown.RMB"),
+		FString("RMB input cooldown")
+	);
+	GameplayTags.Cooldown_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Cooldown.LMB"),
+		FString("LMB input cooldown")
+	);
 	
 	/*
 	 *		Attributes
