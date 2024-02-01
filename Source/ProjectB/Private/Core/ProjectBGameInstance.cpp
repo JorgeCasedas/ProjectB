@@ -203,7 +203,7 @@ void UProjectBGameInstance::OnJoinSession(FName SessionName, EOnJoinSessionCompl
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("JOINING"));
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
-	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute); 
 }
 
 FString UProjectBGameInstance::GetCurrentSessionID()
