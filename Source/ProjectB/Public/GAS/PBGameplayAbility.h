@@ -18,6 +18,8 @@ class PROJECTB_API UPBGameplayAbility : public UGameplayAbility
 public:
 	UPBGameplayAbility();
 
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps) const override;
+
 	virtual void ApplyCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
 	virtual const FGameplayTagContainer* GetCooldownTags() const override;
 
@@ -25,14 +27,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCooldownGameplayTag(const FGameplayTag& Tag);
 
+	/*UFUNCTION()
+	void OnRep_CooldownTag();*/
+
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(Replicated, BlueprintReadOnly)
 	FGameplayTag CooldownTag;
-
-	
-
-private:
-	FGameplayTagContainer ReturnCooldownTagContainer;
 };
