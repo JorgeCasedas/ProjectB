@@ -13,12 +13,12 @@ void UPBGameplayAbility::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >&
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UPBGameplayAbility, CooldownTag);
+	DOREPLIFETIME(UPBGameplayAbility, CdTag);
 }
 
 void UPBGameplayAbility::SetCooldownGameplayTag(const FGameplayTag& Tag)
 {
-	CooldownTag = Tag;
+	CdTag = Tag;
 }
 
 //void UPBGameplayAbility::OnRep_CooldownTag()
@@ -37,7 +37,7 @@ void UPBGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Handle, 
 			if (SpecHandle.IsValid())
 			{
 				SpecHandle.Data->StackCount = 0;
-				SpecHandle.Data->DynamicGrantedTags.AddTag(CooldownTag);
+				SpecHandle.Data->DynamicGrantedTags.AddTag(CdTag);
 				ApplyGameplayEffectSpecToOwner(Handle, ActorInfo, ActivationInfo, SpecHandle);
 			}
 		}
@@ -47,9 +47,7 @@ void UPBGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Handle, 
 const FGameplayTagContainer* UPBGameplayAbility::GetCooldownTags() const
 {
 	//return Super::GetCooldownTags();
-	//Sometimes CooldownTag is not set, when pressing the input for the ability this function gets called 2-3 times one of the times is correctly set but that last time it
-	//is called CooldownTag is empty, this only happends on the client so i guess it is a replication problem, server client works fine now
-	//This behaviour is seen only after the first server travel (havent try with a build and connecting like if it was a real game, only with UE editor)
-	UE_LOG(LogTemp, Error, TEXT("%i -> %i -> %s"),GetWorld()->IsClient() , GetUniqueID(), *CooldownTag.GetTagName().ToString());
-	return &CooldownTag.GetSingleTagContainer();
+	//UE_LOG(LogTemp, Error, TEXT("%i -> %i -> %s"),GetWorld()->IsClient() , GetUniqueID(), *CdTag.GetTagName().ToString());
+
+	return &CdTag.GetSingleTagContainer();
 }

@@ -34,5 +34,5 @@ public:
 	FGameplayTag StartupInputTag;
 
 	UPROPERTY(Replicated, BlueprintReadOnly)
-	FGameplayTag CooldownTag;
+	FGameplayTag CdTag;
 };

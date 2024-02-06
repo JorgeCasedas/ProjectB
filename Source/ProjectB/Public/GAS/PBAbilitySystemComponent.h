@@ -34,13 +34,14 @@ public:
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
 	virtual void AbilitySpecInputPressed(FGameplayAbilitySpec& Spec) override;
 	virtual void AbilitySpecInputReleased(FGameplayAbilitySpec& Spec) override;
+	virtual UGameplayAbility* CreateNewInstanceOfAbility(FGameplayAbilitySpec& Spec, const UGameplayAbility* Ability) override;
 
 	UFUNCTION(BlueprintCallable)
 	void AddCharacterDefaultAbilities(const TArray<FDefaultCharacterAbility>& AbilitiesToAdd);
 	UFUNCTION(BlueprintCallable)
 	void AddCharacterAbility(const TSubclassOf<UGameplayAbility>& Ability, const FGameplayTag& InputTag);
-	UFUNCTION(BlueprintCallable)
-	void SetAbilitiesCooldownTags();
+	UFUNCTION()
+	void SetCooldownBasedOnInput(const FGameplayTag& Input, FGameplayTag& CooldownTagRef);
 	UFUNCTION(BlueprintCallable)
 	UClass* GetGameplayClassFromInput(const FGameplayTag& InputTag);
 	UFUNCTION(BlueprintCallable)
