@@ -39,6 +39,8 @@ public:
 	virtual void OpenPlayerAbilitiesSelection(AController* NewPlayer, int AbilitiesToSelect);
 	UFUNCTION()
 	virtual void MatchStarted();
+	UFUNCTION()
+	virtual void SetPlayersTeam();
 
 	UFUNCTION(BlueprintCallable)
 	void CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC);
@@ -55,4 +57,6 @@ protected:
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UProjectBGameInstance> PBGameInstance;
+	UPROPERTY()
+	int TeamCounter;
 };

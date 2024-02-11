@@ -45,6 +45,16 @@ bool APBPlayerState::IsEqualTo(const APlayerState* InPlayerState)
 	return CheckUniqueNetID(InPlayerState->GetUniqueId()->ToString());
 }
 
+void APBPlayerState::SetTeamID(uint8 InTeamID)
+{
+	TeamID = InTeamID;
+}
+
+uint8 APBPlayerState::GetTeamID()
+{
+	return TeamID;
+}
+
 bool APBPlayerState::CheckUniqueNetID(const FString& UIDString)
 {
 	UE_LOG(LogTemp, Error, TEXT("Incomming %s"), *UIDString);

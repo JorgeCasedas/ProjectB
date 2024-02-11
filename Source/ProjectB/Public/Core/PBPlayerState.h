@@ -42,10 +42,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsEqualTo(const APlayerState* InPlayerState);
 
+	UFUNCTION()
+	void SetTeamID(uint8 TeamID);
+
+	UFUNCTION()
+	uint8 GetTeamID();
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UPBAbilitySystemComponent> PBASC;
 
 	UPROPERTY()
 	TObjectPtr<UPBHealthAttributeSet> HealthAttributeSet;
+
+	UPROPERTY()
+	uint8 TeamID;
 };

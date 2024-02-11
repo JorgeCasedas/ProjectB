@@ -147,6 +147,7 @@ void APBLastOneStadingGameMode::OpenPlayerAbilitiesSelection(AController* NewPla
 
 void APBLastOneStadingGameMode::MatchStarted()
 {
+	TeamCounter = 0;
 	PBGameInstance->SetInitialSaveGame();
 	USaveGamePlayerInfo* TestSaveGame = PBGameInstance->GetPlayerInfoSaveGame();
 	for (APlayerState* PS: UGameplayStatics::GetGameState(this)->PlayerArray)
@@ -157,6 +158,37 @@ void APBLastOneStadingGameMode::MatchStarted()
 		}
 	}
 	PBGameInstance->SavePlayersInfoSaveGame(TestSaveGame);
+
+	SetPlayersTeam();
+}
+
+void APBLastOneStadingGameMode::SetPlayersTeam()
+{
+	UGameplayStatics::GetGameState(this)->PlayerArray.Num();
+
+	for (APlayerState* PS : UGameplayStatics::GetGameState(this)->PlayerArray)
+	{
+		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
+		{
+			PBPS->SetTeamID(TeamCounter);
+
+			switch (CurrentGameMode)
+			{
+				case AllVsAll:
+					TeamCounter++;
+				break;
+
+				case OneVsAll:
+
+				break;
+
+				case Teams:
+
+				break;
+			}
+		}
+	}
+	
 }
 
 void APBLastOneStadingGameMode::CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC)

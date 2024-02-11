@@ -12,6 +12,25 @@ class APBCharacter;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLoggedIn, APBPlayerController*, PlayerController);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
 
+UENUM(BlueprintType)
+enum EGameMode
+{
+	AllVsAll,
+	OneVsAll,
+	Teams
+};
+
+UENUM(BlueprintType)
+enum EGameRule
+{
+	KillAllOponents,
+	FriendlyFire,
+	PushYourOpponentOutOfTheArena,
+	ChangeTeamEveryXSeconds,
+	LastOneStandingLoses,
+	PassTheBomb
+};
+
 //TODO: Deactivate player starts on use (so every player has a different spawn point)
 UCLASS(minimalapi)
 class APBGameMode : public AGameMode
@@ -48,6 +67,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
+
+	UPROPERTY()
+	TEnumAsByte<EGameMode> CurrentGameMode = EGameMode::AllVsAll;
 
 protected:
 	virtual void GenericPlayerInitialization(AController* Controller) override;
