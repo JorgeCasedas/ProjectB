@@ -28,6 +28,8 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UPBAbilitySystemComponent* GetPBAbilitySystemComponent() const;
 	UPBHealthAttributeSet* GetHealthAttributeSet() const { return HealthAttributeSet; }
+
+	void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 	
 	//TODO: Test implementation change this
 	UFUNCTION(BlueprintCallable)
@@ -42,10 +44,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsEqualTo(const APlayerState* InPlayerState);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetTeamID(uint8 TeamID);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	uint8 GetTeamID();
 
 protected:
@@ -55,6 +57,6 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UPBHealthAttributeSet> HealthAttributeSet;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	uint8 TeamID;
 };

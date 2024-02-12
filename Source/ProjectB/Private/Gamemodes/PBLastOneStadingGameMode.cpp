@@ -159,10 +159,28 @@ void APBLastOneStadingGameMode::MatchStarted()
 	}
 	PBGameInstance->SavePlayersInfoSaveGame(TestSaveGame);
 
-	SetPlayersTeam();
+	SetPlayersTeams();
 }
 
-void APBLastOneStadingGameMode::SetPlayersTeam()
+void APBLastOneStadingGameMode::SetPlayersTeams()
+{
+	switch (CurrentGameMode)
+	{
+	case AllVsAll:
+		AllVsAllTeamsDistribution();
+		break;
+
+	case OneVsAll:
+		OneVsAllTeamsDistribution();
+		break;
+
+	case Teams:
+		TeamsTeamsDistribution();
+		break;
+	}
+}
+
+void APBLastOneStadingGameMode::AllVsAllTeamsDistribution()
 {
 	UGameplayStatics::GetGameState(this)->PlayerArray.Num();
 
@@ -171,24 +189,52 @@ void APBLastOneStadingGameMode::SetPlayersTeam()
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
 		{
 			PBPS->SetTeamID(TeamCounter);
-
-			switch (CurrentGameMode)
-			{
-				case AllVsAll:
-					TeamCounter++;
-				break;
-
-				case OneVsAll:
-
-				break;
-
-				case Teams:
-
-				break;
-			}
+			PlayersByTeams.Add(TeamCounter, PBPS);
+			TeamCounter++;
 		}
 	}
-	
+}
+
+void APBLastOneStadingGameMode::OneVsAllTeamsDistribution()
+{
+	int RandomPlayer = FMath::RandRange(0, UGameplayStatics::GetGameState(this)->PlayerArray.Num()-1);
+	int PlayerIteratorCounter = 0;
+	for (APlayerState* PS : UGameplayStatics::GetGameState(this)->PlayerArray)
+	{
+		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
+		{
+			int SelectedTeam = 0;
+			if (PlayerIteratorCounter == RandomPlayer)
+				SelectedTeam = 1;
+			
+			PBPS->SetTeamID(SelectedTeam);
+			PlayersByTeams.Add(SelectedTeam, PBPS);
+
+			PlayerIteratorCounter++;
+		}
+	}
+}
+
+void APBLastOneStadingGameMode::TeamsTeamsDistribution()
+{
+	int MaxPlayersPerTeam = 2;
+	int PlayersAssigned = 0;
+
+	for (APlayerState* PS : UGameplayStatics::GetGameState(this)->PlayerArray)
+	{
+		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
+		{
+			PBPS->SetTeamID(TeamCounter);
+			PlayersByTeams.Add(TeamCounter, PBPS);
+
+			PlayersAssigned++;
+			if (PlayersAssigned >= MaxPlayersPerTeam)
+			{
+				PlayersAssigned = 0;
+				TeamCounter++;
+			}				
+		}
+	}
 }
 
 void APBLastOneStadingGameMode::CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC)

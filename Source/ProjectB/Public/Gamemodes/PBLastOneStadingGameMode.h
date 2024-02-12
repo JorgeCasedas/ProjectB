@@ -40,7 +40,7 @@ public:
 	UFUNCTION()
 	virtual void MatchStarted();
 	UFUNCTION()
-	virtual void SetPlayersTeam();
+	void SetPlayersTeams();
 
 	UFUNCTION(BlueprintCallable)
 	void CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC);
@@ -50,9 +50,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<TObjectPtr<APBPlayerController>, FGameplayAbilitiesArray> TempAbilitiesGivenToPlayers;
 
+	TMap<int, APBPlayerState*> PlayersByTeams;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void GenericPlayerInitialization(AController* Controller) override;
+
+private:
+
+	UFUNCTION()
+		void AllVsAllTeamsDistribution();
+	UFUNCTION()
+		void OneVsAllTeamsDistribution();
+	UFUNCTION()
+		void TeamsTeamsDistribution();
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))

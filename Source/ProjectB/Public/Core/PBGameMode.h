@@ -21,17 +21,34 @@ enum EGameMode
 };
 
 UENUM(BlueprintType)
-enum EGameRule
+enum EWinCondition
 {
 	KillAllOponents,
-	FriendlyFire,
 	PushYourOpponentOutOfTheArena,
-	ChangeTeamEveryXSeconds,
-	LastOneStandingLoses,
 	PassTheBomb
+	//LastOneStandingLoses, I am not implementing this yet
 };
 
-//TODO: Deactivate player starts on use (so every player has a different spawn point)
+UENUM(BlueprintType)
+enum EGameRule
+{
+	FriendlyFire,
+	ChangeTeamEveryXSeconds
+};
+
+USTRUCT()
+struct FGameModeSettings
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TEnumAsByte < EGameMode> GameMode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TEnumAsByte < EWinCondition> WinCondition;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TEnumAsByte < EGameRule> GameRule;
+};
+
 UCLASS(minimalapi)
 class APBGameMode : public AGameMode
 {
@@ -68,8 +85,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
 
-	UPROPERTY()
-	TEnumAsByte<EGameMode> CurrentGameMode = EGameMode::AllVsAll;
+	UPROPERTY(BlueprintReadWrite) //PBTODO: change to FGameModeSettings
+	TEnumAsByte<EGameMode> CurrentGameMode = EGameMode::Teams;
 
 protected:
 	virtual void GenericPlayerInitialization(AController* Controller) override;
