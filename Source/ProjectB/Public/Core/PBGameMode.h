@@ -16,6 +16,7 @@ class UPBGameplayAbility;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLoggedIn, APBPlayerController*, PlayerController);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchEnded);
 
 UENUM(BlueprintType)
 enum EGameMode
@@ -102,21 +103,21 @@ class APBGameMode : public AGameMode
 public:
 	APBGameMode();
 
+	UFUNCTION()
+	void PBStartMatch();
 	UFUNCTION(BlueprintCallable)
-	void StartPBMatch();
+	void PBStartMatchFromBP();
+	UFUNCTION()
+	virtual void PBEndMatch(const TArray<FPlayerInfo>& PlayersInfo);
+	UFUNCTION(BlueprintCallable)
+	virtual void TravelToNextMap();
+	
 	UFUNCTION(BlueprintCallable)
 	void PlayerDeath(APBCharacter* DeadCharacter);
-
 	UFUNCTION(BlueprintCallable)
 	virtual void CheckWinCon();
 	UFUNCTION(BlueprintCallable)
 	virtual void GivePointsToPlayers();
-	UFUNCTION()
-	virtual void MatchStarted();
-	UFUNCTION(BlueprintCallable)
-	virtual void MatchFinished(const TArray<FPlayerInfo>& PlayersInfo);
-	UFUNCTION(BlueprintCallable)
-	virtual void TravelToNextMap();
 
 	UFUNCTION()
 	virtual void GiveAbilitiesToPlayer(AController* NewPlayer);
@@ -124,7 +125,6 @@ public:
 	virtual void OpenPlayerAbilitiesSelection(AController* NewPlayer, int AbilitiesToSelect);
 	UFUNCTION(BlueprintCallable)
 	void CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC);
-
 
 	UFUNCTION()
 	void SetPlayersTeams();
@@ -134,7 +134,9 @@ public:
 	FOnPlayerLoggedIn OnPlayerLoggedIn;
 	UPROPERTY(BlueprintAssignable)
 	FOnMatchStarted OnMatchStarted;
-
+	UPROPERTY(BlueprintAssignable)
+	FOnMatchEnded OnMatchEnded;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<APBCharacter*> AliveCharacters;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

@@ -26,8 +26,6 @@ void APBGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnMatchStarted.AddDynamic(this, &APBGameMode::MatchStarted);
-
 	PBGameInstance = Cast<UProjectBGameInstance>(UGameplayStatics::GetGameInstance(this));
 }
 
@@ -41,22 +39,18 @@ void APBGameMode::GenericPlayerInitialization(AController* Controller)
 }
 
 
-void APBGameMode::StartPBMatch()
+void APBGameMode::PBStartMatch()
 {
-	TArray< APlayerState*> PlayerArray = Cast<APBGameState>(UGameplayStatics::GetGameState(this))->PlayerArray;
-	for(APlayerState* PS : PlayerArray)
+	TArray<APlayerState*> PlayerArray = Cast<APBGameState>(UGameplayStatics::GetGameState(this))->PlayerArray;
+
+	for (APlayerState* PS : PlayerArray)
 	{
 		AliveCharacters.Add(Cast<APBCharacter>(PS->GetPawn()));
 	}
-	OnMatchStarted.Broadcast();
-}
 
-void APBGameMode::MatchStarted()
-{
-	TeamCounter = 0;
 	PBGameInstance->SetInitialSaveGame();
 	USaveGamePlayerInfo* TestSaveGame = PBGameInstance->GetPlayerInfoSaveGame();
-	for (APlayerState* PS : UGameplayStatics::GetGameState(this)->PlayerArray)
+	for (APlayerState* PS : PlayerArray)
 	{
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
 		{
@@ -66,9 +60,16 @@ void APBGameMode::MatchStarted()
 	PBGameInstance->SavePlayersInfoSaveGame(TestSaveGame);
 
 	SetPlayersTeams();
+
+	OnMatchStarted.Broadcast();
 }
 
-void APBGameMode::MatchFinished(const TArray<FPlayerInfo>& PlayersInfo)
+void APBGameMode::PBStartMatchFromBP()
+{
+	PBStartMatch();
+}
+
+void APBGameMode::PBEndMatch(const TArray<FPlayerInfo>& PlayersInfo)
 {
 	check(GetWorld());
 	TArray< APlayerState*> PlayerArray = Cast<APBGameState>(UGameplayStatics::GetGameState(this))->PlayerArray;
@@ -127,7 +128,7 @@ void APBGameMode::GivePointsToPlayers()
 
 	PBGameInstance->SavePlayersInfoSaveGame(TestSaveGame);
 
-	MatchFinished(TestSaveGame->PlayersInfo);
+	PBEndMatch(TestSaveGame->PlayersInfo);
 }
 
 #pragma endregion
@@ -135,6 +136,7 @@ void APBGameMode::GivePointsToPlayers()
 #pragma region Teams Distribution
 void APBGameMode::SetPlayersTeams()
 {
+	TeamCounter = 0;
 	switch (CurrentGameMode)
 	{
 	case AllVsAll:

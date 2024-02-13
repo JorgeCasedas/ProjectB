@@ -45,10 +45,10 @@ public:
 	bool IsEqualTo(const APlayerState* InPlayerState);
 
 	UFUNCTION(BlueprintCallable)
-	void SetTeamID(uint8 TeamID);
+	void SetTeamID(int TeamID);
 
 	UFUNCTION(BlueprintCallable)
-	uint8 GetTeamID();
+	int GetTeamID();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -58,5 +58,5 @@ protected:
 	TObjectPtr<UPBHealthAttributeSet> HealthAttributeSet;
 
 	UPROPERTY(Replicated)
-	uint8 TeamID;
+	int TeamID = -1;
 };

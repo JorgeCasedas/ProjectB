@@ -55,12 +55,12 @@ bool APBPlayerState::IsEqualTo(const APlayerState* InPlayerState)
 	return CheckUniqueNetID(InPlayerState->GetUniqueId()->ToString());
 }
 
-void APBPlayerState::SetTeamID(uint8 InTeamID)
+void APBPlayerState::SetTeamID(int InTeamID)
 {
 	TeamID = InTeamID;
 }
 
-uint8 APBPlayerState::GetTeamID()
+int APBPlayerState::GetTeamID()
 {
 	return TeamID;
 }
