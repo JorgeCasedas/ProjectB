@@ -144,9 +144,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
-
-	UPROPERTY(BlueprintReadWrite) //PBTODO: change to FGameModeSettings
-	TEnumAsByte<EGameMode> CurrentGameMode = EGameMode::Teams;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameModeSettings CurrentGameModeSettings;

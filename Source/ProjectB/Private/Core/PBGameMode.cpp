@@ -137,7 +137,7 @@ void APBGameMode::GivePointsToPlayers()
 void APBGameMode::SetPlayersTeams()
 {
 	TeamCounter = 0;
-	switch (CurrentGameMode)
+	switch (CurrentGameModeSettings.GameMode)
 	{
 	case AllVsAll:
 		AllVsAllTeamsDistribution();
