@@ -36,17 +36,48 @@ enum EGameRule
 	ChangeTeamEveryXSeconds
 };
 
-USTRUCT()
-struct FGameModeSettings
+USTRUCT(BlueprintType)
+struct FWinConditionSettings
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TEnumAsByte < EGameMode> GameMode;
+	TEnumAsByte<EWinCondition> WinCondition;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TEnumAsByte < EWinCondition> WinCondition;
+	TArray<TEnumAsByte<EGameRule>> GameRules;
+};
+
+USTRUCT(BlueprintType)
+struct FExistingGameModesSettings
+{
+	GENERATED_USTRUCT_BODY()
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TEnumAsByte < EGameRule> GameRule;
+	TEnumAsByte<EGameMode> GameMode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FWinConditionSettings> WinConditions;
+};
+
+USTRUCT(BlueprintType)
+struct FGameModeSettings
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EGameMode> GameMode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FWinConditionSettings WinConditions;
+};
+
+USTRUCT(BlueprintType)
+struct FRulesCompatibility
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EGameRule> GameRule;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TEnumAsByte<EGameRule>> GameRules;
 };
 
 UCLASS(minimalapi)
@@ -87,6 +118,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite) //PBTODO: change to FGameModeSettings
 	TEnumAsByte<EGameMode> CurrentGameMode = EGameMode::Teams;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameModeSettings CurrentGameModeSettings;
 
 protected:
 	virtual void GenericPlayerInitialization(AController* Controller) override;
