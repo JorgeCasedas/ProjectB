@@ -17,6 +17,7 @@ class UPBGameplayAbility;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLoggedIn, APBPlayerController*, PlayerController);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchEnded);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
 
 UENUM(BlueprintType)
 enum EGameMode
@@ -117,7 +118,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void CheckWinCon();
 	UFUNCTION(BlueprintCallable)
-	virtual void GivePointsToPlayers();
+	virtual void GivePointsToPlayers(int TeamID);
 
 	UFUNCTION()
 	virtual void GiveAbilitiesToPlayer(AController* NewPlayer);
@@ -128,6 +129,9 @@ public:
 
 	UFUNCTION()
 	void SetPlayersTeams();
+
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentGameModeSettings(const FGameModeSettings& Settings);
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -144,9 +148,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameModeSettings CurrentGameModeSettings;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<TObjectPtr<APBPlayerController>, FGameplayAbilitiesArray> TempAbilitiesGivenToPlayers;
@@ -169,9 +170,13 @@ private:
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	FGameModeSettings CurrentGameModeSettings;
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UProjectBGameInstance> PBGameInstance;
 	UPROPERTY()
 	int TeamCounter;
+	UPROPERTY()
+	FOnPlayerDeath OnPlayerDeathInternal;
 };
 
 

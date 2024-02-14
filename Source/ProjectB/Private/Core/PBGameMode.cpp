@@ -94,27 +94,98 @@ void APBGameMode::TravelToNextMap()
 	World->ServerTravel(LobbyPath + "?listen");
 }
 
+void APBGameMode::SetCurrentGameModeSettings(const FGameModeSettings& Settings)
+{
+	CurrentGameModeSettings = Settings;
+
+	switch (CurrentGameModeSettings.WinConditions.WinCondition)
+	{
+		case EWinCondition::KillAllOponents:
+			OnPlayerDeathInternal.AddDynamic(this, &APBGameMode::CheckWinCon);
+		break;
+
+		case EWinCondition::PushYourOpponentOutOfTheArena:
+			OnPlayerDeathInternal.AddDynamic(this, &APBGameMode::CheckWinCon);
+		break;
+
+		case EWinCondition::PassTheBomb:
+			
+		break;
+	}
+}
+
 #pragma region Win Condition
 void APBGameMode::PlayerDeath(APBCharacter* DeadCharacter)
 {
 	AliveCharacters.Remove(DeadCharacter);
 	DeadCharacters.Add(DeadCharacter);
-	CheckWinCon();
+	OnPlayerDeathInternal.Broadcast();
 }
 
 void APBGameMode::CheckWinCon()
 {
-	if (AliveCharacters.Num() <= 1)
+	int LastTeamID = -1;
+	switch (CurrentGameModeSettings.GameMode)
 	{
-		GivePointsToPlayers();
+		case EGameMode::AllVsAll:
+			if (AliveCharacters.Num() > 1)
+			{
+				return;
+			}
+		break;
+
+		case EGameMode::OneVsAll:
+			//Check Teams Left
+			for (APBCharacter* Character : AliveCharacters)
+			{
+				int CheckTeamID = Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID();
+				if (LastTeamID < 0)
+					LastTeamID = CheckTeamID;
+				else if (LastTeamID != CheckTeamID)
+					return;
+			}
+		break;
+
+		case EGameMode::Teams:
+			//Check Teams Left
+			for (APBCharacter* Character : AliveCharacters)
+			{
+				int CheckTeamID = Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID();
+				if (LastTeamID < 0)
+					LastTeamID = CheckTeamID;
+				else if (LastTeamID != CheckTeamID)
+					return;
+			}
+		break;
 	}
+	GivePointsToPlayers(LastTeamID);
 }
 
-void APBGameMode::GivePointsToPlayers()
+void APBGameMode::GivePointsToPlayers(int TeamID)
 {
 	//PBTODO: rename when it is not a test anymore
 	USaveGamePlayerInfo* TestSaveGame = PBGameInstance->GetPlayerInfoSaveGame();
-	for (APBCharacter* Character : AliveCharacters)
+	TArray<APBCharacter*> PlayersToReward;
+
+	if (TeamID < 0)
+	{
+		PlayersToReward = AliveCharacters;
+	}
+	else 
+	{
+		for (APBCharacter* Character : AliveCharacters)
+		{
+			if (Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID() == TeamID)
+				PlayersToReward.AddUnique(Character);
+		}
+		for (APBCharacter* Character : DeadCharacters)
+		{
+			if (Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID() == TeamID)
+				PlayersToReward.AddUnique(Character);
+		}
+	}
+
+	for (APBCharacter* Character : PlayersToReward)
 	{
 		for (FPlayerInfo& PlayerInfo : TestSaveGame->PlayersInfo)
 		{
