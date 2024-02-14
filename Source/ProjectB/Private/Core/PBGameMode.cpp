@@ -11,6 +11,8 @@
 
 #include "Character/PBCharacter.h"
 
+#include "Actor/PBBomb.h"
+
 #include "SaveGame/SaveGamePlayerInfo.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -109,7 +111,8 @@ void APBGameMode::SetCurrentGameModeSettings(const FGameModeSettings& Settings)
 		break;
 
 		case EWinCondition::PassTheBomb:
-			
+			APBBomb* WinConBomb = GetWorld()->SpawnActor<APBBomb>(FVector::ZeroVector,FRotator::ZeroRotator);
+			WinConBomb->OnExploded.AddDynamic();
 		break;
 	}
 }
