@@ -18,7 +18,7 @@ public:
 	APBBomb();
 
 public:
-	UPROPERTY()
+	UPROPERTY(BlueprintCallable)
 	FOnExploded OnExploded;
 
 protected:

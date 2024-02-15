@@ -117,6 +117,8 @@ public:
 	void PlayerDeath(APBCharacter* DeadCharacter);
 	UFUNCTION(BlueprintCallable)
 	virtual void CheckWinCon();
+	UFUNCTION()
+	virtual void BombExplosion();
 	UFUNCTION(BlueprintCallable)
 	virtual void GivePointsToPlayers(int TeamID);
 
@@ -154,6 +156,11 @@ public:
 	
 	UPROPERTY()
 	TMap<int, APBPlayerState*> PlayersByTeams;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PassTheBomb")
+	TSubclassOf<APBBomb> BombClass;
+	UPROPERTY(BlueprintReadOnly, Category = "PassTheBomb")
+	APBBomb* BombActor;
 
 protected:
 	virtual void BeginPlay() override;
