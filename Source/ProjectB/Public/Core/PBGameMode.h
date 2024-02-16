@@ -12,6 +12,8 @@ class APBPlayerState;
 class APBPlayerController;
 class APBCharacter;
 
+class APBBomb;
+
 class UPBGameplayAbility;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLoggedIn, APBPlayerController*, PlayerController);
