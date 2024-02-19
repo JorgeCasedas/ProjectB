@@ -243,7 +243,21 @@ void APBGameMode::AllVsAllTeamsDistribution()
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
 		{
 			PBPS->SetTeamID(TeamCounter);
-			PlayersByTeams.Add(TeamCounter, PBPS);
+
+			bool bTeamFound = false;
+			for (FPlayersByTeam& Players : PlayersByTeams)
+			{
+				if (Players.TeamID == TeamCounter)
+				{
+					bTeamFound = true;
+					Players.Players.Add(PBPS);
+				}
+			}
+			if (!bTeamFound)
+			{
+				PlayersByTeams.Add({ TeamCounter, PBPS });
+			}
+
 			TeamCounter++;
 		}
 	}
@@ -262,7 +276,20 @@ void APBGameMode::OneVsAllTeamsDistribution()
 				SelectedTeam = 1;
 
 			PBPS->SetTeamID(SelectedTeam);
-			PlayersByTeams.Add(SelectedTeam, PBPS);
+
+			bool bTeamFound = false;
+			for (FPlayersByTeam& Players : PlayersByTeams)
+			{
+				if (Players.TeamID == SelectedTeam)
+				{
+					bTeamFound = true;
+					Players.Players.Add(PBPS);
+				}
+			}
+			if (!bTeamFound)
+			{
+				PlayersByTeams.Add({ SelectedTeam, PBPS });
+			}
 
 			PlayerIteratorCounter++;
 		}
@@ -279,7 +306,20 @@ void APBGameMode::TeamsTeamsDistribution()
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
 		{
 			PBPS->SetTeamID(TeamCounter);
-			PlayersByTeams.Add(TeamCounter, PBPS);
+
+			bool bTeamFound = false;
+			for (FPlayersByTeam& Players : PlayersByTeams)
+			{
+				if (Players.TeamID == TeamCounter)
+				{
+					bTeamFound = true;
+					Players.Players.Add(PBPS);
+				}
+			}
+			if (!bTeamFound)
+			{
+				PlayersByTeams.Add({ TeamCounter, PBPS });
+			}
 
 			PlayersAssigned++;
 			if (PlayersAssigned >= MaxPlayersPerTeam)

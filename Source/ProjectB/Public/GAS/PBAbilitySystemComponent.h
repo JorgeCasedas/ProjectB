@@ -4,14 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "PBGameplayAbility.h" //not compiling without this, forward declaraton not working?
 #include "PBAbilitySystemComponent.generated.h"
 
-class UPBGameplayAbility;
+//class UPBGameplayAbility;
 
 USTRUCT(BlueprintType)
 struct FDefaultCharacterAbility
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<UPBGameplayAbility> Ability;

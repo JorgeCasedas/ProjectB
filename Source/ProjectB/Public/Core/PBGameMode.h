@@ -92,10 +92,30 @@ struct FRulesCompatibility
 USTRUCT(BlueprintType)
 struct FGameplayAbilitiesArray
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
-		UPROPERTY(BlueprintReadWrite)
-		TArray<TSubclassOf<UPBGameplayAbility>> Abilities;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<TSubclassOf<UPBGameplayAbility>> Abilities;
+};
+
+USTRUCT(BlueprintType)
+struct FPlayersByTeam
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	FPlayersByTeam()
+	{
+		TeamID = -1;
+	}
+	FPlayersByTeam(int inTeamID, APBPlayerState* inState)
+	{
+		TeamID = inTeamID;
+		Players.Add(inState);
+	}
+	UPROPERTY(BlueprintReadWrite)
+	int TeamID;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<APBPlayerState*> Players;
 };
 
 UCLASS(minimalapi)
@@ -156,8 +176,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<TObjectPtr<APBPlayerController>, FGameplayAbilitiesArray> TempAbilitiesGivenToPlayers;
 	
-	UPROPERTY()
-	TMap<int, APBPlayerState*> PlayersByTeams;
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FPlayersByTeam> PlayersByTeams;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PassTheBomb")
 	TSubclassOf<APBBomb> BombClass;
