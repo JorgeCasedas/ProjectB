@@ -184,6 +184,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnPlayersChangedTeam OnPlayersChangedTeam;
 
+	UPROPERTY(BlueprintReadOnly)
+	FGameModeSettings CurrentGameModeSettings;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PassTheBomb")
 	TSubclassOf<APBBomb> BombClass;
 	UPROPERTY(BlueprintReadOnly, Category = "PassTheBomb")
@@ -203,8 +206,7 @@ private:
 	void TeamsTeamsDistribution();
 
 private:
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	FGameModeSettings CurrentGameModeSettings;
+	
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UProjectBGameInstance> PBGameInstance;
 	UPROPERTY()
