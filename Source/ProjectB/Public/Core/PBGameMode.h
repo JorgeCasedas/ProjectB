@@ -172,6 +172,8 @@ public:
 	TArray<APBCharacter*> AliveCharacters;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<APBCharacter*> DeadCharacters;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<APBCharacter*> CurrentWinners;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;

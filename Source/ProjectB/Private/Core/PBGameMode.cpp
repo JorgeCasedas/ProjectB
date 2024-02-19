@@ -176,33 +176,33 @@ void APBGameMode::GivePointsToPlayers(int TeamID)
 {
 	//PBTODO: rename when it is not a test anymore
 	USaveGamePlayerInfo* TestSaveGame = PBGameInstance->GetPlayerInfoSaveGame();
-	TArray<APBCharacter*> PlayersToReward;
 
 	if (TeamID < 0)
 	{
-		PlayersToReward = AliveCharacters;
+		CurrentWinners = AliveCharacters;
 	}
 	else 
 	{
 		for (APBCharacter* Character : AliveCharacters)
 		{
 			if (Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID() == TeamID)
-				PlayersToReward.AddUnique(Character);
+				CurrentWinners.AddUnique(Character);
 		}
 		for (APBCharacter* Character : DeadCharacters)
 		{
 			if (Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID() == TeamID)
-				PlayersToReward.AddUnique(Character);
+				CurrentWinners.AddUnique(Character);
 		}
 	}
 
-	for (APBCharacter* Character : PlayersToReward)
+	for (APBCharacter* Character : CurrentWinners)
 	{
 		for (FPlayerInfo& PlayerInfo : TestSaveGame->PlayersInfo)
 		{
 			if (PlayerInfo.UID == Character->GetPlayerState()->GetUniqueId()->ToString())
 			{
 				PlayerInfo.PointsWon += 1;
+				Cast<APBPlayerState>(Character->GetPlayerState())->bIsTheCurrentWinner = true;
 				break;
 			}
 		}

@@ -20,6 +20,8 @@ APBPlayerState::APBPlayerState()
 	HealthAttributeSet = CreateDefaultSubobject<UPBHealthAttributeSet>("HealthAttributeSet");
 
 	bReplicates = true;
+
+	bIsTheCurrentWinner = false;
 }
 
 UAbilitySystemComponent* APBPlayerState::GetAbilitySystemComponent() const
@@ -37,6 +39,7 @@ void APBPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APBPlayerState, TeamID);
+	DOREPLIFETIME(APBPlayerState, bIsTheCurrentWinner);
 }
 
 //TODO: Test implementation change this

@@ -50,6 +50,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetTeamID();
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	bool bIsTheCurrentWinner = false;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UPBAbilitySystemComponent> PBASC;

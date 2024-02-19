@@ -45,40 +45,49 @@ void UPBExecution::Execute_Implementation(const FGameplayEffectCustomExecutionPa
 	FAggregatorEvaluateParameters EvaluationParameters;
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
-
-	bool bIsFriendlyFireActive = Cast<APBGameMode>(UGameplayStatics::GetGameMode(SourceAvatar))->CurrentGameModeSettings.WinConditions.GameRules.Contains(EGameRule::FriendlyFire);
+	
+	FGameModeSettings CurrentGameModeSettings = Cast<APBGameMode>(UGameplayStatics::GetGameMode(SourceAvatar))->CurrentGameModeSettings;
+	bool bIsFriendlyFireActive = CurrentGameModeSettings.WinConditions.GameRules.Contains(EGameRule::FriendlyFire);
 	bool bSameTeam = false;
 	if (SourceASC != TargetASC && !bIsFriendlyFireActive)
 	{
 		if (const APBCharacter* SourceCharacter = Cast<APBCharacter>(SourceAvatar))
 		{
-			const APBCharacter* TargetCharacter = Cast<APBCharacter>(TargetAvatar);
-			if (const APBPlayerState* SourcePlayerState = Cast<APBPlayerState>(SourceCharacter->GetPlayerState()))
+			if (const APBCharacter* TargetCharacter = Cast<APBCharacter>(TargetAvatar))
 			{
-				const APBPlayerState* TargetPlayerState = Cast<APBPlayerState>(TargetCharacter->GetPlayerState());
-				int SourceTeamID = const_cast<APBPlayerState*>(SourcePlayerState)->GetTeamID();
-				int TargetTeamID = const_cast<APBPlayerState*>(TargetPlayerState)->GetTeamID();
-
-				if (SourceTeamID == TargetTeamID)
+				if (const APBPlayerState* SourcePlayerState = Cast<APBPlayerState>(SourceCharacter->GetPlayerState()))
 				{
-					bSameTeam = true;
+					if (const APBPlayerState* TargetPlayerState = Cast<APBPlayerState>(TargetCharacter->GetPlayerState()))
+					{
+						int SourceTeamID = const_cast<APBPlayerState*>(SourcePlayerState)->GetTeamID();
+						int TargetTeamID = const_cast<APBPlayerState*>(TargetPlayerState)->GetTeamID();
+						
+						if (SourceTeamID == TargetTeamID)
+						{
+							bSameTeam = true;
+						}
+					}
 				}
-			}
+			}	
 		}
 	}
 
-	bool bFound = false;
-	float Health = 0;
-	float Damage = 0;
-	if (!bIsFriendlyFireActive && bSameTeam)
+	bool bShouldDealDamage = true;
+
+	if (CurrentGameModeSettings.WinConditions.WinCondition == EWinCondition::PassTheBomb ||  
+		CurrentGameModeSettings.WinConditions.WinCondition == EWinCondition::PushYourOpponentOutOfTheArena ||
+		(!bIsFriendlyFireActive && bSameTeam))
 	{
-		ExecutionParams.AttemptCalculateCapturedAttributeBaseValue(ExecStatics().HealthDef, Health);
-	}
-	else 
-	{
-		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(ExecStatics().HealthDef, EvaluationParameters, Health);
+		bShouldDealDamage = false;
 	}
 
-	FGameplayModifierEvaluatedData EvaluatedData(ExecStatics().HealthProperty, EGameplayModOp::Override, Health);
-	OutExecutionOutput.AddOutputModifier(EvaluatedData);
+	if(bShouldDealDamage)
+	{
+		float Health = 0;
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(ExecStatics().HealthDef, EvaluationParameters, Health);
+		FGameplayModifierEvaluatedData EvaluatedData(ExecStatics().HealthProperty, EGameplayModOp::Override, Health);
+		OutExecutionOutput.AddOutputModifier(EvaluatedData);
+	}
+
+	
 }
