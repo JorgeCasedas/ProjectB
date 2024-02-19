@@ -48,7 +48,7 @@ void UPBExecution::Execute_Implementation(const FGameplayEffectCustomExecutionPa
 
 	bool bIsFriendlyFireActive = Cast<APBGameMode>(UGameplayStatics::GetGameMode(SourceAvatar))->CurrentGameModeSettings.WinConditions.GameRules.Contains(EGameRule::FriendlyFire);
 	bool bSameTeam = false;
-	if (!bIsFriendlyFireActive)
+	if (SourceASC != TargetASC && !bIsFriendlyFireActive)
 	{
 		if (const APBCharacter* SourceCharacter = Cast<APBCharacter>(SourceAvatar))
 		{
@@ -66,20 +66,19 @@ void UPBExecution::Execute_Implementation(const FGameplayEffectCustomExecutionPa
 			}
 		}
 	}
-	
-	float Health = 100;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(ExecStatics().HealthDef, EvaluationParameters, Health);
 
+	bool bFound = false;
+	float Health = 0;
+	float Damage = 0;
 	if (!bIsFriendlyFireActive && bSameTeam)
 	{
-		FGameplayModifierEvaluatedData EvaluatedData(ExecStatics().HealthProperty, EGameplayModOp::Additive, 0);
-		OutExecutionOutput.AddOutputModifier(EvaluatedData);
+		ExecutionParams.AttemptCalculateCapturedAttributeBaseValue(ExecStatics().HealthDef, Health);
 	}
 	else 
 	{
-		FGameplayModifierEvaluatedData EvaluatedData(ExecStatics().HealthProperty, EGameplayModOp::Override, Health);
-		OutExecutionOutput.AddOutputModifier(EvaluatedData);
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(ExecStatics().HealthDef, EvaluationParameters, Health);
 	}
-	
-	
+
+	FGameplayModifierEvaluatedData EvaluatedData(ExecStatics().HealthProperty, EGameplayModOp::Override, Health);
+	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 }
