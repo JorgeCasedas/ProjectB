@@ -80,6 +80,7 @@ void APBGameMode::PBEndMatch(const TArray<FPlayerInfo>& PlayersInfo)
 	{
 		Cast<APBPlayerController>(PS->GetPlayerController())->ClientShowPoints(PlayersInfo);
 	}
+	OnMatchEnded.Broadcast();
 }
 
 void APBGameMode::TravelToNextMap()
@@ -234,11 +235,44 @@ void APBGameMode::SetPlayersTeams()
 	}
 }
 
+void APBGameMode::ChangePlayersTeams()
+{
+	//PBTODO: change this logic so left players dont just wait until they are matched together and win the game
+	switch (CurrentGameModeSettings.GameMode)
+	{
+		case OneVsAll:
+			OneVsAllTeamsDistribution();
+			break;
+
+		case Teams:
+			TeamsTeamsDistribution();
+			break;
+	}
+	switch (CurrentGameModeSettings.WinConditions.WinCondition)
+	{
+		case EWinCondition::KillAllOponents:
+			CheckWinCon();
+		break;
+
+		case EWinCondition::PushYourOpponentOutOfTheArena:
+			CheckWinCon();
+		break;
+	}
+	OnPlayersChangedTeam.Broadcast();
+}
+
 void APBGameMode::AllVsAllTeamsDistribution()
 {
-	UGameplayStatics::GetGameState(this)->PlayerArray.Num();
+	TArray<APlayerState*> PlayersList = UGameplayStatics::GetGameState(this)->PlayerArray;
+	// Shuffle the list
+	const int32 NumShuffles = PlayersList.Num() - 1;
+	for (int32 i = 0; i < NumShuffles; ++i)
+	{
+		int32 SwapIdx = FMath::RandRange(i, NumShuffles);
+		PlayersList.Swap(i, SwapIdx);
+	}
 
-	for (APlayerState* PS : UGameplayStatics::GetGameState(this)->PlayerArray)
+	for (APlayerState* PS : PlayersList)
 	{
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
 		{
@@ -298,10 +332,19 @@ void APBGameMode::OneVsAllTeamsDistribution()
 
 void APBGameMode::TeamsTeamsDistribution()
 {
+	TArray<APlayerState*> PlayersList = UGameplayStatics::GetGameState(this)->PlayerArray;
+	// Shuffle the list
+	const int32 NumShuffles = PlayersList.Num() - 1;
+	for (int32 i = 0; i < NumShuffles; ++i)
+	{
+		int32 SwapIdx = FMath::RandRange(i, NumShuffles);
+		PlayersList.Swap(i, SwapIdx);
+	}
+
 	int MaxPlayersPerTeam = 2;
 	int PlayersAssigned = 0;
 
-	for (APlayerState* PS : UGameplayStatics::GetGameState(this)->PlayerArray)
+	for (APlayerState* PS : PlayersList)
 	{
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
 		{

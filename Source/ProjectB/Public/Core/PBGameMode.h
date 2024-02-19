@@ -20,6 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLoggedIn, APBPlayerControll
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchEnded);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersChangedTeam);
 
 UENUM(BlueprintType)
 enum EGameMode
@@ -153,6 +154,8 @@ public:
 
 	UFUNCTION()
 	void SetPlayersTeams();
+	UFUNCTION(BlueprintCallable)
+	void ChangePlayersTeams();
 
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentGameModeSettings(const FGameModeSettings& Settings);
@@ -178,6 +181,8 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FPlayersByTeam> PlayersByTeams;
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayersChangedTeam OnPlayersChangedTeam;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PassTheBomb")
 	TSubclassOf<APBBomb> BombClass;
