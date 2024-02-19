@@ -90,6 +90,8 @@ void APBLevelCamera::RepositionCamera()
 
 	for (APBCharacter* Character : Characters)
 	{
+		if (!Character)
+			continue;
 		if (Character->IsHidden())
 			continue;
 		PlayersVector += Character->GetActorLocation();
