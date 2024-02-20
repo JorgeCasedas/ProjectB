@@ -30,6 +30,7 @@ public:
 	FGameplayTag Ability_Active_Explode;
 	FGameplayTag Ability_Active_Mistborn;
 	FGameplayTag Ability_Active_Mistborn_NailReached;
+	FGameplayTag Ability_Active_Fireball;
 	
 	//Passive Abilities
 	FGameplayTag Ability_Passive_FireTrail;
@@ -40,6 +41,7 @@ public:
 	FGameplayTag Cooldown_Dash;
 	FGameplayTag Cooldown_Explode;
 	FGameplayTag Cooldown_Mistborn;
+	FGameplayTag Cooldown_Fireball;
 	FGameplayTag Cooldown_Q;
 	FGameplayTag Cooldown_E;
 	FGameplayTag Cooldown_R;

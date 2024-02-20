@@ -68,7 +68,12 @@ void FPBGameplayTags::InitializeNativeGameplayTags()
 		FName("Ability.Active.Mistborn.NailReached"),
 		FString("Mistborn ability when nail reaches a target")
 	);
-
+	GameplayTags.Ability_Active_Fireball = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Ability.Active.Fireball"),
+		FString("Fireball ability")
+	);
+	
 	/*
 	 *		Passive Abilities
 	 */
@@ -108,6 +113,11 @@ void FPBGameplayTags::InitializeNativeGameplayTags()
 	(
 		FName("Cooldown.Mistborn"),
 		FString("Mistborn ability cooldown")
+	);
+	GameplayTags.Cooldown_Fireball = UGameplayTagsManager::Get().AddNativeGameplayTag
+	(
+		FName("Cooldown.Fireball"),
+		FString("Fireball ability cooldown")
 	);
 	GameplayTags.Cooldown_Q = UGameplayTagsManager::Get().AddNativeGameplayTag
 	(
