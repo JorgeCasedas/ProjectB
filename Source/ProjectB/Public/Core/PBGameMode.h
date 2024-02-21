@@ -21,6 +21,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchEnded);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersChangedTeam);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerWinsGame, APBCharacter*, PlayerCharacter);
 
 UENUM(BlueprintType)
 enum EGameMode
@@ -174,6 +175,10 @@ public:
 	TArray<APBCharacter*> DeadCharacters;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<APBCharacter*> CurrentWinners;
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerWinsGame OnPlayerWinsGame;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxPointsToWinTheGame = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> NextLevel;

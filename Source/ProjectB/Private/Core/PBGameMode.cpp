@@ -203,6 +203,10 @@ void APBGameMode::GivePointsToPlayers(int TeamID)
 			{
 				PlayerInfo.PointsWon += 1;
 				Cast<APBPlayerState>(Character->GetPlayerState())->bIsTheCurrentWinner = true;
+				if (PlayerInfo.PointsWon >= MaxPointsToWinTheGame)
+				{
+					OnPlayerWinsGame.Broadcast(Character);
+				}
 				break;
 			}
 		}
