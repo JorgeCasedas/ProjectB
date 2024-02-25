@@ -17,6 +17,9 @@ class UAbilitiesConfig;
  * 
  */
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLoadingStateUpdated, FString, Message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOperationFailed);
+
 //PBTODO: Rename UProjectBGameInstance to UPBGameInstance
 
 UCLASS()
@@ -62,6 +65,12 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bSaveGameAlreadyCreated = false;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnLoadingStateUpdated OnLoadingStateUpdate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnOperationFailed OnOperationFailed;
 
 private:
 	UFUNCTION(BlueprintCallable)

@@ -45,8 +45,11 @@ void UProjectBGameInstance::Init()
 
 void UProjectBGameInstance::TryHostGame()
 {
+	OnLoadingStateUpdate.Broadcast(TEXT("Creating Server"));
+
 	if (!SessionInterface.IsValid())
 	{
+		OnOperationFailed.Broadcast();
 		return;
 	}
 
@@ -71,14 +74,17 @@ void UProjectBGameInstance::CreateSession()
 {
 	if (!SessionInterface.IsValid())
 	{
+		OnOperationFailed.Broadcast();
 		return;
 	}
 
 	FOnlineSessionSettings SessionSettings;
 #if WITH_EDITOR
 	SessionSettings.bIsLANMatch = true;
+	OnLoadingStateUpdate.Broadcast(TEXT("CREATING LAN MATCH"));
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("CREATING LAN MATCH"));
 #else
+	OnLoadingStateUpdate.Broadcast(TEXT("CREATING ONLINE MATCH"));
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("CREATING ONLINE MATCH"));
 	SessionSettings.bIsLANMatch = false;
 	SessionSettings.bUsesPresence = true;
@@ -95,6 +101,7 @@ void UProjectBGameInstance::OnCreateSession(FName SessionName, bool bSuccess)
 {
 	if (!bSuccess)
 	{
+		OnOperationFailed.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Could not create session"));
 		return;
 	}
@@ -107,6 +114,7 @@ void UProjectBGameInstance::OnDestroySession(FName SessionName, bool bSuccess)
 	if(!bSuccess)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Could not destroy session"));
+		OnOperationFailed.Broadcast();
 		return;
 	}
 
@@ -131,19 +139,23 @@ void UProjectBGameInstance::FindSessions()
 {
 	if (!SessionInterface.IsValid())
 	{
+		OnOperationFailed.Broadcast();
 		return;
 	}
 
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if (!SessionSearch.IsValid())
 	{
+		OnOperationFailed.Broadcast();
 		return;
 	}
 
 #if WITH_EDITOR
 	SessionSearch->bIsLanQuery = true;
+	OnLoadingStateUpdate.Broadcast(TEXT("FINDING LAN MATCH"));
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING LAN MATCH"));
 #else
+	OnLoadingStateUpdate.Broadcast(TEXT("FINDING ONLINE MATCH"));
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING ONLINE MATCH"));
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 #endif
@@ -154,27 +166,34 @@ void UProjectBGameInstance::FindSessions()
 
 void UProjectBGameInstance::OnSessionsFound(bool bSuccess)
 {
+	OnLoadingStateUpdate.Broadcast(TEXT("Check sessions found"));
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Check sessions found"));
 	if (!bSuccess)
 	{
+		OnOperationFailed.Broadcast();
+		OnLoadingStateUpdate.Broadcast(TEXT("Could not find sessions"));
 		//UE_LOG(LogTemp, Warning, TEXT("Could not find sessions"));
 		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Could not find sessions"));
 		return;
 	}
 	if (!SessionSearch.IsValid())
 	{
+		OnOperationFailed.Broadcast();
+		OnLoadingStateUpdate.Broadcast(TEXT("SessionSearch Not Valid"));
 		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("SessionSearchNotValid"));
 		return;
 	}
-	
+
 	int FoundSessionIndex = 0;
 	for (const FOnlineSessionSearchResult& SearchResult : SessionSearch->SearchResults)
 	{
 		if (SearchResult.GetSessionIdStr() == GameSessionIdToJoin)
 		{
+			OnLoadingStateUpdate.Broadcast(TEXT("Joining"));
 			UE_LOG(LogTemp, Warning, TEXT("Joining"));
 			break;
 		}
+		OnLoadingStateUpdate.Broadcast(TEXT("Found session"));
 		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, (TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr()));
 		//UE_LOG(LogTemp, Warning, TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr());
 		FoundSessionIndex++;
@@ -182,8 +201,16 @@ void UProjectBGameInstance::OnSessionsFound(bool bSuccess)
 
 	if (FoundSessionIndex < SessionSearch->SearchResults.Num())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Try to JOIN"));
+		OnLoadingStateUpdate.Broadcast(TEXT("Try to join"));
+		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Try to join"));
 		SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[FoundSessionIndex]);
+	}
+	else 
+	{
+		OnOperationFailed.Broadcast();
+		OnLoadingStateUpdate.Broadcast(TEXT("No Sessions found"));
+		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("No Sessions found"));
+		return;
 	}
 }
 
@@ -191,6 +218,7 @@ void UProjectBGameInstance::OnJoinSession(FName SessionName, EOnJoinSessionCompl
 {
 	if (!SessionInterface.IsValid())
 	{
+		OnOperationFailed.Broadcast();
 		return;
 	}
 
@@ -200,6 +228,7 @@ void UProjectBGameInstance::OnJoinSession(FName SessionName, EOnJoinSessionCompl
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 
+	OnLoadingStateUpdate.Broadcast(TEXT("JOINING"));
 	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("JOINING"));
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
@@ -210,16 +239,20 @@ FString UProjectBGameInstance::GetCurrentSessionID()
 {
 	if (!SessionInterface.IsValid())
 	{
+		OnOperationFailed.Broadcast();
+		OnLoadingStateUpdate.Broadcast(TEXT("No SessionInterface Found"));
 		return "NoSessionInterfaceFound";
 	}
 
 	FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
 	if (!ExistingSession)
 	{
+		OnOperationFailed.Broadcast();
+		OnLoadingStateUpdate.Broadcast(TEXT("No CurrentSession Found"));
 		return "NoCurrentSessionFound";
 	}
 
-	return ExistingSession->GetSessionIdStr();;
+	return ExistingSession->GetSessionIdStr();
 }
 
 void UProjectBGameInstance::SetConnectedPlayersCount()
