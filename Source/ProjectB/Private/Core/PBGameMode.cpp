@@ -123,6 +123,9 @@ void APBGameMode::SetCurrentGameModeSettings(const FGameModeSettings& Settings)
 #pragma region Win Condition
 void APBGameMode::PlayerDeath(APBCharacter* DeadCharacter)
 {
+	if (!AliveCharacters.Contains(DeadCharacter))
+		return;
+
 	AliveCharacters.Remove(DeadCharacter);
 	DeadCharacters.Add(DeadCharacter);
 	OnPlayerDeathInternal.Broadcast();
