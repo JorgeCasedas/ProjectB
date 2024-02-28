@@ -83,17 +83,17 @@ void APBGameMode::PBEndMatch(const TArray<FPlayerInfo>& PlayersInfo)
 	OnMatchEnded.Broadcast();
 }
 
-void APBGameMode::TravelToNextMap()
+void APBGameMode::TravelToNextMap(TArray<TSoftObjectPtr<UWorld>> Levels)
 {
 	UWorld* World = GetWorld();
-	if (!World || !NextLevel)
+	if (!World || Levels.Num()<1)
 	{
 		return;
 	}
-
+	;
 	bUseSeamlessTravel = false;
 
-	FString LobbyPath = NextLevel.GetLongPackageName();
+	FString LobbyPath = Levels[FMath::RandRange(0, Levels.Num() - 1)]->GetPackage()->GetName();
 	World->ServerTravel(LobbyPath + "?listen");
 }
 

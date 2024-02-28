@@ -135,7 +135,7 @@ public:
 	UFUNCTION()
 	virtual void PBEndMatch(const TArray<FPlayerInfo>& PlayersInfo);
 	UFUNCTION(BlueprintCallable)
-	virtual void TravelToNextMap();
+	virtual void TravelToNextMap(TArray<TSoftObjectPtr<UWorld>> Levels);
 	
 	UFUNCTION(BlueprintCallable)
 	void PlayerDeath(APBCharacter* DeadCharacter);
@@ -179,9 +179,6 @@ public:
 	FOnPlayerWinsGame OnPlayerWinsGame;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxPointsToWinTheGame = 10;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftObjectPtr<UWorld> NextLevel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<TObjectPtr<APBPlayerController>, FGameplayAbilitiesArray> TempAbilitiesGivenToPlayers;
