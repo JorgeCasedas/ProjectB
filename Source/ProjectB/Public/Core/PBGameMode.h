@@ -135,7 +135,7 @@ public:
 	UFUNCTION()
 	virtual void PBEndMatch(const TArray<FPlayerInfo>& PlayersInfo);
 	UFUNCTION(BlueprintCallable)
-	virtual void TravelToNextMap(TArray<TSoftObjectPtr<UWorld>> Levels);
+	virtual void TravelToNextMap(const FString& LobbyPath);
 	
 	UFUNCTION(BlueprintCallable)
 	void PlayerDeath(APBCharacter* DeadCharacter);
