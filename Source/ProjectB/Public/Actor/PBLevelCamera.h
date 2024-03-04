@@ -35,6 +35,10 @@ protected:
 	float InitPlayersDistance;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<TObjectPtr<APBCharacter>> Characters;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FVector OffsetDirecton = FVector::ZeroVector;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float OffsetUnits = 0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bSmoothZoom;

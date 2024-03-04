@@ -87,17 +87,37 @@ void APBLevelCamera::Tick(float DeltaTime)
 void APBLevelCamera::RepositionCamera()
 {
 	FVector PlayersVector = FVector::Zero();
-
+	float minX = 0;
+	float maxX = 0;
+	bool bMinX = false;
+	bool bMaxX = false;
 	for (APBCharacter* Character : Characters)
 	{
 		if (!Character)
 			continue;
 		if (Character->IsHidden())
 			continue;
+
+		if (!bMinX)
+		{
+			bMinX = true;
+			minX = Character->GetActorLocation().X;
+		}
+		if (!bMaxX)
+		{
+			bMaxX = true;
+			maxX = Character->GetActorLocation().X;
+		}
+
+		if (minX > Character->GetActorLocation().X)
+			minX = Character->GetActorLocation().X;
+		if (maxX < Character->GetActorLocation().X)
+			maxX = Character->GetActorLocation().X;
+
 		PlayersVector += Character->GetActorLocation();
 	}
 	FVector MidPoint = PlayersVector / Characters.Num();
-
+	MidPoint -= OffsetDirecton * (OffsetUnits * FMath::Abs((minX-maxX)));
 	SetActorLocation(MidPoint);
 }
 
