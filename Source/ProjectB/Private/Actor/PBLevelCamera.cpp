@@ -87,8 +87,9 @@ void APBLevelCamera::Tick(float DeltaTime)
 void APBLevelCamera::RepositionCamera()
 {
 	FVector PlayersVector = FVector::Zero();
-	float minX = 0;
-	float maxX = 0;
+	int CharactersUsed = 0;
+	float MinX = 0;
+	float MaxX = 0;
 	bool bMinX = false;
 	bool bMaxX = false;
 	for (APBCharacter* Character : Characters)
@@ -101,24 +102,25 @@ void APBLevelCamera::RepositionCamera()
 		if (!bMinX)
 		{
 			bMinX = true;
-			minX = Character->GetActorLocation().X;
+			MinX = Character->GetActorLocation().X;
 		}
 		if (!bMaxX)
 		{
 			bMaxX = true;
-			maxX = Character->GetActorLocation().X;
+			MaxX = Character->GetActorLocation().X;
 		}
 
-		if (minX > Character->GetActorLocation().X)
-			minX = Character->GetActorLocation().X;
-		if (maxX < Character->GetActorLocation().X)
-			maxX = Character->GetActorLocation().X;
+		if (MinX > Character->GetActorLocation().X)
+			MinX = Character->GetActorLocation().X;
+		if (MaxX < Character->GetActorLocation().X)
+			MaxX = Character->GetActorLocation().X;
 
 		PlayersVector += Character->GetActorLocation();
+		CharactersUsed++;
 	}
-	FVector MidPoint = PlayersVector / Characters.Num();
+	FVector MidPoint = PlayersVector / CharactersUsed;
 	//Mid point is not valid everytime because of the UI, so this helps setting an offset that solves the UI being in front of a character
-	MidPoint -= OffsetDirecton * (OffsetUnits * FMath::Abs((minX-maxX)));
+	MidPoint -= OffsetDirecton * (OffsetUnits * FMath::Abs((MinX-MaxX)));
 	SetActorLocation(MidPoint);
 }
 
@@ -169,7 +171,10 @@ float APBLevelCamera::GetMaxPlayersDistance()
 		{
 			if (j >= Characters.Num())
 				continue;
-
+			if (Characters[i] == nullptr || Characters[j] == nullptr)
+				continue;
+			if (Characters[i]->IsHidden() || Characters[j]->IsHidden())
+				continue;
 			const float Distance = FVector::Distance(Characters[i]->GetActorLocation(), Characters[j]->GetActorLocation());
 			if (Distance > CurrentPlayersDistance)
 			{
