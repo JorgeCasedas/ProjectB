@@ -117,6 +117,7 @@ void APBLevelCamera::RepositionCamera()
 		PlayersVector += Character->GetActorLocation();
 	}
 	FVector MidPoint = PlayersVector / Characters.Num();
+	//Mid point is not valid everytime because of the UI, so this helps setting an offset that solves the UI being in front of a character
 	MidPoint -= OffsetDirecton * (OffsetUnits * FMath::Abs((minX-maxX)));
 	SetActorLocation(MidPoint);
 }
