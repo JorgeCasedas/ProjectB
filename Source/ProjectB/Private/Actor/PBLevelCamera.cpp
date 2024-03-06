@@ -38,7 +38,7 @@ void APBLevelCamera::BeginPlay()
 	{
 		return;
 	}
-	PlayerController->SetViewTargetWithBlend(this, 0.1f);
+	PlayerController->SetViewTargetWithBlend(this, 0);
 
 	APBGameMode* PBGameMode = Cast<APBGameMode>(UGameplayStatics::GetGameMode(this));
 	if (!PBGameMode)
