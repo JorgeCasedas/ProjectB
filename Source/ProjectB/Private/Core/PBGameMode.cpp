@@ -63,6 +63,8 @@ void APBGameMode::PBStartMatch()
 
 	SetPlayersTeams();
 
+	bPointsGiven = false;
+
 	OnMatchStarted.Broadcast();
 }
 
@@ -175,6 +177,10 @@ void APBGameMode::BombExplosion()
 
 void APBGameMode::GivePointsToPlayers(int TeamID)
 {
+	if (bPointsGiven)
+		return;
+
+	bPointsGiven = true;
 	//PBTODO: rename when it is not a test anymore
 	USaveGamePlayerInfo* TestSaveGame = PBGameInstance->GetPlayerInfoSaveGame();
 

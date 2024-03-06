@@ -53,7 +53,7 @@ void APBPlayerController::SetupInputComponent()
 
 void APBPlayerController::JoinedToMap()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("MapJoined"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("MapJoined"));
 	APBGameMode* PBGameMode = Cast<APBGameMode>(GetWorld()->GetAuthGameMode());
 	if (PBGameMode)
 	{
@@ -74,13 +74,13 @@ APBCharacter* APBPlayerController::GetPBCharacter()
 
 void APBPlayerController::StartMatch()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Server - ControllerClientStarted"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Server - ControllerClientStarted"));
 	ClientStartMatch();
 }
 
 void APBPlayerController::ClientStartMatch_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Client - ControllerClientStarted"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Client - ControllerClientStarted"));
 	UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx(this, nullptr, EMouseLockMode::DoNotLock, false, false);
 	SetShowMouseCursor(true);
 	OnMatchStarted.Broadcast();
@@ -129,8 +129,9 @@ void APBPlayerController::ClientShowPoints_Implementation(const TArray<FPlayerIn
 		TestSaveGame->PlayersInfo = PlayersInfo;
 		UGameplayStatics::SaveGameToSlot(TestSaveGame, TEXT("TestSlot"), 0);
 	}
-	
-	ScoreboardWidget = CreateWidget<UUserWidget>(this, ScoreboardWidgetClass);
+	if (!GetWorld())
+		return;
+	ScoreboardWidget = CreateWidget<UUserWidget>(this, ScoreboardWidgetClass,TEXT("RoundWinnersWidget"));
 	ScoreboardWidget->AddToViewport();
 }
 

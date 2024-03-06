@@ -217,6 +217,8 @@ private:
 	int TeamCounter;
 	UPROPERTY()
 	FOnPlayerDeath OnPlayerDeathInternal;
+	UPROPERTY()
+	bool bPointsGiven = false;
 };
 
 

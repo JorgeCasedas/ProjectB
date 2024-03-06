@@ -37,9 +37,9 @@ void UProjectBGameInstance::Init()
 	SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnJoinSession);
 
 #if !WITH_EDITOR
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS NOT EDITOR"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS NOT EDITOR"));
 #else 
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS EDITOR"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS EDITOR"));
 #endif
 }
 
@@ -82,10 +82,10 @@ void UProjectBGameInstance::CreateSession()
 #if WITH_EDITOR
 	SessionSettings.bIsLANMatch = true;
 	OnLoadingStateUpdate.Broadcast(TEXT("CREATING LAN MATCH"));
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("CREATING LAN MATCH"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("CREATING LAN MATCH"));
 #else
 	OnLoadingStateUpdate.Broadcast(TEXT("CREATING ONLINE MATCH"));
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("CREATING ONLINE MATCH"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("CREATING ONLINE MATCH"));
 	SessionSettings.bIsLANMatch = false;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.bUseLobbiesIfAvailable = true;
@@ -153,10 +153,10 @@ void UProjectBGameInstance::FindSessions()
 #if WITH_EDITOR
 	SessionSearch->bIsLanQuery = true;
 	OnLoadingStateUpdate.Broadcast(TEXT("FINDING LAN MATCH"));
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING LAN MATCH"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING LAN MATCH"));
 #else
 	OnLoadingStateUpdate.Broadcast(TEXT("FINDING ONLINE MATCH"));
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING ONLINE MATCH"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING ONLINE MATCH"));
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 #endif
 	SessionSearch->MaxSearchResults = 1000;
@@ -167,20 +167,20 @@ void UProjectBGameInstance::FindSessions()
 void UProjectBGameInstance::OnSessionsFound(bool bSuccess)
 {
 	OnLoadingStateUpdate.Broadcast(TEXT("Check sessions found"));
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Check sessions found"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Check sessions found"));
 	if (!bSuccess)
 	{
 		OnOperationFailed.Broadcast();
 		OnLoadingStateUpdate.Broadcast(TEXT("Could not find sessions"));
 		//UE_LOG(LogTemp, Warning, TEXT("Could not find sessions"));
-		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Could not find sessions"));
+		//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Could not find sessions"));
 		return;
 	}
 	if (!SessionSearch.IsValid())
 	{
 		OnOperationFailed.Broadcast();
 		OnLoadingStateUpdate.Broadcast(TEXT("SessionSearch Not Valid"));
-		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("SessionSearchNotValid"));
+		//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("SessionSearchNotValid"));
 		return;
 	}
 
@@ -194,7 +194,7 @@ void UProjectBGameInstance::OnSessionsFound(bool bSuccess)
 			break;
 		}
 		OnLoadingStateUpdate.Broadcast(TEXT("Found session"));
-		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, (TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr()));
+		//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, (TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr()));
 		//UE_LOG(LogTemp, Warning, TEXT("Found session names: %s"), *SearchResult.GetSessionIdStr());
 		FoundSessionIndex++;
 	}
@@ -202,14 +202,14 @@ void UProjectBGameInstance::OnSessionsFound(bool bSuccess)
 	if (FoundSessionIndex < SessionSearch->SearchResults.Num())
 	{
 		OnLoadingStateUpdate.Broadcast(TEXT("Try to join"));
-		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Try to join"));
+		//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Try to join"));
 		SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[FoundSessionIndex]);
 	}
 	else 
 	{
 		OnOperationFailed.Broadcast();
 		OnLoadingStateUpdate.Broadcast(TEXT("No Sessions found"));
-		GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("No Sessions found"));
+		//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("No Sessions found"));
 		return;
 	}
 }
@@ -229,7 +229,7 @@ void UProjectBGameInstance::OnJoinSession(FName SessionName, EOnJoinSessionCompl
 	if (!ensure(Engine != nullptr)) return;
 
 	OnLoadingStateUpdate.Broadcast(TEXT("JOINING"));
-	GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("JOINING"));
+	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("JOINING"));
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute); 
