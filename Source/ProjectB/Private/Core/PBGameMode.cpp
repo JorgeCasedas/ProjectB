@@ -284,6 +284,11 @@ void APBGameMode::AllVsAllTeamsDistribution()
 		PlayersList.Swap(i, SwapIdx);
 	}
 
+	for (FPlayersByTeam& Players : PlayersByTeams)
+	{
+		Players.Players.Empty();
+	}
+
 	for (APlayerState* PS : PlayersList)
 	{
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
@@ -313,6 +318,12 @@ void APBGameMode::OneVsAllTeamsDistribution()
 {
 	int RandomPlayer = FMath::RandRange(0, UGameplayStatics::GetGameState(this)->PlayerArray.Num() - 1);
 	int PlayerIteratorCounter = 0;
+
+	for (FPlayersByTeam& Players : PlayersByTeams)
+	{
+		Players.Players.Empty();
+	}
+
 	for (APlayerState* PS : UGameplayStatics::GetGameState(this)->PlayerArray)
 	{
 		if (APBPlayerState* PBPS = Cast<APBPlayerState>(PS))
@@ -355,6 +366,11 @@ void APBGameMode::TeamsTeamsDistribution()
 
 	int MaxPlayersPerTeam = 2;
 	int PlayersAssigned = 0;
+
+	for (FPlayersByTeam& Players : PlayersByTeams)
+	{
+		Players.Players.Empty();
+	}
 
 	for (APlayerState* PS : PlayersList)
 	{
