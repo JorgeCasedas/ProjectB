@@ -249,6 +249,7 @@ void APBGameMode::SetPlayersTeams()
 void APBGameMode::ChangePlayersTeams()
 {
 	//PBTODO: change this logic so left players dont just wait until they are matched together and win the game
+	TeamCounter = 0;
 	switch (CurrentGameModeSettings.GameMode)
 	{
 		case OneVsAll:
