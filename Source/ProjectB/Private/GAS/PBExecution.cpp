@@ -81,7 +81,7 @@ void UPBExecution::Execute_Implementation(const FGameplayEffectCustomExecutionPa
 		bShouldDealDamage = false;
 	}
 
-	if(bShouldDealDamage)
+	if(bShouldDealDamage || !Cast<APawn>(TargetAvatar))
 	{
 		float Health = 0;
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(ExecStatics().HealthDef, EvaluationParameters, Health);
