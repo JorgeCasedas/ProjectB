@@ -2,3 +2,9 @@
 
 
 #include "Core/PBGameState.h"
+#include "Sound/SoundBase.h"
+
+void APBGameState::SetMapWalkSounds(const TArray<USoundBase*>& InWalkSounds)
+{
+	CurrentWalkSounds = InWalkSounds;
+}

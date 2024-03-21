@@ -6,6 +6,7 @@
 #include "GameFramework/GameState.h"
 #include "PBGameState.generated.h"
 
+class USoundBase;
 /**
  * 
  */
@@ -14,4 +15,12 @@ class PROJECTB_API APBGameState : public AGameState
 {
 	GENERATED_BODY()
 	//TODO: Recieve OnMatchStart from Game mode so clients can subscribe to it
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetMapWalkSounds(const TArray<USoundBase*>& InWalkSounds);
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<USoundBase*> CurrentWalkSounds;
 };
