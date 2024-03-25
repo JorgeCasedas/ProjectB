@@ -153,6 +153,8 @@ void APBLevelCamera::OnPlayerDeath()
 {
 	for (APBCharacter* Character : Characters)
 	{
+		if (!Character)
+			continue;
 		if (Character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FPBGameplayTags::Get().State_Dead))
 		{
 			Characters.Remove(Character);
