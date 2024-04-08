@@ -9,7 +9,7 @@
 #include "OnlineSessionSettings.h"
 #include "SaveGame/SaveGamePlayerInfo.h"
 
-const static FName SESSION_NAME = TEXT("My Session Game");
+const static FName SESSION_NAME = TEXT("ProjectBSession");
 
 UProjectBGameInstance::UProjectBGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -150,16 +150,20 @@ void UProjectBGameInstance::FindSessions()
 		return;
 	}
 
+	SessionSearch->MaxSearchResults = 1000;
+
 #if WITH_EDITOR
 	SessionSearch->bIsLanQuery = true;
 	OnLoadingStateUpdate.Broadcast(TEXT("FINDING LAN MATCH"));
 	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING LAN MATCH"));
 #else
+	SessionSearch->bIsLanQuery = false;
 	OnLoadingStateUpdate.Broadcast(TEXT("FINDING ONLINE MATCH"));
 	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("FINDING ONLINE MATCH"));
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-#endif
 	SessionSearch->MaxSearchResults = 1000;
+#endif
+	
 
 	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
