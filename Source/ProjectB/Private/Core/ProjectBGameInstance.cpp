@@ -10,6 +10,7 @@
 #include "SaveGame/SaveGamePlayerInfo.h"
 
 const static FName SESSION_NAME = TEXT("ProjectBSession");
+const static FName SERVER_SETTINGS = TEXT("ProjectBServer");
 
 UProjectBGameInstance::UProjectBGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -93,6 +94,9 @@ void UProjectBGameInstance::CreateSession()
 
 	SessionSettings.NumPublicConnections = 4;
 	SessionSettings.bShouldAdvertise = true;
+	SessionSettings.bAllowJoinInProgress = true;
+	SessionSettings.bAllowJoinViaPresence = true;
+	SessionSettings.Set(SERVER_SETTINGS, TEXT("ProjectBServerName"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
