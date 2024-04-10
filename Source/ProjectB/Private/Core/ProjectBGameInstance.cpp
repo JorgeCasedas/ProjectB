@@ -92,11 +92,12 @@ void UProjectBGameInstance::CreateSession()
 	SessionSettings.bUseLobbiesIfAvailable = true;
 #endif
 
+	FString ServerName = "ProjectBServerName";
 	SessionSettings.NumPublicConnections = 4;
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bAllowJoinInProgress = true;
 	SessionSettings.bAllowJoinViaPresence = true;
-	SessionSettings.Set(SERVER_SETTINGS, TEXT("ProjectBServerName"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	SessionSettings.Set(SERVER_SETTINGS, ServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
