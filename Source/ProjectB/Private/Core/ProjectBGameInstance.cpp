@@ -71,6 +71,12 @@ void UProjectBGameInstance::TryFindSessions(FString GameSessionId)
 	FindSessions();
 }
 
+void UProjectBGameInstance::ResetGameInstance()
+{
+	bSaveGameAlreadyCreated = false;
+	ConnectedPlayersCount = 0;
+}
+
 void UProjectBGameInstance::CreateSession()
 {
 	if (!SessionInterface.IsValid())

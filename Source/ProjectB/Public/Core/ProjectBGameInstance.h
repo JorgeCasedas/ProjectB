@@ -74,6 +74,9 @@ public:
 
 private:
 	UFUNCTION(BlueprintCallable)
+	void ResetGameInstance();
+
+	UFUNCTION(BlueprintCallable)
 	void CreateSession();
 	UFUNCTION()
 	void OnCreateSession(FName SessionName, bool bSuccess);
