@@ -142,6 +142,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void CheckWinCon();
 	UFUNCTION()
+	virtual void CheckAltBombWinCon();
+	UFUNCTION()
 	virtual void BombExplosion();
 	UFUNCTION(BlueprintCallable)
 	virtual void GivePointsToPlayers(int TeamID);

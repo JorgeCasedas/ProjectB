@@ -114,8 +114,11 @@ void APBGameMode::SetCurrentGameModeSettings(const FGameModeSettings& Settings)
 		case EWinCondition::PassTheBomb:
 			if(BombClass)
 				BombActor = GetWorld()->SpawnActor<APBBomb>(BombClass,FVector::ZeroVector,FRotator::ZeroRotator);
-			if(BombActor)
+			if (BombActor)
+			{
 				BombActor->OnExploded.AddDynamic(this, &APBGameMode::BombExplosion);
+				OnPlayerDeathInternal.AddDynamic(this, &APBGameMode::CheckAltBombWinCon);
+			}			
 		break;
 	}
 }
@@ -168,6 +171,14 @@ void APBGameMode::CheckWinCon()
 		break;
 	}
 	GivePointsToPlayers(LastTeamID);
+}
+
+void APBGameMode::CheckAltBombWinCon() 
+{
+	if (AliveCharacters.Num() < 2)
+	{
+		GivePointsToPlayers(-1);
+	}
 }
 
 void APBGameMode::BombExplosion()
