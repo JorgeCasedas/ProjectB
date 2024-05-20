@@ -83,6 +83,7 @@ void APBPlayerController::ClientStartMatch_Implementation()
 	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("Client - ControllerClientStarted"));
 	UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx(this, nullptr, EMouseLockMode::DoNotLock, false, false);
 	SetShowMouseCursor(true);
+	bHasMatchStarted = true;
 	OnMatchStarted.Broadcast();
 }
 
@@ -98,13 +99,14 @@ UPBAbilitySystemComponent* APBPlayerController::GetPBASC()
 void APBPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
 	if (!GetPBASC()) return;
-
+	if (!bHasMatchStarted) return;
 	GetPBASC()->AbilityInputTagPressed(InputTag);
 }
 
 void APBPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
 	if (!GetPBASC()) return;
+	if (!bHasMatchStarted) return;
 
 	GetPBASC()->AbilityInputTagReleased(InputTag);
 
@@ -113,6 +115,7 @@ void APBPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 void APBPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
 	if (!GetPBASC()) return;
+	if (!bHasMatchStarted) return;
 
 	GetPBASC()->AbilityInputTagHeld(InputTag);
 }
