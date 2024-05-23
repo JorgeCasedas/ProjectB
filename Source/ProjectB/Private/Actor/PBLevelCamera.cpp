@@ -67,6 +67,35 @@ void APBLevelCamera::InitCameraStats()
 	InitPlayersDistance = GetMaxPlayersDistance();
 }
 
+void APBLevelCamera::ServerForceInitCameraStats(float maxPlayersDistance)
+{
+	ForceInitCameraStats(maxPlayersDistance);
+	Mulicast_ForceInitCameraStats(maxPlayersDistance);
+}
+
+void APBLevelCamera::ForceInitCameraStats(float maxPlayersDistance)
+{
+	if (!GetWorld())
+		return;
+	if (!GetWorld()->GetGameState())
+		return;
+
+	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
+	{
+		APBCharacter* Character = Cast<APBCharacter>(PlayerState->GetPawn());
+		Characters.AddUnique(Character);
+	}
+
+	InitArmLength = MaxArmLength;
+	InitPlayersDistance = maxPlayersDistance;
+}
+
+
+void APBLevelCamera::Mulicast_ForceInitCameraStats_Implementation(float maxPlayersDistance)
+{
+	ForceInitCameraStats(maxPlayersDistance);
+}
+
 void APBLevelCamera::OnMatchStarted()
 {
 	Mulicast_OnMatchStarted();

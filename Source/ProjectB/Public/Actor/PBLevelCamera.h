@@ -18,6 +18,12 @@ class PROJECTB_API APBLevelCamera : public AActor
 	
 public:	
 	APBLevelCamera();
+	UFUNCTION(BlueprintCallable)
+	void ServerForceInitCameraStats(float maxPlayersDistance);
+	UFUNCTION(NetMulticast, Reliable)
+	void Mulicast_ForceInitCameraStats(float maxPlayersDistance);
+	UFUNCTION()
+	void ForceInitCameraStats(float maxPlayersDistance);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
