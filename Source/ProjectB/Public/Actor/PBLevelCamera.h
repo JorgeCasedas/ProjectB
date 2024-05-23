@@ -22,7 +22,7 @@ public:
 	void ServerForceInitCameraStats(float maxPlayersDistance);
 	UFUNCTION(NetMulticast, Reliable)
 	void Mulicast_ForceInitCameraStats(float maxPlayersDistance);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ForceInitCameraStats(float maxPlayersDistance);
 
 protected:
