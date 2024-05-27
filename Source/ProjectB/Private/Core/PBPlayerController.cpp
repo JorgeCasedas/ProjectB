@@ -99,7 +99,7 @@ UPBAbilitySystemComponent* APBPlayerController::GetPBASC()
 void APBPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
 	if (!GetPBASC()) return;
-	if (!bHasMatchStarted) return;
+	if (!bHasMatchStarted && !bIsOnLobby) return;
 	GetPBASC()->AbilityInputTagPressed(InputTag);
 }
 

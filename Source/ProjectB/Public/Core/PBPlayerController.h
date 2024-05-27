@@ -36,8 +36,10 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnClientMatchStarted OnMatchStarted;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bHasMatchStarted = false;
-
+	bool bHasMatchStarted = false; 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsOnLobby = false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UUserWidget> ScoreboardWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
