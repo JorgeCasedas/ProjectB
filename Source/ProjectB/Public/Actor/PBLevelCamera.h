@@ -47,6 +47,10 @@ protected:
 	float OffsetUnits = 0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bSmoothPosition = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.01", ClampMax = "1.0", UIMin = "0.01", UIMax = "1.0"))
+	float PositionSpeed = 0.5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bSmoothZoom;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.01", ClampMax = "1.0", UIMin = "0.01", UIMax = "1.0"))
 	float ZoomSpeed;
@@ -69,6 +73,8 @@ protected:
 	void RepositionCamera();
 	UFUNCTION()
 	void ReZoomCamera();
+	UFUNCTION()
+	void SmoothCameraPosition(FVector ObjectivePosition);
 	UFUNCTION()
 	void SmoothCameraZoom(float TargetArmLength);
 

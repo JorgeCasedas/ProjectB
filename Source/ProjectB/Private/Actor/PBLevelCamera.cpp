@@ -150,9 +150,17 @@ void APBLevelCamera::RepositionCamera()
 	FVector MidPoint = PlayersVector / CharactersUsed;
 	//Mid point is not valid everytime because of the UI, so this helps setting an offset that solves the UI being in front of a character
 	MidPoint -= OffsetDirecton * (OffsetUnits * FMath::Abs((MinX-MaxX)));
-	SetActorLocation(MidPoint);
+	SmoothCameraPosition(MidPoint);
 }
-
+void APBLevelCamera::SmoothCameraPosition(FVector ObjectivePosition)
+{
+	FVector SmoothedPosition = ObjectivePosition;
+	
+	if(bSmoothPosition)
+		SmoothedPosition = FMath::Lerp(GetActorLocation(), ObjectivePosition, PositionSpeed);
+	
+	SetActorLocation(SmoothedPosition);
+}
 void APBLevelCamera::ReZoomCamera()
 {
 	if (InitPlayersDistance == 0)
