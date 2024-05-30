@@ -20,6 +20,8 @@ class UAbilitiesConfig;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLoadingStateUpdated, FString, Message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOperationFailed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerLeftTheGame);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerJoinedTheGame);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerChangedTheGame);
 
 //PBTODO: Rename UProjectBGameInstance to UPBGameInstance
 
@@ -80,6 +82,10 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnPlayerLeftTheGame OnPlayerLeftTheGameDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerJoinedTheGame OnPlayerJoinedTheGameDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerChangedTheGame OnPlayerChangedTheGameDelegate;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -102,6 +108,8 @@ private:
 	
 	void OnJoinSession(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 	void OnPlayerLeftTheGame(FName SessionName, const FUniqueNetId& UserID, EOnSessionParticipantLeftReason LeaveReason);
+	void OnPlayerJoinedTheGame(FName SessionName, const FUniqueNetId& UserID);
+	void OnPlayerChangedTheGame(FName SessionName, const FUniqueNetId& UserID, bool bWasThisAJoin);
 private:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;

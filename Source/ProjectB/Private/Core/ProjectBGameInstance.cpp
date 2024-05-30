@@ -37,6 +37,8 @@ void UProjectBGameInstance::Init()
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnSessionsFound);
 	SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnJoinSession);
 	SessionInterface->OnSessionParticipantLeftDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerLeftTheGame);
+	SessionInterface->OnSessionParticipantJoinedDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerJoinedTheGame);
+	SessionInterface->OnSessionParticipantsChangeDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerChangedTheGame);
 #if !WITH_EDITOR
 	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS NOT EDITOR"));
 #else 
@@ -60,8 +62,7 @@ void UProjectBGameInstance::TryHostGame()
 		SessionInterface->DestroySession(SESSION_NAME);
 	}
 	
-		CreateSession();
-	
+	CreateSession();
 }
 
 void UProjectBGameInstance::TryFindSessions(FString GameSessionId)
@@ -250,6 +251,16 @@ void UProjectBGameInstance::OnJoinSession(FName SessionName, EOnJoinSessionCompl
 void UProjectBGameInstance::OnPlayerLeftTheGame(FName SessionName, const FUniqueNetId& UserID, EOnSessionParticipantLeftReason LeaveReason)
 {
 	OnPlayerLeftTheGameDelegate.Broadcast();
+}
+
+void UProjectBGameInstance::OnPlayerJoinedTheGame(FName SessionName, const FUniqueNetId& UserID)
+{
+	OnPlayerJoinedTheGameDelegate.Broadcast();
+}
+
+void UProjectBGameInstance::OnPlayerChangedTheGame(FName SessionName, const FUniqueNetId& UserID, bool bWasThisAJoin)
+{
+	OnPlayerChangedTheGameDelegate.Broadcast();
 }
 
 FString UProjectBGameInstance::GetCurrentSessionID()
