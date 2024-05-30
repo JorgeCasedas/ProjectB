@@ -59,10 +59,9 @@ void UProjectBGameInstance::TryHostGame()
 	{
 		SessionInterface->DestroySession(SESSION_NAME);
 	}
-	else 
-	{
+	
 		CreateSession();
-	}
+	
 }
 
 void UProjectBGameInstance::TryFindSessions(FString GameSessionId)
