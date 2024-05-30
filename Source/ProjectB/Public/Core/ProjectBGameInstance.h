@@ -22,6 +22,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOperationFailed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerLeftTheGame);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerJoinedTheGame);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerChangedTheGame);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNetworkFailure);
 
 //PBTODO: Rename UProjectBGameInstance to UPBGameInstance
 
@@ -87,6 +88,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnPlayerChangedTheGame OnPlayerChangedTheGameDelegate;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnNetworkFailure OnNetworkFailureDelegate;
+
 private:
 	UFUNCTION(BlueprintCallable)
 	void ResetGameInstance();
@@ -110,6 +114,7 @@ private:
 	void OnPlayerLeftTheGame(FName SessionName, const FUniqueNetId& UserID, EOnSessionParticipantLeftReason LeaveReason);
 	void OnPlayerJoinedTheGame(FName SessionName, const FUniqueNetId& UserID);
 	void OnPlayerChangedTheGame(FName SessionName, const FUniqueNetId& UserID, bool bWasThisAJoin);
+	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
 private:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;

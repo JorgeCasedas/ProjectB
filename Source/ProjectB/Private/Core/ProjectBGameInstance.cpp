@@ -39,6 +39,11 @@ void UProjectBGameInstance::Init()
 	SessionInterface->OnSessionParticipantLeftDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerLeftTheGame);
 	SessionInterface->OnSessionParticipantJoinedDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerJoinedTheGame);
 	SessionInterface->OnSessionParticipantsChangeDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerChangedTheGame);
+	
+	if (GEngine != nullptr) 
+	{
+		GEngine->OnNetworkFailure().AddUObject(this, &UProjectBGameInstance::OnNetworkFailure);
+	}
 #if !WITH_EDITOR
 	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS NOT EDITOR"));
 #else 
@@ -261,6 +266,11 @@ void UProjectBGameInstance::OnPlayerJoinedTheGame(FName SessionName, const FUniq
 void UProjectBGameInstance::OnPlayerChangedTheGame(FName SessionName, const FUniqueNetId& UserID, bool bWasThisAJoin)
 {
 	OnPlayerChangedTheGameDelegate.Broadcast();
+}
+
+void UProjectBGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString)
+{
+	OnNetworkFailureDelegate.Broadcast();
 }
 
 FString UProjectBGameInstance::GetCurrentSessionID()
