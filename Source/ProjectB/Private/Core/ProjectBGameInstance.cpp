@@ -128,8 +128,6 @@ void UProjectBGameInstance::OnDestroySession(FName SessionName, bool bSuccess)
 		OnOperationFailed.Broadcast();
 		return;
 	}
-
-	CreateSession();
 }
 
 void UProjectBGameInstance::StartHostingGame()
