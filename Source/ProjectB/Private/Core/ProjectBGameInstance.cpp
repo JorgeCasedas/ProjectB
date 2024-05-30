@@ -36,7 +36,7 @@ void UProjectBGameInstance::Init()
 	SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnDestroySession);
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnSessionsFound);
 	SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UProjectBGameInstance::OnJoinSession);
-
+	SessionInterface->OnSessionParticipantLeftDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerLeftTheGame);
 #if !WITH_EDITOR
 	//GEngine->AddOnScreenDebugMessage(-1, 50.0f, FColor::Red, TEXT("IS NOT EDITOR"));
 #else 
@@ -175,7 +175,7 @@ void UProjectBGameInstance::FindSessions()
 	SessionSearch->MaxSearchResults = 1000;
 #endif
 	
-
+	
 	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
@@ -250,6 +250,11 @@ void UProjectBGameInstance::OnJoinSession(FName SessionName, EOnJoinSessionCompl
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute); 
 }
 
+void UProjectBGameInstance::OnPlayerLeftTheGame(FName SessionName, const FUniqueNetId& UserID, EOnSessionParticipantLeftReason LeaveReason)
+{
+	OnPlayerLeftTheGameDelegate.Broadcast();
+}
+
 FString UProjectBGameInstance::GetCurrentSessionID()
 {
 	if (!SessionInterface.IsValid())
@@ -300,4 +305,16 @@ USaveGamePlayerInfo* UProjectBGameInstance::GetPlayerInfoSaveGame()
 void UProjectBGameInstance::SavePlayersInfoSaveGame(USaveGamePlayerInfo* SaveGame)
 {
 	UGameplayStatics::SaveGameToSlot(SaveGame, SaveGameSlotName, 0);
+}
+
+void UProjectBGameInstance::LeaveGame()
+{	
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+	if (!ensure(PlayerController != nullptr)) return;
+
+	FString MainMenuPath = MainMenuLevel.GetLongPackageName();
+	PlayerController->ClientTravel(MainMenuPath, ETravelType::TRAVEL_Absolute);
+
+	if (SessionInterface)
+		SessionInterface->DestroySession(SESSION_NAME);
 }

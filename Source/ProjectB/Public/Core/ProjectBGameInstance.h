@@ -19,6 +19,7 @@ class UAbilitiesConfig;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLoadingStateUpdated, FString, Message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOperationFailed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerLeftTheGame);
 
 //PBTODO: Rename UProjectBGameInstance to UPBGameInstance
 
@@ -47,9 +48,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SavePlayersInfoSaveGame(USaveGamePlayerInfo* SaveGame);
 
+	UFUNCTION(BlueprintCallable)
+	void LeaveGame();
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> LobbyLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UWorld> MainMenuLevel;
 	//Will only exist on the server
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 ConnectedPlayersCount;
@@ -71,6 +77,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnOperationFailed OnOperationFailed;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerLeftTheGame OnPlayerLeftTheGameDelegate;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -92,7 +101,7 @@ private:
 	void OnSessionsFound(bool bSuccess);
 	
 	void OnJoinSession(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-
+	void OnPlayerLeftTheGame(FName SessionName, const FUniqueNetId& UserID, EOnSessionParticipantLeftReason LeaveReason);
 private:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;

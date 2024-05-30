@@ -56,12 +56,7 @@ void APBLevelCamera::InitCameraStats()
 	if (!GetWorld()->GetGameState())
 		return;
 
-	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
-	{
-		APBCharacter* Character = Cast<APBCharacter>(PlayerState->GetPawn());
-		Characters.Add(Character);
-		Character->OnDeath.AddDynamic(this, &APBLevelCamera::OnPlayerDeath);
-	}
+	ResetPlayerCount();
 
 	InitArmLength = SpringArm->TargetArmLength;
 	InitPlayersDistance = GetMaxPlayersDistance();
@@ -80,16 +75,36 @@ void APBLevelCamera::ForceInitCameraStats(float maxPlayersDistance)
 	if (!GetWorld()->GetGameState())
 		return;
 
-	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
-	{
-		APBCharacter* Character = Cast<APBCharacter>(PlayerState->GetPawn());
-		Characters.AddUnique(Character);
-	}
+	ResetPlayerCount();
 
 	InitArmLength = MaxArmLength;
 	InitPlayersDistance = maxPlayersDistance;
 }
 
+void APBLevelCamera::ResetPlayerCount()
+{
+	Characters.Empty();
+
+	for (const APlayerState* PlayerState : GetWorld()->GetGameState()->PlayerArray)
+	{
+		APBCharacter* Character = Cast<APBCharacter>(PlayerState->GetPawn());
+		if (!Character) continue;
+
+		Characters.Add(Character);
+		Character->OnDeath.AddDynamic(this, &APBLevelCamera::OnPlayerDeath);
+	}
+}
+
+void APBLevelCamera::ServerResetPlayerCount()
+{
+	ResetPlayerCount();
+	Mulicast_ResetPlayerCount();
+}
+
+void APBLevelCamera::Mulicast_ResetPlayerCount_Implementation()
+{
+	ResetPlayerCount();
+}
 
 void APBLevelCamera::Mulicast_ForceInitCameraStats_Implementation(float maxPlayersDistance)
 {

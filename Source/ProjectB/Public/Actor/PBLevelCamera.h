@@ -24,6 +24,12 @@ public:
 	void Mulicast_ForceInitCameraStats(float maxPlayersDistance);
 	UFUNCTION(BlueprintCallable)
 	void ForceInitCameraStats(float maxPlayersDistance);
+	UFUNCTION(BlueprintCallable)
+	void ResetPlayerCount();
+	UFUNCTION(BlueprintCallable)
+	void ServerResetPlayerCount();
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	void Mulicast_ResetPlayerCount();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
