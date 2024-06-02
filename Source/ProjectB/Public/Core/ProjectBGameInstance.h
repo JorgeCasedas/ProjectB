@@ -32,7 +32,9 @@ class PROJECTB_API UProjectBGameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	UProjectBGameInstance(const FObjectInitializer& ObjectInitializer);
-
+	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	virtual void Init();
 
 	UFUNCTION(BlueprintCallable)
@@ -72,7 +74,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UAbilitiesConfig> AbilitiesDataAsset;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	bool bSaveGameAlreadyCreated = false;
 
 	UPROPERTY(BlueprintAssignable)

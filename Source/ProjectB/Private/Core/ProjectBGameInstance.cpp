@@ -8,6 +8,7 @@
 #include "GameFramework/SaveGame.h"
 #include "OnlineSessionSettings.h"
 #include "SaveGame/SaveGamePlayerInfo.h"
+#include "Net/UnrealNetwork.h"
 
 const static FName SESSION_NAME = TEXT("ProjectBSession");
 const static FName SERVER_SETTINGS = TEXT("ProjectBServer");
@@ -15,6 +16,14 @@ const static FName SERVER_SETTINGS = TEXT("ProjectBServer");
 UProjectBGameInstance::UProjectBGameInstance(const FObjectInitializer& ObjectInitializer)
 {
 }
+
+void UProjectBGameInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UProjectBGameInstance, bSaveGameAlreadyCreated);
+}
+
 
 void UProjectBGameInstance::Init()
 {
