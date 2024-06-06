@@ -304,6 +304,10 @@ FString UProjectBGameInstance::GetCurrentSessionID()
 
 void UProjectBGameInstance::SetConnectedPlayersCount()
 {
+	if (!GetWorld())
+		return;
+	if (!GetWorld()->GetGameState())
+		return;
 	ConnectedPlayersCount = GetWorld()->GetGameState()->PlayerArray.Num();
 }
 
