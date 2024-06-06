@@ -76,6 +76,8 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	bool bSaveGameAlreadyCreated = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
+	bool bIsInTransition = false;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnLoadingStateUpdated OnLoadingStateUpdate;

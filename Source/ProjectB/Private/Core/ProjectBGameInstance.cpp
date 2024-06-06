@@ -22,6 +22,7 @@ void UProjectBGameInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UProjectBGameInstance, bSaveGameAlreadyCreated);
+	DOREPLIFETIME(UProjectBGameInstance, bIsInTransition);
 }
 
 
