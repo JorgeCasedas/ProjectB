@@ -309,7 +309,13 @@ void UProjectBGameInstance::SetConnectedPlayersCount()
 		return;
 	if (!GetWorld()->GetGameState())
 		return;
-	ConnectedPlayersCount = GetWorld()->GetGameState()->PlayerArray.Num();
+	ConnectedPlayersCount = 0;
+	for (APlayerState* PS : GetWorld()->GetGameState()->PlayerArray)
+	{
+		if (PS != nullptr)
+			if (PS->GetPawn() != nullptr)
+				ConnectedPlayersCount++;
+	}
 }
 
 bool UProjectBGameInstance::SetInitialSaveGame()
