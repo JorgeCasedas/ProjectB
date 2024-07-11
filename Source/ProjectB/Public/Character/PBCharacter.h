@@ -33,7 +33,7 @@ struct FAbilitySelectionArguments
 	}	
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, AActor*, DeathInstigator);
 
 UCLASS(config=Game)
 class APBCharacter : public ACharacter, public IAbilitySystemInterface
@@ -66,6 +66,8 @@ public:
 	FOnDeath OnDeath;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bLookTowardsMouse;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AActor* LastInstigator;
 
 protected:
 	UPROPERTY()
@@ -85,7 +87,7 @@ private:
 
 	virtual void HealthChanged(const FOnAttributeChangeData& HealthData);
 	UFUNCTION()
-	void Death();
+	void Death(AActor* DeathInstigator);
 
 };
 

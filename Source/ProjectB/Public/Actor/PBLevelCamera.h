@@ -71,7 +71,7 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void Mulicast_OnMatchStarted();
 	UFUNCTION()
-	void OnPlayerDeath();
+	void OnPlayerDeath(AActor* DeathInstigator);
 
 	UFUNCTION()
 	float GetMaxPlayersDistance();

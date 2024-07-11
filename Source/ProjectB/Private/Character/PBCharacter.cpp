@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameplayEffectExtension.h"
 
 #include "Core/PBPlayerState.h"
 #include "GAS/PBAbilitySystemComponent.h"
@@ -91,15 +92,20 @@ void APBCharacter::InitAbilityActorInfo()
 
 void APBCharacter::HealthChanged(const FOnAttributeChangeData& HealthData)
 {
+	AActor* HealthLoseInstigator = HealthData.GEModData ? HealthData.GEModData->EffectSpec.GetEffectContext().GetInstigator() : nullptr;
 	if (HealthData.NewValue <= 0)
 	{
-		Death();
+		Death(HealthLoseInstigator);
+	}
+	else 
+	{
+		LastInstigator = HealthLoseInstigator;
 	}
 }
 
-void APBCharacter::Death()
+void APBCharacter::Death(AActor* DeathInstigator)
 {
-	OnDeath.Broadcast();
+	OnDeath.Broadcast(DeathInstigator);
 	bLookTowardsMouse = false;
 }
 

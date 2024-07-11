@@ -201,7 +201,7 @@ void APBLevelCamera::SmoothCameraZoom(float TargetArmLength)
 	SpringArm->TargetArmLength = TargetArmLength;
 }
 
-void APBLevelCamera::OnPlayerDeath()
+void APBLevelCamera::OnPlayerDeath(AActor* DeathInstigator)
 {
 	for (APBCharacter* Character : Characters)
 	{
