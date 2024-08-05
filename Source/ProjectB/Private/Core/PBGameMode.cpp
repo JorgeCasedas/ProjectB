@@ -179,6 +179,19 @@ void APBGameMode::CheckAltBombWinCon()
 	{
 		GivePointsToPlayers(-1);
 	}
+	else if (CurrentGameModeSettings.GameMode == EGameMode::Teams)
+	{
+		int LastTeamID = -1;
+		for (APBCharacter* Character : AliveCharacters)
+		{
+			int CheckTeamID = Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID();
+			if (LastTeamID < 0)
+				LastTeamID = CheckTeamID;
+			else if (LastTeamID != CheckTeamID)
+				return;
+		}
+		GivePointsToPlayers(-1);
+	}
 }
 
 void APBGameMode::BombExplosion()
