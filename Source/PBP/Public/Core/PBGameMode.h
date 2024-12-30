@@ -150,7 +150,7 @@ public:
 
 	UFUNCTION()
 	virtual void GiveAbilitiesToPlayer(AController* NewPlayer);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void OpenPlayerAbilitiesSelection(AController* NewPlayer, int AbilitiesToSelect);
 	UFUNCTION(BlueprintCallable)
 	void CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC);
