@@ -49,6 +49,7 @@ void UProjectBGameInstance::Init()
 	SessionInterface->OnSessionParticipantLeftDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerLeftTheGame);
 	SessionInterface->OnSessionParticipantJoinedDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerJoinedTheGame);
 	SessionInterface->OnSessionParticipantsChangeDelegates.AddUObject(this, &UProjectBGameInstance::OnPlayerChangedTheGame);
+	SessionInterface->OnSessionUserInviteAcceptedDelegates.AddUObject(this, &UProjectBGameInstance::OnInviteAccepted);
 	
 	if (GEngine != nullptr) 
 	{
@@ -281,6 +282,12 @@ void UProjectBGameInstance::OnPlayerChangedTheGame(FName SessionName, const FUni
 void UProjectBGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString)
 {
 	OnNetworkFailureDelegate.Broadcast();
+}
+
+void UProjectBGameInstance::OnInviteAccepted(const bool bWasSuccessful, const int32 ControllerId, FUniqueNetIdPtr UserId, const FOnlineSessionSearchResult& InviteResult)
+{
+	//SessionInterface->DestroySession
+	SessionInterface->JoinSession(0, SESSION_NAME, InviteResult);
 }
 
 FString UProjectBGameInstance::GetCurrentSessionID()

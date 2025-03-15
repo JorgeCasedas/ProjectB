@@ -119,6 +119,7 @@ private:
 	void OnPlayerJoinedTheGame(FName SessionName, const FUniqueNetId& UserID);
 	void OnPlayerChangedTheGame(FName SessionName, const FUniqueNetId& UserID, bool bWasThisAJoin);
 	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
+	void OnInviteAccepted(const bool bWasSuccessful, const int32 ControllerId, FUniqueNetIdPtr UserId, const FOnlineSessionSearchResult& InviteResult);
 private:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
