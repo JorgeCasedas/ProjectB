@@ -56,6 +56,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LeaveGame();
 
+	UFUNCTION(BlueprintCallable)
+	void TryShowAchievements();
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> LobbyLevel;

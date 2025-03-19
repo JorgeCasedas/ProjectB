@@ -10,6 +10,10 @@
 #include "SaveGame/SaveGamePlayerInfo.h"
 #include "Net/UnrealNetwork.h"
 
+#include "steam/steam_api.h"
+
+
+
 const static FName SESSION_NAME = TEXT("ProjectBSession");
 const static FName SERVER_SETTINGS = TEXT("ProjectBServer");
 
@@ -362,4 +366,10 @@ void UProjectBGameInstance::LeaveGame()
 
 	if (SessionInterface)
 		SessionInterface->DestroySession(SESSION_NAME);
+}
+
+void UProjectBGameInstance::TryShowAchievements()
+{
+	if(SteamUserStats())
+		SteamUserStats()->StoreStats();
 }

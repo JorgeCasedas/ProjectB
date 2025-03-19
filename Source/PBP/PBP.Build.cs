@@ -8,7 +8,7 @@ public class PBP : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput","UMG", "OnlineSubsystem", "OnlineSubsystemSteam", "GameplayAbilities" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput","UMG", "OnlineSubsystem", "OnlineSubsystemSteam", "GameplayAbilities", "Steamworks", "OnlineSubsystemUtils" });
         PrivateDependencyModuleNames.AddRange(new string[] { "GameplayTags", "GameplayTasks" });
-	}
+    }
 }
