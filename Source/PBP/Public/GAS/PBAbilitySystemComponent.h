@@ -22,6 +22,7 @@ struct FDefaultCharacterAbility
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilitySystemComponentInitialized);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityFailedToActivateDueToCooldown);
 /**
  * 
  */
@@ -55,5 +56,7 @@ public:
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnAbilitySystemComponentInitialized OnAbilitySystemComponentInitialized;
+	UPROPERTY(BlueprintAssignable)
+	FOnAbilityFailedToActivateDueToCooldown OnAbilityFailedToActivateDueToCooldown;
 
 };

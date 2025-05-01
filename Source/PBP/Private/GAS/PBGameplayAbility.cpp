@@ -26,6 +26,18 @@ void UPBGameplayAbility::SetCooldownGameplayTag(const FGameplayTag& Tag)
 //
 //}
 
+bool UPBGameplayAbility::CheckCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, OUT FGameplayTagContainer* OptionalRelevantTags) const
+{
+	bool bCheckCooldown = Super::CheckCooldown(Handle, ActorInfo, OptionalRelevantTags);
+
+	if (!bCheckCooldown)
+	{
+		Cast<UPBAbilitySystemComponent>(ActorInfo->AbilitySystemComponent)->OnAbilityFailedToActivateDueToCooldown.Broadcast();
+	}
+
+	return bCheckCooldown;
+}
+
 void UPBGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const
 {
 	UGameplayEffect* CooldownGE = GetCooldownGameplayEffect();
