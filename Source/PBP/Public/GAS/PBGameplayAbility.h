@@ -31,7 +31,7 @@ public:
 	/*UFUNCTION()
 	void OnRep_CooldownTag();*/
 
-	UPROPERTY(EditDefaultsOnly, Category="Input")
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category="Input")
 	FGameplayTag StartupInputTag;
 
 	UPROPERTY(Replicated, BlueprintReadOnly)
