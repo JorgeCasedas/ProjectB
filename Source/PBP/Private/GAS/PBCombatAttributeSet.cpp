@@ -6,6 +6,18 @@
 UPBCombatAttributeSet::UPBCombatAttributeSet()
 {
 	InitDamage(100.f);
+
+	InitLMBMaxCharges(0);
+	InitRMBMaxCharges(0);
+	InitQMaxCharges(0);
+	InitEMaxCharges(0);
+	InitRMaxCharges(0);
+
+	InitLMBCharges(0);
+	InitRMBCharges(0);
+	InitQCharges(0);
+	InitECharges(0);
+	InitRCharges(0);
 }
 
 void UPBCombatAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -15,9 +27,35 @@ void UPBCombatAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	//DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, Damage, COND_None, REPNOTIFY_Always);
 }
 
-void UPBCombatAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+void UPBCombatAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const
 {
-	Super::PreAttributeChange(Attribute, NewValue);
+	Super::PreAttributeBaseChange(Attribute, NewValue);
+
+	//Charges min value should be 0
+	if (Attribute == GetLMBChargesAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, GetLMBMaxCharges());
+	}
+
+	if (Attribute == GetRMBChargesAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, GetRMBMaxCharges());
+	}
+
+	if (Attribute == GetQChargesAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, GetQMaxCharges());
+	}
+
+	if (Attribute == GetEChargesAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, GetEMaxCharges());
+	}
+
+	if (Attribute == GetRChargesAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, GetRMaxCharges());
+	}
 }
 
 void UPBCombatAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -31,4 +69,54 @@ void UPBCombatAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCa
 void UPBCombatAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldDamage) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, Damage, OldDamage);
+}
+
+void UPBCombatAttributeSet::OnRep_LMBMaxCharges(const FGameplayAttributeData& OldLMBCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, LMBCharges, OldLMBCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_RMBMaxCharges(const FGameplayAttributeData& OldRMBCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, RMBCharges, OldRMBCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_QMaxCharges(const FGameplayAttributeData& OldQCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, QCharges, OldQCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_EMaxCharges(const FGameplayAttributeData& OldECharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, ECharges, OldECharges);
+}
+
+void UPBCombatAttributeSet::OnRep_RMaxCharges(const FGameplayAttributeData& OldRCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, RCharges, OldRCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_LMBCharges(const FGameplayAttributeData& OldLMBCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, LMBCharges, OldLMBCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_RMBCharges(const FGameplayAttributeData& OldRMBCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, RMBCharges, OldRMBCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_QCharges(const FGameplayAttributeData& OldQCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, QCharges, OldQCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_ECharges(const FGameplayAttributeData& OldECharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, ECharges, OldECharges);
+}
+
+void UPBCombatAttributeSet::OnRep_RCharges(const FGameplayAttributeData& OldRCharges) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, RCharges, OldRCharges);
 }

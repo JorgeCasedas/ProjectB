@@ -32,6 +32,13 @@ public:
 	UFUNCTION(Client, Reliable)
 	void ClientShowPoints(const TArray<FPlayerInfo>& PlayersInfo);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	TSubclassOf<UGameplayEffect> GetInputGameplayEffect(FGameplayTag InputTag);
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnAbilityAdded(UPBGameplayAbility* Ability);
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnAbilityRemoved(UPBGameplayAbility* Ability);
+
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnClientMatchStarted OnMatchStarted;

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GAS/PBGameplayAbility.h"
+#include "GAS/PBGameplayAbilityWithCharges.h"
 #include "JumpAttackGameplayAbility.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PBP_API UJumpAttackGameplayAbility : public UPBGameplayAbility
+class PBP_API UJumpAttackGameplayAbility : public UPBGameplayAbilityWithCharges
 {
 	GENERATED_BODY()
 	

@@ -100,7 +100,7 @@ void APBPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
 	if (!GetPBASC()) return;
 	if (!bHasMatchStarted && !bIsOnLobby) return;
-	GetPBASC()->AbilityInputTagPressed(InputTag);
+	GetPBASC()->AbilityInputTagPressed(InputTag, GetInputGameplayEffect(InputTag));
 }
 
 void APBPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)

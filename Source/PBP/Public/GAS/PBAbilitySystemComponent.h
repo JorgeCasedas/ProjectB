@@ -49,7 +49,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const UGameplayAbility* GetGameplayAbilityFromInput(const FGameplayTag& InputTag);
 
-	void AbilityInputTagPressed(const FGameplayTag& InputTag);
+	void AbilityInputTagPressed(const FGameplayTag& InputTag, TSubclassOf<UGameplayEffect> InputGameplayEffectClass);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 

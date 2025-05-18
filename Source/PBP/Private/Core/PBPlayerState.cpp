@@ -18,6 +18,7 @@ APBPlayerState::APBPlayerState()
 	NetUpdateFrequency = 100.f;
 
 	HealthAttributeSet = CreateDefaultSubobject<UPBHealthAttributeSet>("HealthAttributeSet");
+	CombatAttributeSet = CreateDefaultSubobject<UPBCombatAttributeSet>("CombatAttributeSet");
 
 	bReplicates = true;
 

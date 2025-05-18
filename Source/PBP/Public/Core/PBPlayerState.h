@@ -14,6 +14,7 @@ class UAbilitySystemComponent;
 class UPBAbilitySystemComponent;
 class UAttributeSet;
 class UPBHealthAttributeSet;
+class UPBCombatAttributeSet;
 
 /**
  * 
@@ -60,6 +61,9 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UPBHealthAttributeSet> HealthAttributeSet;
+	UPROPERTY()
+	TObjectPtr<UPBCombatAttributeSet> CombatAttributeSet;
+	
 
 	UPROPERTY(Replicated)
 	int TeamID = -1;

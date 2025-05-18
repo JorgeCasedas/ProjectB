@@ -8,6 +8,7 @@
 #include "AbilitiesConfig.generated.h"
 
 class UPBGameplayAbility;
+class UGameplayEffect;
 /**
  * 
  */
@@ -27,6 +28,10 @@ public:
 	FString Name;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FString Info;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int MaxCharges;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> ChargesEffect;
 };
 
 UCLASS()

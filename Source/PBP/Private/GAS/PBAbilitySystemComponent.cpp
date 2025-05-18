@@ -63,7 +63,7 @@ void UPBAbilitySystemComponent::AddCharacterDefaultAbilities(const TArray<FDefau
 #pragma region SetTags
 
 			FGameplayTag InputTag;
-			FGameplayTag CooldownTag;
+			//FGameplayTag CooldownTag;
 			if (AbilityToAdd.InputTag.IsValid())
 				InputTag = AbilityToAdd.InputTag;
 			else
@@ -155,7 +155,7 @@ const UGameplayAbility* UPBAbilitySystemComponent::GetGameplayAbilityFromInput(c
 	}
 	return nullptr;
 }
-void UPBAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
+void UPBAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag, TSubclassOf<UGameplayEffect> InputGameplayEffectClass)
 {
 	if (!InputTag.IsValid()) return;
 
@@ -166,7 +166,12 @@ void UPBAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Input
 			AbilitySpecInputPressed(Spec);
 			if (!Spec.IsActive())
 			{
-				TryActivateAbility(Spec.Handle);
+				bool bAbilityWasActivated =	TryActivateAbility(Spec.Handle);
+				if (bAbilityWasActivated && InputGameplayEffectClass !=nullptr)
+				{
+					UE_LOG(LogTemp, Error, TEXT("Activated"));
+					BP_ApplyGameplayEffectToSelf(InputGameplayEffectClass, 0, MakeEffectContext());
+				}
 			}
 		}
 	}
