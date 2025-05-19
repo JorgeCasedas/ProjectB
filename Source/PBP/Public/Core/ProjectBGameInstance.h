@@ -59,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void TryShowAchievements();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	float GetChargeAttributeValueByCooldownTag(FGameplayTag CdTag);
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> LobbyLevel;

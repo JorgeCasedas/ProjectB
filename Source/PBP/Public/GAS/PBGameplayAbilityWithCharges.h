@@ -20,4 +20,5 @@ class PBP_API UPBGameplayAbilityWithCharges : public UPBGameplayAbility
 	/** Called when the ability is removed from an AbilitySystemComponent */
 	virtual void OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 
+	virtual bool CheckCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const;
 };
