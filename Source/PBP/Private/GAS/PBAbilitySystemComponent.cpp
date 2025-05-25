@@ -5,6 +5,9 @@
 #include "GAS/PBGameplayAbility.h"
 #include "PBGameplayTags.h"
 
+#include "Core/PBPlayerState.h"
+#include "Core/PBPlayerController.h"
+
 UPBAbilitySystemComponent::UPBAbilitySystemComponent(const FObjectInitializer& ObjectInitializer)
 {
 }
@@ -170,7 +173,8 @@ void UPBAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Input
 				if (bAbilityWasActivated && InputGameplayEffectClass !=nullptr)
 				{
 					UE_LOG(LogTemp, Error, TEXT("Activated"));
-					BP_ApplyGameplayEffectToSelf(InputGameplayEffectClass, 0, MakeEffectContext());
+					if(APBPlayerState* PS = Cast<APBPlayerState>(GetOwner()))
+						PS->UseInputGameplayEffect(InputGameplayEffectClass);
 				}
 			}
 		}

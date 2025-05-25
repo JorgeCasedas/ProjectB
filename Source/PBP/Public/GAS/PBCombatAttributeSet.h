@@ -29,6 +29,15 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Damage, Category = "Damage Attributes")
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(UPBCombatAttributeSet, Damage);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Speed, Category = "Damage Attributes")
+	FGameplayAttributeData Speed;
+	ATTRIBUTE_ACCESSORS(UPBCombatAttributeSet, Speed);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MovementForce, Category = "Damage Attributes")
+	FGameplayAttributeData MovementForce;
+	ATTRIBUTE_ACCESSORS(UPBCombatAttributeSet, MovementForce);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MovementResistance, Category = "Damage Attributes")
+	FGameplayAttributeData MovementResistance;
+	ATTRIBUTE_ACCESSORS(UPBCombatAttributeSet, MovementResistance);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_LMBMaxCharges, Category = "Damage Attributes")
 	FGameplayAttributeData LMBMaxCharges;
@@ -62,8 +71,18 @@ public:
 	FGameplayAttributeData RCharges;
 	ATTRIBUTE_ACCESSORS(UPBCombatAttributeSet, RCharges);
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Frozen, Category = "Damage Attributes")
+	FGameplayAttributeData Frozen;
+	ATTRIBUTE_ACCESSORS(UPBCombatAttributeSet, Frozen);
+
 	UFUNCTION()
 	void OnRep_Damage(const FGameplayAttributeData& OldDamage) const;
+	UFUNCTION()
+	void OnRep_Speed(const FGameplayAttributeData& OldSpeed) const;
+	UFUNCTION()
+	void OnRep_MovementForce(const FGameplayAttributeData& OldMovementForce) const;
+	UFUNCTION()
+	void OnRep_MovementResistance(const FGameplayAttributeData& OldMovementResistance) const;
 
 	UFUNCTION()
 	void OnRep_LMBMaxCharges(const FGameplayAttributeData& OldLMBCharges) const;
@@ -86,4 +105,7 @@ public:
 	void OnRep_ECharges(const FGameplayAttributeData& OldECharges) const;
 	UFUNCTION()
 	void OnRep_RCharges(const FGameplayAttributeData& OldRCharges) const;
+
+	UFUNCTION()
+	void OnRep_Frozen(const FGameplayAttributeData& OldFrozen) const;
 };

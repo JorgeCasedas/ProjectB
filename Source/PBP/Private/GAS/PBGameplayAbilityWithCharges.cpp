@@ -24,7 +24,7 @@ bool UPBGameplayAbilityWithCharges::CheckCooldown(const FGameplayAbilitySpecHand
 	UProjectBGameInstance* GameInstance = Cast<UProjectBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance != nullptr)
 	{
-		float AbilityCharges = GameInstance->GetChargeAttributeValueByCooldownTag(CdTag);
+		float AbilityCharges = GameInstance->GetChargeAttributeValueByCooldownTag(*ActorInfo, CdTag);
 
 		return AbilityCharges > 0;
 	}

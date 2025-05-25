@@ -60,7 +60,7 @@ public:
 	void TryShowAchievements();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	float GetChargeAttributeValueByCooldownTag(FGameplayTag CdTag);
+	float GetChargeAttributeValueByCooldownTag(const FGameplayAbilityActorInfo& ActorInfo, FGameplayTag CdTag);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

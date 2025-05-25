@@ -51,6 +51,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetTeamID();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void UseInputGameplayEffect(TSubclassOf<UGameplayEffect> InputGameplayEffectClass);
+
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	bool bIsTheCurrentWinner = false;

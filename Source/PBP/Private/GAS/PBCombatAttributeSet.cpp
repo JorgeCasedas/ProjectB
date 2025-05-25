@@ -2,10 +2,14 @@
 
 
 #include "GAS/PBCombatAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 UPBCombatAttributeSet::UPBCombatAttributeSet()
 {
 	InitDamage(100.f);
+	InitSpeed(1.f);
+	InitMovementForce(1.f);
+	InitMovementResistance(1.f);
 
 	InitLMBMaxCharges(0);
 	InitRMBMaxCharges(0);
@@ -18,13 +22,32 @@ UPBCombatAttributeSet::UPBCombatAttributeSet()
 	InitQCharges(0);
 	InitECharges(0);
 	InitRCharges(0);
+
+	InitFrozen(0);
 }
 
 void UPBCombatAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, Damage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, Damage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, Speed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, MovementForce, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, MovementResistance, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, LMBMaxCharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, RMBMaxCharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, QMaxCharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, EMaxCharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, RMaxCharges, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, LMBCharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, RMBCharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, QCharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, ECharges, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, RCharges, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UPBCombatAttributeSet, Frozen, COND_None, REPNOTIFY_Always);
 }
 
 void UPBCombatAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const
@@ -69,6 +92,21 @@ void UPBCombatAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCa
 void UPBCombatAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldDamage) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, Damage, OldDamage);
+}
+
+void UPBCombatAttributeSet::OnRep_Speed(const FGameplayAttributeData& OldSpeed) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, Speed, OldSpeed);
+}
+
+void UPBCombatAttributeSet::OnRep_MovementForce(const FGameplayAttributeData& OldMovementForce) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, MovementForce, OldMovementForce);
+}
+
+void UPBCombatAttributeSet::OnRep_MovementResistance(const FGameplayAttributeData& OldMovementResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, MovementResistance, OldMovementResistance);
 }
 
 void UPBCombatAttributeSet::OnRep_LMBMaxCharges(const FGameplayAttributeData& OldLMBCharges) const
@@ -119,4 +157,9 @@ void UPBCombatAttributeSet::OnRep_ECharges(const FGameplayAttributeData& OldECha
 void UPBCombatAttributeSet::OnRep_RCharges(const FGameplayAttributeData& OldRCharges) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, RCharges, OldRCharges);
+}
+
+void UPBCombatAttributeSet::OnRep_Frozen(const FGameplayAttributeData& OldFrozen) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPBCombatAttributeSet, Frozen, OldFrozen);
 }
