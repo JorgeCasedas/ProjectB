@@ -79,6 +79,13 @@ void UPBCombatAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Att
 	{
 		NewValue = FMath::Clamp(NewValue, 0, GetRMaxCharges());
 	}
+
+
+	if (Attribute == GetFrozenAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, 100);
+	}
+
 }
 
 void UPBCombatAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)

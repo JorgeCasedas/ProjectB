@@ -100,6 +100,8 @@ void APBPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
 	if (!GetPBASC()) return;
 	if (!bHasMatchStarted && !bIsOnLobby) return;
+	if (GetPBASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Frozen"))) return;
+			
 	GetPBASC()->AbilityInputTagPressed(InputTag, GetInputGameplayEffect(InputTag));
 }
 
@@ -116,6 +118,7 @@ void APBPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
 	if (!GetPBASC()) return;
 	if (!bHasMatchStarted) return;
+	if (GetPBASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Frozen"))) return;
 
 	GetPBASC()->AbilityInputTagHeld(InputTag);
 }
@@ -144,6 +147,10 @@ void APBPlayerController::Move(const FInputActionValue& Value)
 	AActor* ViewTarget = GetViewTarget();
 	if (!ViewTarget)
 		return;
+
+	if (GetPBASC())
+		if (GetPBASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Frozen")))
+			return;
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 

@@ -118,8 +118,10 @@ void APBCharacter::LookTowardsMouse()
 
 	if (!GetMesh())
 		return;
-	if (!PlayerController)
-		return;
+
+	if (GetAbilitySystemComponent())
+		if(GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Frozen")))
+			return;
 
 	const FVector2D MousePosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(GetWorld());
 
