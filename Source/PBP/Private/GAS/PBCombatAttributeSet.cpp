@@ -6,10 +6,10 @@
 
 UPBCombatAttributeSet::UPBCombatAttributeSet()
 {
-	InitDamage(100.f);
+	InitDamage(0.f);
 	InitSpeed(1.f);
 	InitMovementForce(1.f);
-	InitMovementResistance(1.f);
+	InitMovementResistance(0.f);
 
 	InitLMBMaxCharges(0);
 	InitRMBMaxCharges(0);
@@ -79,7 +79,6 @@ void UPBCombatAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Att
 	{
 		NewValue = FMath::Clamp(NewValue, 0, GetRMaxCharges());
 	}
-
 
 	if (Attribute == GetFrozenAttribute())
 	{
