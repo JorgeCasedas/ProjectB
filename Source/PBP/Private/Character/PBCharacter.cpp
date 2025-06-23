@@ -66,6 +66,11 @@ void APBCharacter::AddSelectedAbility(const TSubclassOf<UPBGameplayAbility>& Abi
 
 }
 
+void APBCharacter::AddSelectedPassive(const TSubclassOf<UGameplayEffect>& Effect)
+{
+	Cast<APBPlayerState>(GetPlayerState())->GetPBAbilitySystemComponent()->AddCharacterPassive(Effect);
+}
+
 void APBCharacter::ClientOpenAbilitiesSelection_Implementation(const TArray<FAbilitySelectionArguments>& AbilitiesToSelectFrom)
 {
 	OpenAbilitiesSelection(AbilitiesToSelectFrom);

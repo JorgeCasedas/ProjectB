@@ -49,6 +49,9 @@ struct FPlayerInfo
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FAbilityInfo> GameplayAbilities;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TSubclassOf<UGameplayEffect>> Passives;
+
 	FPlayerInfo()
 	{
 		UID = "INVALID";
@@ -76,6 +79,8 @@ public:
 	void AddPoints(APBPlayerState* PlayerState, uint8 NewPoints);
 	UFUNCTION(BlueprintCallable)
 	void SaveGameplayAbilities(APBPlayerState* PlayerState);
+	UFUNCTION(BlueprintCallable)
+	void SavePlayerPassive(APBPlayerState* PlayerState, TSubclassOf<UGameplayEffect> Passive);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

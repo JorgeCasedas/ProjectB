@@ -64,3 +64,17 @@ void USaveGamePlayerInfo::SaveGameplayAbilities(APBPlayerState* PlayerState)
 		}
 	}
 }
+
+void USaveGamePlayerInfo::SavePlayerPassive(APBPlayerState* PlayerState, TSubclassOf<UGameplayEffect> Passive)
+{
+	FString UID = PlayerState->GetUniqueId()->ToString();
+
+	for (FPlayerInfo& Info : PlayersInfo)
+	{
+		if (Info.UID == UID)
+		{
+			Info.Passives.Add(Passive);
+			return;
+		}
+	}
+}

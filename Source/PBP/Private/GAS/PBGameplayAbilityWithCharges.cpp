@@ -10,7 +10,8 @@
 void UPBGameplayAbilityWithCharges::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnGiveAbility(ActorInfo, Spec);
-	Cast<APBPlayerController>(ActorInfo->PlayerController)->OnAbilityAdded(this);
+	if(this!=NULL) //It is crashing???
+		Cast<APBPlayerController>(ActorInfo->PlayerController)->OnAbilityAdded(this);
 }
 
 void UPBGameplayAbilityWithCharges::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)

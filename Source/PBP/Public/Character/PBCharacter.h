@@ -14,6 +14,7 @@ class UAbilitySystemComponent;
 class UAttributeSet;
 class UPBHealthAttributeSet;
 class UPBGameplayAbility;
+class UGameplayEffect;
 
 USTRUCT(BlueprintType)
 struct FAbilitySelectionArguments
@@ -22,6 +23,8 @@ struct FAbilitySelectionArguments
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPBGameplayAbility> Ability;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UGameplayEffect> Effect;
 
 	FAbilitySelectionArguments()
 	{
@@ -31,6 +34,10 @@ struct FAbilitySelectionArguments
 	{
 		Ability = InAbility;
 	}	
+	FAbilitySelectionArguments(TSubclassOf<UGameplayEffect> InEffect)
+	{
+		Effect = InEffect;
+	}
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, AActor*, DeathInstigator);
@@ -60,6 +67,8 @@ public:
 	void OpenAbilitiesSelection(const TArray<FAbilitySelectionArguments>& AbilitiesToSelectFrom);
 	UFUNCTION()
 	void AddSelectedAbility(const TSubclassOf<UPBGameplayAbility>& Ability, const FGameplayTag& GameplayTag);
+	UFUNCTION()
+	void AddSelectedPassive(const TSubclassOf<UGameplayEffect>& Effect);
 
 public:
 	UPROPERTY(BlueprintAssignable)

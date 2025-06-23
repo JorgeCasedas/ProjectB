@@ -15,6 +15,7 @@ class APBCharacter;
 class APBBomb;
 
 class UPBGameplayAbility;
+class UGameplayEffect;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLoggedIn, APBPlayerController*, PlayerController);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMatchStarted);
@@ -98,6 +99,8 @@ struct FGameplayAbilitiesArray
 
 	UPROPERTY(BlueprintReadWrite)
 	TArray<TSubclassOf<UPBGameplayAbility>> Abilities;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<TSubclassOf<UGameplayEffect>> PassiveEffects;
 };
 
 USTRUCT(BlueprintType)
@@ -154,6 +157,9 @@ public:
 	virtual void OpenPlayerAbilitiesSelection(AController* NewPlayer, int AbilitiesToSelect);
 	UFUNCTION(BlueprintCallable)
 	void CharacterSelectedAbility(int SelectedAbilityIndex, const FGameplayTag& GameplayTag, APlayerController* PC);
+	UFUNCTION(BlueprintCallable)
+	void CharacterSelectedPassive(int SelectedAbilityIndex, APlayerController* PC);
+
 
 	UFUNCTION()
 	void SetPlayersTeams();
@@ -210,6 +216,9 @@ private:
 	void OneVsAllTeamsDistribution();
 	UFUNCTION()
 	void TeamsTeamsDistribution();
+
+	UFUNCTION()
+	void SavePlayerPassive(APBPlayerState* PS, TSubclassOf<UGameplayEffect> Effect);
 
 private:
 	

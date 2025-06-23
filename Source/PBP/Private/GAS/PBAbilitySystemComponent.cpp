@@ -100,6 +100,11 @@ void UPBAbilitySystemComponent::AddCharacterAbility(const TSubclassOf<UGameplayA
 	}
 }
 
+void UPBAbilitySystemComponent::AddCharacterPassive(const TSubclassOf<UGameplayEffect>& Effect)
+{
+	BP_ApplyGameplayEffectToSelf(Effect, 0, MakeEffectContext());
+}
+
 void UPBAbilitySystemComponent::SetCooldownBasedOnInput(const FGameplayTag& Input, FGameplayTag& CooldownTagRef)
 {
 	if (Input == FPBGameplayTags::Get().InputTag_Q)

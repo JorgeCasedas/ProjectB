@@ -37,7 +37,7 @@ public:
 protected:
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent>ASC;
-
+	UPROPERTY()
 	FGameplayTag CooldownTag;
 
 	void CooldownTagChanged(const FGameplayTag InCooldownTag, int32 NewCount);

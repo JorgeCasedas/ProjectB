@@ -42,6 +42,8 @@ public:
 	void AddCharacterDefaultAbilities(const TArray<FDefaultCharacterAbility>& AbilitiesToAdd);
 	UFUNCTION(BlueprintCallable)
 	void AddCharacterAbility(const TSubclassOf<UGameplayAbility>& Ability, const FGameplayTag& InputTag);
+	UFUNCTION(BlueprintCallable)
+	void AddCharacterPassive(const TSubclassOf<UGameplayEffect>& Effect);
 	UFUNCTION()
 	void SetCooldownBasedOnInput(const FGameplayTag& Input, FGameplayTag& CooldownTagRef);
 	UFUNCTION(BlueprintCallable)

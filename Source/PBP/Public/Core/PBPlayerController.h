@@ -76,6 +76,6 @@ private:
 	class UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
-
+	UPROPERTY()
 	TObjectPtr<UPBAbilitySystemComponent> PBASC;
 };

@@ -8,6 +8,7 @@
 
 #include "GAS/PBAbilitySystemComponent.h"
 #include "GAS/AbilitiesConfig.h"
+#include "GAS/PassivesConfig.h"
 
 #include "Character/PBCharacter.h"
 
@@ -425,6 +426,13 @@ void APBGameMode::TeamsTeamsDistribution()
 		}
 	}
 }
+void APBGameMode::SavePlayerPassive(APBPlayerState* PS, TSubclassOf<UGameplayEffect> Effect)
+{
+	PBGameInstance->SetInitialSaveGame();
+	USaveGamePlayerInfo* TestSaveGame = PBGameInstance->GetPlayerInfoSaveGame();
+	TestSaveGame->SavePlayerPassive(PS, Effect);
+	PBGameInstance->SavePlayersInfoSaveGame(TestSaveGame);
+}
 #pragma endregion
 
 #pragma region Abilities Management
@@ -458,6 +466,10 @@ void APBGameMode::GiveAbilitiesToPlayer(AController* NewPlayer)
 				{
 					PBPS->GetPBAbilitySystemComponent()->AddCharacterAbility(TSubclassOf<UGameplayAbility>(AbilityInfo.Ability), AbilityInfo.InputTag);
 				}
+				for (const TSubclassOf<UGameplayEffect> Effect : PlayerInfo.Passives)
+				{
+					PBPS->GetPBAbilitySystemComponent()->AddCharacterPassive(Effect);
+				}
 			}
 		}
 	}
@@ -470,28 +482,41 @@ void APBGameMode::OpenPlayerAbilitiesSelection(AController* NewPlayer, int Abili
 	{
 		check(PBGameInstance);
 		check(PBGameInstance->AbilitiesDataAsset);
+		check(PBGameInstance->PassivesDataAsset);
 
 		TArray<FAbilitySelectionArguments> AbilitiesForSelection;
 		FGameplayAbilitiesArray AbilitiesArray;
 
 		int AblitiesNumber = PBGameInstance->AbilitiesDataAsset->AbilitiesInfo.Num();
+		int EffectsNumber = PBGameInstance->PassivesDataAsset->EffectsInfo.Num();
 
-		if (AbilitiesToSelect > AblitiesNumber)
+		int TotalUpgradesNumber = AblitiesNumber + EffectsNumber;
+
+		if (AbilitiesToSelect > TotalUpgradesNumber)
 		{
-			AbilitiesToSelect = AblitiesNumber;
+			AbilitiesToSelect = TotalUpgradesNumber;
 		}
 
 		TArray<int> AbilitiesIndexes;
 
 		for (int i = 0; AbilitiesIndexes.Num() < AbilitiesToSelect; i++) {
 
-			AbilitiesIndexes.AddUnique(FMath::RandRange(0, AblitiesNumber - 1));
+			AbilitiesIndexes.AddUnique(FMath::RandRange(0, TotalUpgradesNumber - 1));
 		}
 
 		for (int index : AbilitiesIndexes)
 		{
-			AbilitiesForSelection.Add({ PBGameInstance->AbilitiesDataAsset->AbilitiesInfo[index].AbilityClass });
-			AbilitiesArray.Abilities.Add({ PBGameInstance->AbilitiesDataAsset->AbilitiesInfo[index].AbilityClass });
+			if (index >= AblitiesNumber)
+			{
+				int EffectIndex = index - AblitiesNumber;
+				AbilitiesForSelection.Add({ PBGameInstance->PassivesDataAsset->EffectsInfo[EffectIndex].EffectClass});
+				AbilitiesArray.PassiveEffects.Add({ PBGameInstance->PassivesDataAsset->EffectsInfo[EffectIndex].EffectClass });
+			}
+			else 
+			{
+				AbilitiesForSelection.Add({ PBGameInstance->AbilitiesDataAsset->AbilitiesInfo[index].AbilityClass });
+				AbilitiesArray.Abilities.Add({ PBGameInstance->AbilitiesDataAsset->AbilitiesInfo[index].AbilityClass });
+			}
 		}
 
 		TempAbilitiesGivenToPlayers.Add(Cast<APBPlayerController>(NewPlayer), AbilitiesArray);
@@ -517,6 +542,25 @@ void APBGameMode::CharacterSelectedAbility(int SelectedAbilityIndex, const FGame
 				if (SelectedAbilityIndex == i)
 				{
 					Cast<APBCharacter>(PC->GetPawn())->AddSelectedAbility(Ability, GameplayTag);
+				}
+				i++;
+			}
+		}
+	}
+}
+void APBGameMode::CharacterSelectedPassive(int SelectedAbilityIndex, APlayerController* PC)
+{
+	for (const TPair <TObjectPtr<APBPlayerController>, FGameplayAbilitiesArray> Pair : TempAbilitiesGivenToPlayers)
+	{
+		if (PC == Pair.Key)
+		{
+			int i = 0;
+			for (const TSubclassOf<UGameplayEffect> Effect : Pair.Value.PassiveEffects)
+			{
+				if (SelectedAbilityIndex == i)
+				{
+					Cast<APBCharacter>(PC->GetPawn())->AddSelectedPassive(Effect);
+					SavePlayerPassive(Cast<APBPlayerState>(PC->PlayerState), Effect);
 				}
 				i++;
 			}

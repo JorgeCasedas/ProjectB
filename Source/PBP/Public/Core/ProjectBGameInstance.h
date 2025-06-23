@@ -13,6 +13,7 @@
 class FOnlineSessionSearch;
 class USaveGamePlayerInfo;
 class UAbilitiesConfig;
+class UPassivesConfig;
 /**
  * 
  */
@@ -79,6 +80,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UAbilitiesConfig> AbilitiesDataAsset;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UPassivesConfig> PassivesDataAsset;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	bool bSaveGameAlreadyCreated = false;
