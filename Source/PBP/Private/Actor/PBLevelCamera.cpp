@@ -91,6 +91,7 @@ void APBLevelCamera::ResetPlayerCount()
 		if (!Character) continue;
 
 		Characters.Add(Character);
+		Character->OnDeath.RemoveDynamic(this, &APBLevelCamera::OnPlayerDeath); //in case it is already binded
 		Character->OnDeath.AddDynamic(this, &APBLevelCamera::OnPlayerDeath);
 	}
 }
@@ -162,10 +163,13 @@ void APBLevelCamera::RepositionCamera()
 		PlayersVector += Character->GetActorLocation();
 		CharactersUsed++;
 	}
-	FVector MidPoint = PlayersVector / CharactersUsed;
-	//Mid point is not valid everytime because of the UI, so this helps setting an offset that solves the UI being in front of a character
-	MidPoint -= OffsetDirecton * (OffsetUnits * FMath::Abs((MinX-MaxX)));
-	SmoothCameraPosition(MidPoint);
+	if (CharactersUsed > 0)
+	{
+		FVector MidPoint = PlayersVector / CharactersUsed;
+		//Mid point is not valid everytime because of the UI, so this helps setting an offset that solves the UI being in front of a character
+		MidPoint -= OffsetDirecton * (OffsetUnits * FMath::Abs((MinX - MaxX)));
+		SmoothCameraPosition(MidPoint);
+	}
 }
 void APBLevelCamera::SmoothCameraPosition(FVector ObjectivePosition)
 {
@@ -178,12 +182,16 @@ void APBLevelCamera::SmoothCameraPosition(FVector ObjectivePosition)
 }
 void APBLevelCamera::ReZoomCamera()
 {
+	if (!SpringArm)
+		return;
 	if (InitPlayersDistance == 0)
 	{
 		SpringArm->TargetArmLength = MaxArmLength;
 		return;
 	}
 	//Calculation based on an initial arm length adecuated to the characters spawn points;
+	if (InitPlayersDistance == 0)
+		return;
 	float ClampedZoom = FMath::Clamp(InitArmLength * (GetMaxPlayersDistance() / InitPlayersDistance), MinArmLength, MaxArmLength);
 	if (!bSmoothZoom)
 	{
@@ -197,6 +205,8 @@ void APBLevelCamera::ReZoomCamera()
 
 void APBLevelCamera::SmoothCameraZoom(float TargetArmLength)
 {
+	if (!SpringArm)
+		return;
 	TargetArmLength = FMath::Lerp(SpringArm->TargetArmLength, TargetArmLength, ZoomSpeed);
 	SpringArm->TargetArmLength = TargetArmLength;
 }
@@ -207,6 +217,10 @@ void APBLevelCamera::OnPlayerDeath(AActor* DeathInstigator)
 	{
 		if (!Character)
 			continue;
+		if (!Character->GetAbilitySystemComponent())
+		{
+			continue;
+		}
 		if (Character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FPBGameplayTags::Get().State_Dead))
 		{
 			Characters.Remove(Character);

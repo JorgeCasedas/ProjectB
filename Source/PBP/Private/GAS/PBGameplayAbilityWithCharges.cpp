@@ -10,19 +10,26 @@
 void UPBGameplayAbilityWithCharges::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnGiveAbility(ActorInfo, Spec);
-	if(this!=NULL) //It is crashing???
-		Cast<APBPlayerController>(ActorInfo->PlayerController)->OnAbilityAdded(this);
+	if (!ActorInfo) //NULL ActorInfo is crashing the build sometimes when loading a new map
+		return;
+	if (APBPlayerController* PlayerController = Cast<APBPlayerController>(ActorInfo->PlayerController))
+		PlayerController->OnAbilityAdded(this);
 }
 
 void UPBGameplayAbilityWithCharges::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnRemoveAbility(ActorInfo, Spec);
-	Cast<APBPlayerController>(ActorInfo->PlayerController)->OnAbilityRemoved(this);
+	if (!ActorInfo)
+		return;
+	if (APBPlayerController* PlayerController = Cast<APBPlayerController>(ActorInfo->PlayerController))
+		PlayerController->OnAbilityRemoved(this);
 }
 
 bool UPBGameplayAbilityWithCharges::CheckCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, OUT FGameplayTagContainer* OptionalRelevantTags) const
 {
 	UProjectBGameInstance* GameInstance = Cast<UProjectBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (!ActorInfo)
+		return false;
 	if (GameInstance != nullptr)
 	{
 		float AbilityCharges = GameInstance->GetChargeAttributeValueByCooldownTag(*ActorInfo, CdTag);

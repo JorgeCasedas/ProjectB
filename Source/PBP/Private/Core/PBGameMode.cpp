@@ -217,13 +217,15 @@ void APBGameMode::GivePointsToPlayers(int TeamID)
 	{
 		for (APBCharacter* Character : AliveCharacters)
 		{
-			if (Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID() == TeamID)
-				CurrentWinners.AddUnique(Character);
+			if (APBPlayerState* PS =Cast<APBPlayerState>(Character->GetPlayerState()))
+				if(PS->GetTeamID() == TeamID)
+					CurrentWinners.AddUnique(Character);
 		}
 		for (APBCharacter* Character : DeadCharacters)
 		{
-			if (Cast<APBPlayerState>(Character->GetPlayerState())->GetTeamID() == TeamID)
-				CurrentWinners.AddUnique(Character);
+			if (APBPlayerState* PS = Cast<APBPlayerState>(Character->GetPlayerState()))
+				if (PS->GetTeamID() == TeamID)
+					CurrentWinners.AddUnique(Character);
 		}
 	}
 

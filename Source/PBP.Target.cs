@@ -11,5 +11,10 @@ public class PBPTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
 		ExtraModuleNames.Add("PBP");
-	}
+        //bUseLoggingInShipping = true;
+        //bUseChecksInShipping = true;
+        //bDisableDebugInfo = false;
+        //LinkType = TargetLinkType.Monolithic;
+        //bUsePDBFiles = true;
+    }
 }

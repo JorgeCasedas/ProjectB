@@ -131,8 +131,11 @@ void APBCharacter::LookTowardsMouse()
 	const FVector2D MousePosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(GetWorld());
 
 	FHitResult HitResult;
+	if (!PlayerController)
+		return;
 	PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel1, false, HitResult);
-
+	if (!GetMesh())
+		return;
 	float YawRotation = UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetComponentLocation(), HitResult.Location).Yaw;
 	
 	PlayerController->SetControlRotation({ 0.f,  YawRotation, 0.f });
