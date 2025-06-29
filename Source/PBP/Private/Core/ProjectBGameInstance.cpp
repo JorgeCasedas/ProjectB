@@ -373,3 +373,12 @@ void UProjectBGameInstance::TryShowAchievements()
 	if(SteamUserStats())
 		SteamUserStats()->StoreStats();
 }
+
+bool UProjectBGameInstance::IsShipping()
+{
+	#if UE_BUILD_SHIPPING
+		return true;
+	#else
+		return false;
+	#endif
+}

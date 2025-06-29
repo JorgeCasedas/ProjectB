@@ -63,6 +63,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	float GetChargeAttributeValueByCooldownTag(const FGameplayAbilityActorInfo& ActorInfo, FGameplayTag CdTag);
 
+	UFUNCTION(BlueprintCallable)
+	bool IsShipping();
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> LobbyLevel;
